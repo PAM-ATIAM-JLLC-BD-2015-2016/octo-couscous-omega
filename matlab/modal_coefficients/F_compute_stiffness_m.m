@@ -1,0 +1,21 @@
+function [ stiffness_m ] = F_compute_stiffness_m( ...
+    string_modes_n, body_modes_n, string_tension, string_length, ...
+    string_bending_stiffness, effective_stiffnesses_v )
+%% Stiffness matrix K computation
+% 
+
+%% String part of the stiffness matrix
+stiffness_1_1_v = ones(string_modes_n,1)^2*pi^2/(2*string_length) .* ( ...
+    string_tension + ...
+        string_bending_stiffness*(pi/string_length)^2 * ...
+        ones(string_modes_n,1)^2);
+
+stiffness_1_1_m = diag(stiffness_1_1_v);
+
+%% Body part of the stiffness matrix
+stiffness_2_2_v = string_tension/string_length + ...
+    diag(effective_stiffnesses_v);
+
+stiffness_m = blkdiag( stiffness_1_1_m, stiffness_2_2_v );
+
+end
