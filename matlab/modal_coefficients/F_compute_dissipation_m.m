@@ -20,4 +20,3 @@ dissipation_2_2_m = diag(dissipation_2_2_v);
 dissipation_m = blkdiag(dissipation_1_1_m, dissipation_2_2_m);
 
 end
-
