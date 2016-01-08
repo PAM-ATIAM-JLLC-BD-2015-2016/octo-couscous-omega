@@ -10,9 +10,9 @@ mass_1_1_v = string_mass/2 * ones(string_modes_n,1);
 mass_1_1_m = diag(mass_1_1_v);
 
 %% Coupled contributions
-mass_1_2_v = (-1)^(0:string_modes_n-1) * ...
-    string_mass / (pi*(0:string_modes_n-1));
-mass_1_2_m = repmat(mass_1_2_v, 1, body_modes_n);
+mass_1_2_v = (-1).^(0:string_modes_n-1) .* ...
+    ((string_mass/pi) ./ (1:string_modes_n));
+mass_1_2_m = repmat(mass_1_2_v.', 1, body_modes_n);
 
 %% Body part of the mass matrix
 mass_2_2_m = diag(effective_masses_v) + ...
