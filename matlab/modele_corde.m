@@ -1,67 +1,73 @@
-clear all
-close all
-clc
+function [Z_string] = modele_corde(string_modes_n)
 
 %% Discretisation fréquentielle et temporelle
 
-Fe = 44100;    % Fréquence d'échantillonnage
-dt = 1/Fe;     % Discrétisation temporelle
-Tmax = 6;      % Temps de vibration
-t=0:dt:Tmax;   % Vecteur temps
-f = Fe*linspace(0,1,length(t));
+Fs = 44100;    % Sampling frequency
+dt = 1/Fs;     % time step
+Tmax = 6;      % waving time
+t=0:dt:Tmax;   % time vector
+f = Fs*linspace(0,1,length(t));
 w = 2*pi*f;
 %% Caractéristiques de la corde
 
-L = 0.65;             % Longueur corde de mi
-ml = 6.24*10^(-3);    % rho*l masse linéique
-%xi = 10^(-3);         % 2*xi = 1/Q = eta  Q = facteur de qualité 
-B = 57e-6;            % Bending Stiffness
-h = 5*10^(-3);        % hauteur
-xe = L/8;             % Point d'écoute
-T = 71.6;            % Tension            
-c = sqrt(T/ml);      % Célérité
-x0 = L/4;             % Point d'excitation
-Nmodes = 100;           % Nombre de modes
+string_length = 0.65;              
+string_linear_mass = 6.24*10^(-3);    
+%xi = 10^(-3);                                % damping 2*xi = 1/Q = eta  Q = facteur de qualité 
+string_bending_stiffness = 57e-6;            
+initial_height = 5*10^(-3);                        
+xe = string_length/8;                         % listening point
+string_tension = 71.6;                         
+celerity = sqrt(string_tension/string_linear_mass);     
+excitation_point = string_length/4;                        
+string_modes_n = 10;                                 % NUmber of modes
 
+parameters=[string_length string_linear_mass];
 
 
 %% Détermination des modes
-k_n=zeros(1,Nmodes); % Pré-allocation
-for n=1:Nmodes
+string_wave_number=zeros(1,string_modes_n); % Pré-allocation
+for n=1:string_modes_n
     %k_n(n)=n*pi/L;
-    w_n(n) = (n*pi*c/L)*(1+(B/(2*T))*(n*pi/L)^2);   
+    string_frequency(n) = (n*pi*celerity/string_length)*(1+(string_bending_stiffness/(2*string_tension))*(n*pi/string_length)^2);   
 end
 %w_n=k_n*c;
-k_n = w_n/c;
+string_wave_number = string_frequency/celerity;
 
-%% Coefficient d'amortissement définit dans woodhouse(b)
+%% Damping coefficient as described in Woodhouse (b)
 eta_F = 2*10^(-6);
 eta_B = 2*10^(-5);
 eta_A = 1.2*10^(-2);
 
-for n=1:Nmodes
-eta(n) = (T*(eta_F+(eta_A/w_n(n))) + B*eta_B*(n*pi/L)^2)/(T+B*(n*pi/L)^2);
+for n=1:string_modes_n
+string_damping_coeff(n) = (string_tension*(eta_F+(eta_A/string_frequency(n))) + string_bending_stiffness*eta_B*(n*pi/string_length)^2)/(string_tension+string_bending_stiffness*(n*pi/string_length)^2);
 end
 
 
 
-% %% Application des CI
-% 
-% yn = zeros(Nmodes,length(t));
-% y = zeros(1,length(t));
-% for n = 1:Nmodes
-% yn(n,:)=sin(k_n(n)*x0)*sin(k_n(n)*xe)*((h/(L-x0))+(h/x0))/(k_n(n))*cos(w_n(n)*t).*exp(-eta(n)*w_n(n)*t);
-% y = y+yn(n,:);
-% end
+%% Application des CI
 
-som = zeros(Nmodes,length(t));
-
-for n =1:Nmodes
-  som(n,:) = 1./(w - w_n(1,n)*(1+1i*eta(n)/2)) + 1./(w + w_n(1,n)*(1-1i*eta(n)/2));
-    
+yn = zeros(string_modes_n,length(t));
+y = zeros(1,length(t));
+for n = 1:string_modes_n
+yn(n,:)=sin(k_n(n)*excitation_point)*sin(k_n(n)*xe)*((initial_height/(string_length-excitation_point))+(initial_height/excitation_point))/(k_n(n))*cos(w_n(n)*t).*exp(-string_damping_coeff(n)*w_n(n)*t);
+y = y+yn(n,:);
 end
 
-Z = -(1i*T/L)*((1./w) + sum(som));  % Impédance de la corde equation (29)
 
-% figure;
-% plot(f,abs(fft(y)));
+%% String Impedance Z for Nmodes
+TMP = zeros(string_modes_n,length(t));
+
+for n =1:string_modes_n
+  TMP(n,:) = (2*w - 1i*string_frequency(n)*string_damping_coeff(n))./...
+      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeff(n) - (string_frequency(n)^2)*(1-(string_damping_coeff(n)^2)/4));
+end
+Z_string = -(1i*string_tension/string_length)*((1./w) + sum(TMP));  % String impédance equation (29)
+
+%% Transfer function displacement/displacement
+
+
+
+%figure;
+%plot(f,abs(fft(y)));
+
+end
