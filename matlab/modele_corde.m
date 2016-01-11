@@ -1,4 +1,4 @@
-function [Z_string] = modele_corde(string_modes_n)
+function [H_string,Z_string] = modele_corde(string_modes_n)
 
 %% Discretisation fréquentielle et temporelle
 
@@ -19,7 +19,7 @@ xe = string_length/8;                         % listening point
 string_tension = 71.6;                         
 celerity = sqrt(string_tension/string_linear_mass);     
 excitation_point = string_length/4;                        
-string_modes_n = 10;                                 % NUmber of modes
+%string_modes_n = 10;                                 % NUmber of modes
 
 parameters=[string_length string_linear_mass];
 
@@ -49,7 +49,7 @@ end
 yn = zeros(string_modes_n,length(t));
 y = zeros(1,length(t));
 for n = 1:string_modes_n
-yn(n,:)=sin(k_n(n)*excitation_point)*sin(k_n(n)*xe)*((initial_height/(string_length-excitation_point))+(initial_height/excitation_point))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeff(n)*string_frequency(n)*t);
+yn(n,:)=sin(string_wave_number(n)*excitation_point)*sin(string_wave_number(n)*xe)*((initial_height/(string_length-excitation_point))+(initial_height/excitation_point))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeff(n)*string_frequency(n)*t);
 y = y+yn(n,:);
 end
 
@@ -61,11 +61,18 @@ for n =1:string_modes_n
   TMP(n,:) = (2*w - 1i*string_frequency(n)*string_damping_coeff(n))./...
       (w.^2 - 1i*w*string_frequency(n)*string_damping_coeff(n) - (string_frequency(n)^2)*(1-(string_damping_coeff(n)^2)/4));
 end
+
 Z_string = -(1i*string_tension/string_length)*((1./w) + sum(TMP));  % String impedance equation (29)
 
+clear TMP
 %% Transfer function displacement/displacement
 
+for n =1:string_modes_n
+  TMP(n,:) = (-1)^n*(2*w*sin(n*pi*excitation_point/string_length))./...
+      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeff(n) - (string_frequency(n)^2)*(1-(string_damping_coeff(n)^2)/4));
+end
 
+H_string = excitation_point/string_length + (celerity/string_length)*sum(TMP);
 
 %figure;
 %plot(f,abs(fft(y)));
