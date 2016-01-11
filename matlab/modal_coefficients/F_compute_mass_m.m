@@ -1,5 +1,5 @@
 function [ mass_m ] = F_compute_mass_m( string_modes_n, body_modes_n, ...
-    effective_masses_v, string_linear_mass, string_length )
+    string_linear_mass, string_length, effective_masses_v )
 %% Mass matrix, M, computation
 % 
 
