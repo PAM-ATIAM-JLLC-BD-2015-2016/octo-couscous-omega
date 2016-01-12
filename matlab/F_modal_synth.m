@@ -36,7 +36,7 @@ X_woodhouse = V_right_inv/mass_m;
 gammas_v = sum(X_woodhouse(:,string_modes_number+1:end),2);
 
 duration_n = round(Fs_Hz*duration_s); 
-time_v = 1:duration_n;
+time_v = 0:duration_n-1;
 modal_synthesis_v = sum(gammas_v .* betas_v .* ...
     exp(complex_natural_frequencies_v * time_v), 1);
 
