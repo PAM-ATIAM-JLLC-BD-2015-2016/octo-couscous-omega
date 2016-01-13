@@ -1,8 +1,6 @@
 function [ H_string, Z_string, string_params ] = ...
     F_string_model( string_modes_n )
 
-string_params = {};
-
 %% Discretisation fr�quentielle et temporelle
 
 Fs = 44100;    % Sampling frequency
@@ -28,7 +26,7 @@ x_excitation = string_length/4;
 % string_modes_n = 10;  % Number of modes
 
 %% Parameters container
-parameters=[string_length string_linear_mass];
+string_params = {};
 
 string_params.string_length = string_length;
 string_params.string_linear_mass = string_linear_mass;
@@ -57,8 +55,6 @@ eta_A = 1.2*10^(-2);
 for n=1:string_modes_n
 string_damping_coeff(n) = (string_tension*(eta_F+(eta_A/string_frequency(n))) + string_bending_stiffness*eta_B*(n*pi/string_length)^2)/(string_tension+string_bending_stiffness*(n*pi/string_length)^2);
 end
-
-
 
 %% Application des CI
 
