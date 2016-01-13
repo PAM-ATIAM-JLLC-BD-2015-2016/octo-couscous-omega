@@ -22,7 +22,7 @@ addRequired(p, 'mass_m', @isnumeric);
 addRequired(p, 'stiffness_m', @isnumeric);
 % addParameter(p, 'computation_mode_s', defaultType, checkMode);
 
-parse(p, X_stft_m, Fs_Hz, N_fft_n, varargin{:});
+parse(p, dissipation_m, mass_m, stiffness_m); %, varargin{:});
 
 % if strcmp(computations_mode_s, 'ODE')
 % %% Undamped modes computation via physical differential equation
