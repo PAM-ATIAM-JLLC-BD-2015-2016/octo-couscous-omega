@@ -1,5 +1,5 @@
 function [ H_string, Z_string, string_params ] = ...
-    string_model( string_modes_n )
+    F_string_model( string_modes_n )
 
 string_params = {};
 
