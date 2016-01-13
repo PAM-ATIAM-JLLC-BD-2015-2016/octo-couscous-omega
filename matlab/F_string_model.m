@@ -1,5 +1,5 @@
 function [ H_string, Z_string, string_params ] = ...
-    F_string_model( string_modes_n )
+    F_string_model( string_modes_number )
 
 %% Discretisation fr�quentielle et temporelle
 
@@ -38,12 +38,11 @@ string_params.initial_height = initial_height;
 string_params.x_listening = x_listening;
 string_params.x_excitation = x_excitation;
 
-%% D�termination des modes
-string_wave_number=zeros(1,string_modes_n); % Pre-allocation
+%% Modes computation
 
-for n=1:string_modes_n
-    string_frequency(n) = (n*pi*celerity/string_length)*(1+(string_bending_stiffness/(2*string_tension))*(n*pi/string_length)^2);   
-end
+string_frequency = (1:string_modes_number)*pi*celerity/string_length .* ...
+    (1 + (string_bending_stiffness/(2*string_tension)) * ...
+    ((1:string_modes_number)*pi/string_length).^2);
 
 string_wave_number = string_frequency/celerity;
 
@@ -52,26 +51,35 @@ eta_F = 2*10^(-6);
 eta_B = 2*10^(-5);
 eta_A = 1.2*10^(-2);
 
-for n=1:string_modes_n
-string_damping_coeff(n) = (string_tension*(eta_F+(eta_A/string_frequency(n))) + string_bending_stiffness*eta_B*(n*pi/string_length)^2)/(string_tension+string_bending_stiffness*(n*pi/string_length)^2);
-end
+% for n=1:string_modes_number
+%     string_damping_coeffs_v(n) = (string_tension*(eta_F+(eta_A/string_frequency(n))) + ...
+%         string_bending_stiffness*eta_B*( n *pi/string_length)^2) / ...
+%         (string_tension+string_bending_stiffness*( n *pi/string_length)^2);
+% end
+
+string_damping_coeffs_v = ...
+    (string_tension*(eta_F+(eta_A ./ string_frequency)) + ...
+        string_bending_stiffness*eta_B * ...
+        ( (1:string_modes_number) *pi/string_length).^2) ./ ...
+    (string_tension+string_bending_stiffness * ...
+        ( (1:string_modes_number) *pi/string_length).^2);
 
 %% Application des CI
 
-yn = zeros(string_modes_n,length(t));
+yn = zeros(string_modes_number,length(t));
 y = zeros(1,length(t));
-for n = 1:string_modes_n
-yn(n,:)=sin(string_wave_number(n)*x_excitation)*sin(string_wave_number(n)*x_listening)*((initial_height/(string_length-x_excitation))+(initial_height/x_excitation))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeff(n)*string_frequency(n)*t);
-y = y+yn(n,:);
+for n = 1:string_modes_number
+    yn(n,:)=sin(string_wave_number(n)*x_excitation)*sin(string_wave_number(n)*x_listening)*((initial_height/(string_length-x_excitation))+(initial_height/x_excitation))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeffs_v(n)*string_frequency(n)*t);
+    y = y+yn(n,:);
 end
 
 
 %% String Impedance Z for Nmodes
-TMP = zeros(string_modes_n,length(t));
+TMP = zeros(string_modes_number,length(t));
 
-for n =1:string_modes_n
-  TMP(n,:) = (2*w - 1i*string_frequency(n)*string_damping_coeff(n))./...
-      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeff(n) - (string_frequency(n)^2)*(1-(string_damping_coeff(n)^2)/4));
+for n =1:string_modes_number
+  TMP(n,:) = (2*w - 1i*string_frequency(n)*string_damping_coeffs_v(n))./...
+      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
 end
 
 Z_string = -(1i*string_tension/string_length)*((1./w) + sum(TMP));  % String impedance equation (29)
@@ -79,9 +87,9 @@ Z_string = -(1i*string_tension/string_length)*((1./w) + sum(TMP));  % String imp
 clear TMP
 %% Transfer function displacement/displacement
 
-for n =1:string_modes_n
+for n =1:string_modes_number
   TMP(n,:) = (-1)^n*(2*w*sin(n*pi*x_excitation/string_length))./...
-      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeff(n) - (string_frequency(n)^2)*(1-(string_damping_coeff(n)^2)/4));
+      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
 end
 
 H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP);
