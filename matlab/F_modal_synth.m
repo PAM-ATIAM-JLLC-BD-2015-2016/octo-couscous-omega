@@ -18,31 +18,37 @@ for i=1:modes_number
         % basis in the first-order method has twice the amount of
         % dimensions
     % Matlab recommends left-division instead of using inv()
-    mode_projections_m(:,i) = modes_m \ mode_v;  % BAD dimensions
+    mode_projections_m(:,i) = modes_m \ mode_v;
 end
+
+% imagesc(mode_projections_m); pause;
 
 string_mode_projections_m = mode_projections_m(:,1:string_modes_number);
 body_mode_projections_m = mode_projections_m(:,string_modes_number+1:end);
 
 alphas_v = sum(body_mode_projections_m,2);
+% plot(abs(alphas_v));
 betas_v = alphas_v * x_synthesis/string_length + ...
     string_mode_projections_m * ...
-    sin((1:string_modes_number).'*pi*x_synthesis/string_length);
+    sin((1:string_modes_number).' * pi*x_synthesis/string_length);
 
 modes_inv_m = inv(modes_m);
 V_right_inv = modes_inv_m(:,modes_number+1:end);
 
-X_woodhouse = V_right_inv/mass_m;
+X_woodhouse = V_right_inv / mass_m;
 
 gammas_v = sum(X_woodhouse(:,string_modes_number+1:end),2);
 
+% duration_n = round(Fs_Hz*duration_s);
+dt = 1 / Fs_Hz;
+time_s_v = 0:dt:duration_s;
+sampled_damped_exponentials_m = exp( ...
+    complex_natural_frequencies_v * time_s_v);
 
-duration_n = round(Fs_Hz*duration_s); 
-time_v = 0:duration_n-1;
-sampled_damped_exponentials_m = exp(complex_natural_frequencies_v * time_v);
+% sampled_damped_exponentials_m = exp(-1i * (2*pi*(440-1i)*(1:2*modes_number).') * time_s_v);
 
-modal_synthesis_v = sum((gammas_v .* betas_v).' * ...
-    sampled_damped_exponentials_m, 1);
+modal_synthesis_v = (gammas_v .* betas_v).' * ...
+    sampled_damped_exponentials_m;
 
 end
 
