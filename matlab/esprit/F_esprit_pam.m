@@ -53,9 +53,11 @@ if dis == 1
     hold on
     % Affichage du periodogramme en fond
     plot(freqx2(1:floor(Nfft/2)),db(P2(1:floor(Nfft/2))),'b')
-    baselvl = min(db(P2(1:floor(Nfft/2))));
+    y_lims_plot = ylim;
+    ymin_plot = y_lims_plot(1);
+%     baselvl = min(db(P2(1:floor(Nfft/2))));
     % Affichage des pics detects par la methode
-    stem(f, db(a),'r','BaseValue',baselvl);
+    stem(f, db(a),'r','BaseValue',ymin_plot);
     % Noms
     title( ['Periodogramme, pics issus de la methode ESPRIT et comparaison avec les 15 facteurs donnes'])
     xlabel('Frequence normalisee')
