@@ -1,14 +1,15 @@
-function [ H_string, Z_string, string_params ] = ...
+function [ H_string, Z_string, string_params,f ] = ...
     F_string_model( string_modes_number )
 
 %% Discretisation fr�quentielle et temporelle
 
-Fs = 44100;    % Sampling frequency
+Fs = 25600;    % Sampling frequency
 dt = 1/Fs;     % time step
 Tmax = 6;      % waving time
 t=0:dt:Tmax;   % time vector
+%f = 1:Fs;
 f = Fs*linspace(0,1,length(t));
-w = 2*pi*f;
+omega = 2*pi*f;
 
 %% String physical characteristics
 
@@ -64,6 +65,7 @@ string_damping_coeffs_v = ...
     (string_tension+string_bending_stiffness * ...
         ( (1:string_modes_number) *pi/string_length).^2);
 
+string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
 %% Application des CI
 
 yn = zeros(string_modes_number,length(t));
@@ -75,21 +77,23 @@ end
 
 
 %% String Impedance Z for Nmodes
-TMP = zeros(string_modes_number,length(t));
+TMP = zeros(string_modes_number,length(f));
 
 for n =1:string_modes_number
-  TMP(n,:) = (2*w - 1i*string_frequency(n)*string_damping_coeffs_v(n))./...
-      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
+  TMP(n,:) = (2*omega - 1i*string_frequency(n)*string_damping_coeffs_v(n))./...
+      (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
 end
 
-Z_string = -(1i*string_tension/string_length)*((1./w) + sum(TMP));  % String impedance equation (29)
 
+Z_string = -(1i*string_tension/string_length)*((1./omega) + sum(TMP));  % String impedance equation (29)
 clear TMP
 %% Transfer function displacement/displacement
 
 for n =1:string_modes_number
-  TMP(n,:) = (-1)^n*(2*w*sin(n*pi*x_excitation/string_length))./...
-      (w.^2 - 1i*w*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
+%   TMP(n,:) = (-1)^n*(2*omega*sin(n*pi*x_excitation/string_length))./...
+%       (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
+TMP(n,:) = (-1)^n*(2*omega*sin(n*pi*x_excitation/string_length))./...
+       (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - string_frequency(n)^2);
 end
 
 H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP);
