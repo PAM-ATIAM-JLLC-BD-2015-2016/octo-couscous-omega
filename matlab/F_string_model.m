@@ -1,6 +1,5 @@
 function [ H_string, Z_string, string_params,f ] = ...
     F_string_model( string_modes_number )
-
 %% Discretisation fr�quentielle et temporelle
 
 Fs = 25600;    % Sampling frequency
@@ -10,6 +9,9 @@ t=0:dt:Tmax;   % time vector
 %f = 1:Fs;
 f = Fs*linspace(0,1,length(t));
 omega = 2*pi*f;
+
+%% String modelling parameters + string admittance / impedance
+% Values obtained from Woodhouse's 'Plucked guitar transients' paper
 
 %% String physical characteristics
 
@@ -66,7 +68,9 @@ string_damping_coeffs_v = ...
         ( (1:string_modes_number) *pi/string_length).^2);
 
 string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
-%% Application des CI
+
+%% Inclusion of Initial Conditions
+
 
 yn = zeros(string_modes_number,length(t));
 y = zeros(1,length(t));
@@ -74,7 +78,6 @@ for n = 1:string_modes_number
     yn(n,:)=sin(string_wave_number(n)*x_excitation)*sin(string_wave_number(n)*x_listening)*((initial_height/(string_length-x_excitation))+(initial_height/x_excitation))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeffs_v(n)*string_frequency(n)*t);
     y = y+yn(n,:);
 end
-
 
 %% String Impedance Z for Nmodes
 TMP = zeros(string_modes_number,length(f));
