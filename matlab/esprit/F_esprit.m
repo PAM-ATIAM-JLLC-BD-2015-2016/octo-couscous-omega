@@ -111,6 +111,3 @@ alpha = pinv(VN)*x;
 a = abs(alpha);
 phi = angle(alpha);
 end
-
-
-
