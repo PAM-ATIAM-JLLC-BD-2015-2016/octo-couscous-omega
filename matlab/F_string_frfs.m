@@ -64,7 +64,7 @@ string_damping_coeffs_v = ...
     (string_tension+string_bending_stiffness * ...
         ( (1:string_modes_number) *pi/string_length).^2);
 
-string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
+%string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
 
 %% Inclusion of Initial Conditions
 % yn = zeros(string_modes_number,length(t));

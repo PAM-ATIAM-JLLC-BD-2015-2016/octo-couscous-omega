@@ -12,7 +12,7 @@ f = [0:Nfft-1]*Fs/Nfft;
 figure_fullscreen
 %% Body
 %
-[Y11_b,~] = compute_FRF('body-no_string_E4/mesure_z1.mat',Fs,Nfft);
+[Y11_b,~] = compute_FRF('measures/yamaha-c40_1/body-no_string_E2/mesure_z1.mat',Fs,Nfft);
 subplot 311
 plot(f,db(abs(Y11_b))); 
 title('Y11 body')
@@ -20,7 +20,7 @@ xlim([f1 f2])
 
 %% Body + string 
 %
-[Y11_t,~] = compute_FRF('total_E4/mesure_z1.mat',Fs,Nfft);
+[Y11_t,~] = compute_FRF('measures/yamaha-c40_1/total_E2/mesure_z1.mat',Fs,Nfft);
 subplot 312
 plot(f,db(abs(Y11_t)));
 title('Y11 total')
@@ -43,3 +43,27 @@ Y_s = [Y_s;flip(conj(Y_s(2:end-1)))];
 Y_s(Nfft/2+1) = abs(Y_s(Nfft/2+1) );
 a = ifft(Y_s);
 sound(a,Fs);
+figure, plot(a);
+
+%% Ajust positive values of real(Y11_s)
+for k = 1:length(Y11_s)
+    if real(Y11_s(k)) > 0
+        Y11_s(k) = -( real(Y11_s(k)) ) + i*imag(Y11_s(k));
+    end
+end
+
+figure
+plot(f,db(abs(Y11_s)));
+title('Y11 string')
+xlim([f1 f2])
+
+Y_s = Y11_s(1:Nfft/2+1);
+%Y_s(f2_bin:end) = 0;
+Y_s = [Y_s;flip(conj(Y_s(2:end-1)))];
+Y_s(Nfft/2+1) = abs(Y_s(Nfft/2+1) );
+a = ifft(Y_s);
+sound(a(1:floor(length(a)*0.7)),Fs);
+figure, plot(a);
+
+
+
