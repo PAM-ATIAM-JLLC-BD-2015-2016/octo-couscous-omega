@@ -24,7 +24,7 @@ G = Hint.*1./(1./Y11_b+Zint);
 
 % Making sure G satisfies the hermitian symmetry
 G_sym = G(1:Nfft/2+1);
-%G_sym(1:f1_bin) = eps; % This sets to zero G in the very low frequencies.
+G_sym(1:f1_bin) = eps; % This sets to zero G in the very low frequencies.
 % it might be needed after integrating the measures
 G_sym = [G_sym;flip(conj(G_sym(2:end-1)))];
 

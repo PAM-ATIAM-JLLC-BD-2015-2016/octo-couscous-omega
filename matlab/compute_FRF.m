@@ -31,17 +31,17 @@ function Y = c_FRF( force_t, acceleration_t, Fs, Nfft )
     A = fft(acceleration_t,Nfft);
     Ytemp = A./(F+eps);
     
-%     f0 = 50;
-%     df = Fs/Nfft;
-%     i0 = floor(f0/df);
-%     freqs = [0:Nfft-1]*Fs/Nfft;
-%     
-%     % Integrating the acceleration
-%     Y = Ytemp./(i.*(freqs.'+eps));
-%     
-%     % Setting to zero the very low frequencies
-%     Y(1:i0) = Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1));
-%     Y(end-i0+1:end) = flip(Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1)));
+    f0 = 50;
+    df = Fs/Nfft;
+    i0 = floor(f0/df);
+    freqs = [0:Nfft-1]*Fs/Nfft;
+    
+    % Integrating the acceleration
+    Y = Ytemp./(i.*(freqs.'+eps));
+    
+    % Setting to zero the very low frequencies
+    Y(1:i0) = Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1));
+    Y(end-i0+1:end) = flip(Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1)));
     Y = Ytemp;
 end
 

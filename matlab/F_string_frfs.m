@@ -1,5 +1,5 @@
 function [ H_string, Z_string, string_params,f ] = ...
-    F_string_model( string_modes_number, Nfft, str_note_name )
+    F_string_frfs( string_modes_number, Nfft, str_note_name )
 % 
 % str_note_name = 'E2', 'A2', 'D3', 'G3', 'B3', or 'E4'
 
@@ -32,7 +32,6 @@ string_tension = tens; %71.6;
 celerity = sqrt(string_tension/string_linear_mass);  
 
 
-
 %% Observation parameters
 initial_height = 5*10^(-3);
 x_listening = string_length/8;  % Listening point
@@ -53,24 +52,11 @@ string_params.x_listening = x_listening;
 string_params.x_excitation = x_excitation;
 
 %% Modes computation
-
 string_frequency = (1:string_modes_number)*pi*celerity/string_length .* ...
     (1 + (string_bending_stiffness/(2*string_tension)) * ...
     ((1:string_modes_number)*pi/string_length).^2);
 
-string_wave_number = string_frequency/celerity;
-
 %% Damping coefficient as described in Woodhouse (b)
-% eta_F = 2*10^(-6);
-% eta_B = 2*10^(-5);
-% eta_A = 1.2*10^(-2);
-
-% for n=1:string_modes_number
-%     string_damping_coeffs_v(n) = (string_tension*(eta_F+(eta_A/string_frequency(n))) + ...
-%         string_bending_stiffness*eta_B*( n *pi/string_length)^2) / ...
-%         (string_tension+string_bending_stiffness*( n *pi/string_length)^2);
-% end
-
 string_damping_coeffs_v = ...
     (string_tension*(eta_F+(eta_A ./ string_frequency)) + ...
         string_bending_stiffness*eta_B * ...
@@ -81,8 +67,6 @@ string_damping_coeffs_v = ...
 string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
 
 %% Inclusion of Initial Conditions
-
-% 
 % yn = zeros(string_modes_number,length(t));
 % y = zeros(1,length(t));
 % for n = 1:string_modes_number
