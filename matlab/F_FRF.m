@@ -58,7 +58,7 @@ figure, plot(t,g2), title('g2')
 %soundsc(g2,Fs)
 
 %% 
-g3 = g(1:floor(end*0.4));
+g3 = g(1:floor(length(g)*0.4));
 exc_size = 100;
 x = zeros(1,3*Fs);
 x(1:exc_size) = ones(1,exc_size);
