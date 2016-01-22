@@ -1,13 +1,15 @@
 function [ H_string, Z_string, string_params,f ] = ...
-    F_string_model( string_modes_number )
-%% Discretisation fr�quentielle et temporelle
+    F_string_model( string_modes_number, Nfft )
 
+if nargin < 2
+    Nfft = 2^18;
+end
 Fs = 25600;    % Sampling frequency
 dt = 1/Fs;     % time step
 Tmax = 6;      % waving time
 t=0:dt:Tmax;   % time vector
 %f = 1:Fs;
-f = Fs*linspace(0,1,length(t));
+f = Fs*linspace(0,1,Nfft);
 omega = 2*pi*f;
 
 %% String modelling parameters + string admittance / impedance
