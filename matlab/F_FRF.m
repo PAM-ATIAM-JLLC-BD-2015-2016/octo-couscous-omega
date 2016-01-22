@@ -12,7 +12,7 @@ f2_bin = floor(f2/df);
 f = [0:Nfft-1]*Fs/Nfft;
 
 % Loading the measure of admittance
-[Y11_b,~] = compute_FRF('measures/yamaha-c40_1/body-no_string_E2/mesure_z1.mat',Fs,Nfft);
+[Y11_b,~] = F_compute_FRF('measures/yamaha-c40_1/body-no_string_E2/mesure_z1.mat',Fs,Nfft);
 
 % Computing the response transfer function 
 [H,Z,~,f] = F_string_model(200);

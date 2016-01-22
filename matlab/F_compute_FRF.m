@@ -2,7 +2,7 @@
 %% Try to compute the FRF with a higher number of points than the software used.
 %
 %
-function [Yn1,Yn2] = compute_FRF( measure_mat_filename, Fs, Nfft )
+function [Yn1,Yn2] = F_compute_FRF( measure_mat_filename, Fs, Nfft )
 % This function extracts the measurements  from experiments data
 % in a .mat file. It is then saved in the folder ./wav in an audio form
 
