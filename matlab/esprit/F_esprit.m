@@ -1,7 +1,7 @@
-function [f, a, delta, phi] = F_esprit(x, Fs, K, N, n,dis)
+function [f, a, delta, phi] = F_esprit(x, Fs, K, N, n, dis)
 %% Computes the ESPRIT method on a signal
 % INPUTS
-%   x : signal
+%   x, a column array : signal
 %   Fs : sampling rate
 %   K : signal space dimension
 %   N : size of the studied segment
@@ -103,11 +103,11 @@ W_orth = U1(:,K+1:end);
 end
 
 function [ a, phi ] = least_squares_priv( x, delta, f )
-N = length(x);
-t = [0:N-1];
-y = delta+i*2*pi*f;
-VN = exp(t'*y.');
-alpha = pinv(VN)*x;
-a = abs(alpha);
-phi = angle(alpha);
+    N = length(x);
+    t = (0:N-1);
+    y = delta+1i*2*pi*f;
+    VN = exp(t'*y.');
+    alpha = pinv(VN)*x;
+    a = abs(alpha);
+    phi = angle(alpha);
 end
