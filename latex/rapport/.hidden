@@ -1,0 +1,9 @@
+master.fdb_latexmk
+master.run.xml
+master.bcf
+master.aux
+master.out
+q.log
+master.dvi
+master.fls
+master.log

@@ -1,0 +1,65 @@
+\chapter{Méthode ESPRIT - Extraction des paramètres de corde}
+
+\subsection{Objectifs}
+
+Les paramètres physiques et fréquentiels de corde sont nécessaires à la fois à
+la synthèse par FRF et à la synthèse modale : dans la première, il est besoin
+d'une admittance en extrémité de corde et d'une fonction de transfert entre le
+déplacement de deux points de la corde, tandis que la seconde demande la
+connaissance des modes de cordes. Pour obtenir l'ensemble de ces données,
+plusieurs possibilités s'offrent à nous : s'il est possible de se servir
+directement du modèle proposé par l'article de Woodhouse et des valeurs qui y
+sont fournies, il pourrait être avantageux d'extraire nous-même ces valeurs de
+mesures réelles.\\ Pour cela, il est envisageable de se placer dans une
+position "guitariste", en mesurant uniquement la longueur de la corde, sa
+tension et sa réponse impulsionnelle en un point. A partir de là, il est
+nécessaire de conduire une analyse modale pour extraire de cette réponse les
+valeurs des fréquences modales et de leurs amortissements : avec eux, la
+synthèse FRF sera assurée. Pour obtenir les données nécessaires à la synthèse
+modale, il faudra ensuite "fitter" nos données avec le modèle de Woodhouse
+(c.f. partie Victor) afin de déterminer les paramètres $B$, $c$ (et donc
+$\rho$), $\eta_A$, $\eta_B$ et $\eta_F$. Un des avantages à effectuer cette
+démarche tient ensuite au fait que cette corde pourrait être jouée par nos
+méthodes de synthèse en la tendant (i.e. modifiant $T$) ou la raccourcissant
+(i.e. modifiant $L$) à volonté, comme une corde d'instrument réel.\\ Procédons
+donc comme si nous avions connaissance d'une réponse impulsionnelle de corde,
+de sa tension et de sa longueur.
+
+\subsection{Pré-traitement}
+
+Au lieu d'effectuer immédiatement une analyse modale via la méthode ESPRIT
+(c.f. un ou deux papiers) de la réponse impulsionnelle, qui risque de se
+révéler couteuse en temps, nous utilisons le fait que nous avons déjà une
+certaine idée de la forme de l'admittance de la corde et des valeurs de ses
+résonances pour effectuer un pré-traitement du signal : afin de n'utiliser la
+méthode ESPRIT qu'à faible ordre, nous traitons le signal temporel par un banc
+de filtres centrés sur les valeurs approximatives des fréquences attendues. Un
+autre intérêt est ensuite de pouvoir effectuer un décalage fréquentiel des
+signaux traités (en les modulant par une sinusoïde complexe à la fréquence du
+passe-bande correspondant) afin de le décimer et de réduire les temps de calcul
+à suivre, tout en permettant aisément de remonter aux valeurs véritables des
+pôles du signal. Il est à noter que les signaux en sortie de banc de filtre
+sont amputés de leur partie transitoire, qui trahirai le fait qu'il ne s'agit
+pas d'exponentielles infinies au yeux de la méthode ESPRIT : pour cela, il est
+utile d'utiliser un banc de filtre à réponse impulsionnelle finie (FRI) ,
+puisque cette transition contiendra alors précisément autant d'échantillons que
+l'ordre des filtres.
+
+\subsection{Méthode ESPRIT et moindres carrés}
+
+- à remplir par une brève explication du principe des méthodes ? -
+
+
+\subsection{Extractions des paramètres}
+
+Les données obtenues via le traitement précédant permettent immédiatement
+l'utilisation de la synthèse de type FRF, mais ne suffisent pas à celle de type
+modale. Pour cette dernière, il faut encore remonter aux valeurs de $B$ et de
+$\rho$ : pour cela, et comme exposé plus haut, on se sert de l'expression des
+valeurs attendues des fréquences et amortissements (c.f. partie Victor) pour
+remonter aux paramètres encore inconnus de ces équations. Une fois obtenus, nos
+seront en mesure de manipuler ce type de corde à volonté sur nos deux méthodes
+de synthèses.
+
+
+
