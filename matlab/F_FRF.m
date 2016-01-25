@@ -16,7 +16,7 @@ f1_bin = floor(f1/df);
 f2_bin = floor(f2/df);
 f = [0:Nfft-1]*Fs/Nfft;
 
-nb_modes = 20;
+nb_modes = 10;
 
 %% Loading the measure of admittance
 %[Y11_b,~] = F_compute_FRF('measures/yamaha-c40_1/body-no_string_E2/mesure_z3.mat',Fs,Nfft);
