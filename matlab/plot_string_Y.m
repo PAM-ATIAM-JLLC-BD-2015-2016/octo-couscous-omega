@@ -29,7 +29,7 @@ xlim([f1 f2])
 %% String
 %
 Y11_s = 1./(( (Y11_t+eps).^(-1) - (Y11_b+eps).^(-1) ) + eps );
-Y11_s(1:f1_bin) = -eps;
+%Y11_s(1:f1_bin) = -eps;
 subplot 313
 plot(f,db(abs(Y11_s)));
 title('Y11 string')
@@ -42,7 +42,8 @@ Y_s = Y11_s(1:Nfft/2+1);
 Y_s = [Y_s;flip(conj(Y_s(2:end-1)))];
 Y_s(Nfft/2+1) = abs(Y_s(Nfft/2+1) );
 a = ifft(Y_s);
-sound(a,Fs);
+soundsc(a,Fs);
+pause(6);
 figure, plot(a);
 
 %% Ajust positive values of real(Y11_s)
@@ -52,7 +53,7 @@ for k = 1:length(Y11_s)
     end
 end
 
-figure
+figure 
 plot(f,db(abs(Y11_s)));
 title('Y11 string')
 xlim([f1 f2])
@@ -62,7 +63,7 @@ Y_s = Y11_s(1:Nfft/2+1);
 Y_s = [Y_s;flip(conj(Y_s(2:end-1)))];
 Y_s(Nfft/2+1) = abs(Y_s(Nfft/2+1) );
 a = ifft(Y_s);
-sound(a(1:floor(length(a)*0.7)),Fs);
+soundsc(a(1:floor(length(a)*0.4)),Fs);
 figure, plot(a);
 
 

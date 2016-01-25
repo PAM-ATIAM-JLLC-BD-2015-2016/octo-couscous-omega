@@ -1,11 +1,12 @@
 function [ H_string, Z_string, string_params,f ] = ...
-    F_string_frfs( string_modes_number, Nfft, str_note_name )
+    F_string_frfs( string_modes_number, Nfft, str_note_name, DEBUG_MODE )
 % 
 % str_note_name = 'E2', 'A2', 'D3', 'G3', 'B3', or 'E4'
 
-if nargin < 2
+if nargin < 3
+    DEBUG_MODE = false;
     str_note_name = 'E2';
-    if nargin < 3
+    if nargin < 2
         Nfft = 2^18;
     end
 end
@@ -15,7 +16,7 @@ Tmax = 6;      % waving time
 t=0:dt:Tmax;   % time vector
 %f = 1:Fs;
 f = Fs*linspace(0,1,Nfft);
-omega = 2*pi*f;
+omega = 2*pi*f+eps;
 
 %% String modelling parameters + string admittance / impedance
 % Values obtained from Woodhouse's 'Plucked guitar transients' paper
@@ -30,7 +31,6 @@ string_linear_mass = lin_mass; %6.24*10^(-3);
 string_bending_stiffness = bend_stif; %57e-6;
 string_tension = tens; %71.6;
 celerity = sqrt(string_tension/string_linear_mass);  
-
 
 %% Observation parameters
 initial_height = 5*10^(-3);
@@ -51,6 +51,12 @@ string_params.initial_height = initial_height;
 string_params.x_listening = x_listening;
 string_params.x_excitation = x_excitation;
 
+if DEBUG_MODE
+    disp('*** DEBUG_MODE ***');
+    disp('* STRING PARAMETERS');
+    disp(string_params);
+end
+
 %% Modes computation
 string_frequency = (1:string_modes_number)*pi*celerity/string_length .* ...
     (1 + (string_bending_stiffness/(2*string_tension)) * ...
@@ -64,15 +70,6 @@ string_damping_coeffs_v = ...
     (string_tension+string_bending_stiffness * ...
         ( (1:string_modes_number) *pi/string_length).^2);
 
-%string_damping_coeffs_v = 1000 * string_damping_coeffs_v;
-
-%% Inclusion of Initial Conditions
-% yn = zeros(string_modes_number,length(t));
-% y = zeros(1,length(t));
-% for n = 1:string_modes_number
-%     yn(n,:)=sin(string_wave_number(n)*x_excitation)*sin(string_wave_number(n)*x_listening)*((initial_height/(string_length-x_excitation))+(initial_height/x_excitation))/(string_wave_number(n))*cos(string_frequency(n)*t).*exp(-string_damping_coeffs_v(n)*string_frequency(n)*t);
-%     y = y+yn(n,:);
-% end
 
 %% String Impedance Z for Nmodes
 TMP = zeros(string_modes_number,length(f));
@@ -92,30 +89,29 @@ TMP = (2*omega_m - 1i*string_frequency_m.*string_damping_coeffs_m)./...
       - (string_frequency_m.^2).*(1-(string_damping_coeffs_m.^2)/4));
 Z_string = -(1i*string_tension/string_length)*((1./(omega+eps)) + sum(TMP));  % String impedance equation (29)
  
-clear TMP
-%% Transfer function displacement/displacementw
+if DEBUG_MODE
+    disp('*** DEBUG_MODE ***');
+    disp('* Z_string');
+    figure, plot(f,db(Z_string)), title('DEBUG : Z_{string}')
+end
 
-% for n = 1:string_modes_number
-%   TMP(n,:) = (-1)^n*(2*omega*sin(n*pi*x_excitation/string_length))./...
-%       (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
-% TMP(n,:) = (-1)^n*(2*omega*sin(n*pi*x_excitation/string_length))./...
-%        (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - string_frequency(n)^2);
-% end
-% 
-% H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP);
+%% Transfer function displacement/displacementw
 
 power_v = (-1).^[1:string_modes_number].';
 power_m = repmat(power_v,1,length(omega));
 sin_v   = sin([1:string_modes_number].'*pi*x_excitation/string_length);
 sin_m   = repmat(sin_v,1,length(omega));
 
-TMP2 = power_m.*(2.*omega_m.*sin_m)./...
+TMP = power_m.*(2.*omega_m.*sin_m)./...
        (omega_m.^2 - 1i*omega_m.*string_frequency_m.*string_damping_coeffs_m - string_frequency_m.^2);
 
-H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP2);
+H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP);
 
-%figure;
-%plot(f,abs(fft(y)));
+if DEBUG_MODE
+    disp('*** DEBUG_MODE ***');
+    disp('* H_string');
+    figure, plot(f,db(H_string)), title('DEBUG : H_{string}')
+end
 
 end
 
@@ -133,6 +129,8 @@ elseif strcmp(str_note_name,'B3')
     nb_note = 5;
 elseif strcmp(str_note_name,'E4')
     nb_note = 6;
+else
+    error('Note not written correctly, see help for further notice');
 end             
    
 % Arrays
