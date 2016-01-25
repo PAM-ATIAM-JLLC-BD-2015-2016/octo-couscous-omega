@@ -1,0 +1,58 @@
+\documentclass[a4paper,10pt]{scrreprt}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage[margin=1.2in]{geometry}
+
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lmodern}% just for the example
+\usepackage{lipsum}% just for the example
+
+\colorlet{ctcolorchapterline}{black}
+\colorlet{ctcolorchapternum}{black}
+
+\newcommand\mychapformat[1]{%
+  \parbox[b]{\dimexpr\textwidth-3em\relax}{\raggedright#1}}
+\titleformat{\chapter}[display]%
+  {\usekomafont{chapter}\sectfont}%
+  {\vspace{-8em}\raggedleft{%
+    {\color{ctcolorchapterline}%
+        \rule[-5pt]{2pt}{5cm}}\quad%
+    {\color{ctcolorchapternum}
+        \fontsize{60}{60}\selectfont\thechapter}%
+    }%
+  }%
+  {-2.1em}%
+  {\mychapformat}%
+  [\phantomsection]
+
+
+\usepackage[backend=biber]{biblatex}
+\bibliography{bibfile}
+
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{amsmath}
+
+\title{PAM Synthèse hybride d'instruments à cordes}
+\author{Théis Bazin, Louis Moreau-Gaudry, Victor Rosi \\ Hugo Caracalla et Maxime Dickerson}
+
+\begin{document}
+\maketitle
+
+\input{texte/intro.tex}
+
+\input{texte/mesures.tex}
+\input{texte/analyse.tex}
+\input{texte/synthese.tex}
+
+\input{texte/conclu.tex}
+
+\printbibliography{}
+
+\end{document}

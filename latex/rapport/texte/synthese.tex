@@ -1,29 +1,118 @@
-\documentclass[a4paper,10pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[french]{babel}
-\usepackage{csquotes}
+\chapter{Syntèse}
+\section{Synthèse FRF}
 
-\usepackage[backend=biber]{biblatex}
-\bibliography{bibfile}
+\subsection{Principe}
+% méthode hybride ici. mélange mesures et théorie
+\paragraph*{} 
 
-\usepackage[hidelinks]{hyperref}
+Le principe de la synthèse dans le domaine fréquentiel est relativement simple.
+Il s'agit de calculer ou de mesurer des fonctions de transfert
+(\textit{Frequency Response Function}) nous permettant de relier une force
+appliquée au point d'excitation de la corde à un déplacement au niveau du
+chevalet, de la table d'harmonie de la guitare, ou d'un autre instrument comme
+le ukulélé. Le premier élément nécessaire est l'admittance au chevalet, qui
+peut s'exprimer grâce à l'admittance des cordes et celle du corps au niveau du
+chevalet (par corps, il faut comprendre la table d'harmonie et la caisse de la
+guitare), par l'équation \ref{eq:eq_frf_1}.
 
-\usepackage{siunitx}
-\usepackage{bm}
-\usepackage{amsmath}
+\begin{equation}
+  \frac{1}{Y_{total}} = \frac{1}{Y_{corps}} + \frac{1}{Y_{corde}}
+  \label{eq:eq_frf_1}
+\end{equation}
 
-%opening
-\title{PAM Synthèse hybride d'instruments à cordes}
-\author{Th\'{e}is Bazin \and Victor Rosi}
+Cette admittance totale au niveau du chevalet nous fournit la vitesse de
+celui-ci en fonction d'une force qui y serait appliquée. \\
 
-\begin{document}
+Le second élément nécessaire est la fonction de transfert $H$ reliant un
+déplacement de la corde à un déplacement au niveau du chevalet. En multipliant
+cette fonction avec $Y_{total}$, on obtient la FRF fournissant le déplacement
+$\delta_{excitation}$ en fonction de la force $F_{chevalet}$. Le système étant
+supposé linéaire, cette fonction de transfert fournit aussi le déplacement
+$\delta_{chevalet}$ en fonction de la force $F_{excitation}$ :
 
-% \maketitle
+\begin{equation}
+  \frac{\delta_{chevalet}}{F_{excitation}} = \frac{\delta_{excitation}}{F_{chevalet}} = \frac{Y_{total}H}({j\omega})^2
+  \label{eq:eq_frf_2}
+\end{equation}
 
-% \begin{abstract}
-% 
-% \end{abstract}
+\subsection{Mise en place}
+% implémentation
+% H, Z, Ytotal
+
+L'article de Woodhouse à notre disposition nous a permis d'écrire l'impédance
+de la corde au chevalet $Z_{corde}$, ainsi que la fonction de transfert
+unitaire $H$ à partir de la connaissance des caractéristiques de la corde :
+masse linéique, tension, coefficients d'amortissement, raideur de flexion. Les
+mesures sur les instruments nous ont fourni une estimation de $Y_{corps}$ et de
+$Y_{total}$. \\
+
+La première approche a été d'utiliser uniquement $Y_{total}$ mesurée en
+excitant au marteau d'impact un point proche du chevalet et en mesurant son
+accélération selon l'axe normal et l'axe transverse par rapport à la table
+d'harmonie. La corde que l'on souhaitait synthétiser était libre de vibrer
+alors que les autres étaient étouffées. En réalité, nous mesurions l'inertance,
+ce qui devait ajouter une seconde intégration à l'équation \ref{eq:eq_frf_2}.\\
+
+La seconde approche a été de n'utiliser que la mesure de $Y_{corps}$ .
+L'admittance de la corde au chevalet a utilisé les formulations théoriques de
+l'article. \\
+
+Les FRF issues des mesures temporelles ont été calculées avec un très grand
+nombre de point pour que le signal final dure plusieurs secondes.\\
+
+L'obtention du son était en effet réalisée par FFT inverse, ce qui nous a
+imposé d'écrire la symétrie hermitienne pour notre fonction de transfert.
+L'intégration de l'équation \ref{eq:eq_frf_2} a été omise dans un premier temps
+: les valeurs sont divergentes en zéro. Pour compenser cela nous divisions
+l'admittance de mesure par 100 ou 1000.\\
+
+Enfin, nous convoluons ce signal avec plusieurs impulsions consécutives pour
+adoucir le son et modéliser un plectre basiquement. La force excitatrice n'est
+pas un dirac mais $1$ sur $100$ échantillons avant de passer à 0.
+
+\subsection{Résultats}
+%
+Plusieurs précisions ont du être apportés pour améliorer l'algorithme et le
+son. En effet, ce système comporte plusieurs limitations : l'admittance
+$Y_{corps}$ est affectée par la présence de cordes même atténuées. Cet effet
+est difficilement écarté puisqu'oter les cordes modifie la masse au niveau du
+chevalet. Aussi, nous n'avons pas mesuré les caractéristiques des cordes de la
+guitare à notre disposition mais nous somnes basés sur des valeurs fournies par
+Woodhouse, qui peuvent ne pas correspondre à notre instrument.  \\
+
+Utiliser $Y_{total}$ n'a pas fournit de résultats convaincants. Les sons
+synthétisés ne correspondaient pas à ceux d'une guitare. Woodhouse suggère en
+effet d'effectuer la séparation de cette grandeur, ce que nous avons fait
+ensuite.\\
+
+La figure suivante présente les différentes étapes nous ayant permis de
+synthétiser les sons
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{figures/frf_rapport_intermediaire.png}
+\caption{Etapes de calcul de la synthèse FRF}
+\label{fig:FRF1}
+\end{figure}
+
+La seconde approche a permis d'avoir un son accordé sur la note désirée et de
+reconnaître un son de guitare. Cependant il doit encore être précisé car il est
+saturé et comporte des fréquences assez élevées avec des atténuations peu
+faibles.
+
+
+%
+%
+% $c$ pour chevalet, $e$ pour excitation.
+% $$\frac{1}{Y_{tot}} = \frac{1}{Y_{corps}} + \frac{1}{Y_{corde}}$$
+%$$F_c \times Y_{tot} = v_c$$
+%$$v_c \times \tilde{H} = v_e$$
+%$$\frac{v_e}{j\omega} = \delta_e$$
+%par théorème de réciprocité de Betty : 
+%$$\frac{\delta_c}{F_e} = \frac{\delta_e}{F_c} = \frac{Y_{tot}\tilde{H}}{j\omega}$$
+%
+%
+
 
 \section{Synthèse modale}
 
@@ -169,6 +258,4 @@ des matrices à N-dimensions (un candidat est
 \url{http://www.mathworks.com/matlabcentral/fileexchange/37515-mmx-multithreaded-matrix-operations-on-n-d-matrices}})
 est en cours d'étude et pourrait grandement accélérer le processus.
 
-\printbibliography{}
 
-\end{document}
