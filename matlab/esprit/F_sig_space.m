@@ -6,7 +6,7 @@ l = N-n+1;
 X = hankel(x);
 X = X(1:n,1:l);
 
-Rxx = (1/l)*X*X';
+Rxx = (1/l)*(X*X');
 
 [U1,~,~]=svd(Rxx);
 
