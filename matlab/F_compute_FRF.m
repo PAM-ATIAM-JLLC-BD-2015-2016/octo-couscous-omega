@@ -10,7 +10,7 @@ measure_name = measure_mat_filename(1:end-4);
 
 if nargin<2
     Fs = 25600;
-    Nfft = 2^18;
+    Nfft = 2^19;
 end
 
 s       = load( measure_mat_filename, 'data_Temporel_fenetre_1' );
@@ -26,23 +26,10 @@ end
     
     
 function Y = c_FRF( force_t, acceleration_t, Fs, Nfft )
-    F = fft(force_t,Nfft);
-    A = fft(acceleration_t,Nfft);
-    Ytemp = A./(F+eps);
-    
-%     f0 = 50;
-%     df = Fs/Nfft;
-%     i0 = floor(f0/df);
-%     freqs = [0:Nfft-1]*Fs/Nfft;
-%     
-%     % Integrating the acceleration
-%     Y = Ytemp./(i.*(freqs.'+eps));
-%     
-%     % Setting to zero the very low frequencies
-%     Y(1:i0) = Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1));
-%     Y(end-i0+1:end) = flip(Ytemp(1:i0)-(Ytemp(i0)-Y(i0+1)));
-%     
-    Y = Ytemp;
+    F = fft(force_t,Nfft); F = F(1:Nfft/2+1);
+    A = fft(acceleration_t,Nfft); A = A(1:Nfft/2+1);
+    omega = ([0:Nfft/2]'*Fs/Nfft+eps);
+    Y = A./(F+eps)./(1i*omega);
 end
 
 

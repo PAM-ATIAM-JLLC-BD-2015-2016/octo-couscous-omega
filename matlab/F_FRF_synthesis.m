@@ -1,5 +1,5 @@
 
-function sound_frf = F_FRF( str_path_measure_mat, note_str, DEBUG_MODE)
+function sound_frf = F_FRF_synthesis( str_path_measure_mat, note_str, DEBUG_MODE)
 % Synthesizes the guitar sound thanks to a frequency domain synthesis
 % INPUTS
 %   str_path_measure_mat : path to the mesure of admittance
@@ -7,42 +7,23 @@ function sound_frf = F_FRF( str_path_measure_mat, note_str, DEBUG_MODE)
 %   mode_debug (optional) : displays plots if true.
 
 %% Parameters
-Fs = 25600;
-Nfft = 2^19;
-df = Fs/Nfft;
-f1 = 50;
-f2 = 5000;
-f1_bin = floor(f1/df);
-f2_bin = floor(f2/df);
-f = [0:Nfft-1]*Fs/Nfft;
+Fs = 25600; Nfft = 2^19; df = Fs/Nfft;
+f1 = 50; f2 = 5000; f1_bin = floor(f1/df); f2_bin = floor(f2/df);
+f = [0:Nfft/2]*Fs/Nfft;
 f = f(1:Nfft/2+1);
-
 nb_modes = 20;
 
 %% Loading the measure of admittance
-%[Y11_b,~] = F_compute_FRF('measures/yamaha-c40_1/body-no_string_E2/mesure_z3.mat',Fs,Nfft);
 [Y11_b,~] = F_compute_FRF(str_path_measure_mat,Fs,Nfft);
-%[Y11_b,~] = F_compute_FRF('measures/yamaha-c40_1/total_E2/mesure_z2.mat',Fs,Nfft);
-
 Y11_b = -Y11_b;
 
 %% Computing the response transfer function 
-[H,Z,~,f] = F_string_frfs(nb_modes);
-Hint = H(1:Nfft/2+1); Hint = Hint(:);
-Zint = Z(1:Nfft/2+1); Zint = Zint(:);
-
-%Y11_b = [0*Y11_b(1:f1_bin);Y11_b(f1_bin+1:end)./(f(f1_bin+1:end).'+eps).^1]; 
+[H,Z] = F_string_frfs(nb_modes, Nfft, note_str,DEBUG_MODE);
 
 %% Multiplying admittance with transfer function to complete the model
-%G = Hint.*1./(500./(Y11_b)+Zint);
-%G = Hint.*1./(1./(Y11_b)+Zint);
-
 G = Hint.*Y11_b./(1+Zint.*Y11_b);
-%G = Hint.*Y11_b;
-%G = Y11_b;
-%G = Hint.*1./(Zint);
-%G = 1./(Zint);
 
+Gsym = F_duplicate_frequency_signal( G );
 % Making sure G satisfies the hermitian symmetry
 %G_sym = G(1:Nfft/2+1);
 G_sym = G;

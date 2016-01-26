@@ -3,19 +3,8 @@ function [ H_string, Z_string, string_params,f ] = ...
 % 
 % str_note_name = 'E2', 'A2', 'D3', 'G3', 'B3', or 'E4'
 
-if nargin < 3
-    DEBUG_MODE = false;
-    str_note_name = 'E2';
-    if nargin < 2
-        Nfft = 2^18;
-    end
-end
-Fs = 25600;    % Sampling frequency
-dt = 1/Fs;     % time step
-Tmax = 6;      % waving time
-t=0:dt:Tmax;   % time vector
-%f = 1:Fs;
-f = Fs*linspace(0,1,Nfft);
+Fs = 25600;
+f = Fs*linspace(0,1,Nfft); f = f(1:Nfft/2+1);
 omega = 2*pi*f+eps;
 
 %% String modelling parameters + string admittance / impedance
@@ -78,24 +67,18 @@ string_damping_coeffs_m = repmat(string_damping_coeffs_v.', 1, length(omega));
 string_frequency_m = repmat(string_frequency.', 1, length(omega));
 omega_m = repmat(omega, string_modes_number, 1);
 
-% for n =1:string_modes_number
-%   TMP(n,:) = (2*omega - 1i*string_frequency(n)*string_damping_coeffs_v(n))./...
-%       (omega.^2 - 1i*omega*string_frequency(n)*string_damping_coeffs_v(n) - (string_frequency(n)^2)*(1-(string_damping_coeffs_v(n)^2)/4));
-% end
-%
-%Z_string = -(1i*string_tension/string_length)*((1./(omega+eps)) + sum(TMP));  % String impedance equation (29)
 TMP = (2*omega_m - 1i*string_frequency_m.*string_damping_coeffs_m)./...
       (omega_m.^2 - 1i*omega_m.*string_frequency_m.*string_damping_coeffs_m...
       - (string_frequency_m.^2).*(1-(string_damping_coeffs_m.^2)/4));
 Z_string = -(1i*string_tension/string_length)*((1./(omega+eps)) + sum(TMP));  % String impedance equation (29)
- 
+
 if DEBUG_MODE
     disp('*** DEBUG_MODE ***');
     disp('* Z_string');
     figure, plot(f,db(Z_string)), title('DEBUG : Z_{string}')
 end
 
-%% Transfer function displacement/displacementw
+%% Transfer function displacement/displacement
 
 power_v = (-1).^[1:string_modes_number].';
 power_m = repmat(power_v,1,length(omega));
