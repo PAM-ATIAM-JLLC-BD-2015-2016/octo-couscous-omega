@@ -2,7 +2,7 @@ clc;
 close all;
 clear all;
 
-[signal,Fs] = audioread('measures\wav\A3_piano.wav');
+[signal,Fs] = audioread('test_A3.wav');
 %signal = signal(2000:end);
 F_fond = 220; %approximate fundamental frequency [Hz]
 

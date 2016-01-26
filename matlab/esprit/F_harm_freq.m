@@ -11,7 +11,7 @@ for i=2:number_harm
     if i==2
         middle_freq = 2*harm_freq(1);
     else
-        middle_freq = (harm_freq(i-1)*3 - harm_freq(i-2))/2;
+        middle_freq = 2*harm_freq(i-1) - harm_freq(i-2);
     end
     N_min = ceil(Nfft* (middle_freq - search_interv)/Fs); %beginning of the search interval
     N_max = floor(Nfft * (middle_freq + search_interv)/Fs); %end of the search interval
