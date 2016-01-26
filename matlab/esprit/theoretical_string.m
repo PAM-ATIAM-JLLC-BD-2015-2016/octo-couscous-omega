@@ -1,4 +1,4 @@
-function [y,Fs,string_frequency,string_damping_coeffs_v] = theorical_string(str_note_name)
+function [y,Fs,string_frequency,string_damping_coeffs_v] = theoretical_string(str_note_name)
 
 
 % str_note_name = 'E2', 'A2', 'D3', 'G3', 'B3', or 'E4'
