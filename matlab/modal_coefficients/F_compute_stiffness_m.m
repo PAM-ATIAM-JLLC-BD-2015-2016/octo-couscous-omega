@@ -1,5 +1,5 @@
-function [ stiffness_m ] = F_compute_stiffness_m( ...
-    string_modes_number, string_params, body_effective_stiffnesses_v )
+function [ stiffness_m ] = F_compute_stiffness_m( string_modes_number, ...
+    string_params, body_effective_stiffnesses_v )
 %% Stiffness matrix, K, computation
 % 
 
