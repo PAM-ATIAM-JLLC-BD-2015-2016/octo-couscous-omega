@@ -1,6 +1,7 @@
 function [ string_loss_factors_v ] = F_compute_string_loss_factors_v( ...
     string_params, string_modes_number )
 %% String loss_factors $\eta$ computation via theoretical model
+% Loss factors are the inverses of the Q-factors
 
 % Parameters extraction
 n = 1:string_modes_number;
