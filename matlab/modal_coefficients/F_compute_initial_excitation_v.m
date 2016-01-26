@@ -8,6 +8,8 @@ modes_number = string_modes_number + body_modes_number;
 
 L = string_params.length;
 H_0 = string_params.initial_height;
+x_excitation = string_params.x_excitation;
+excitation_width = string_params.excitation_width;
 
 excitation_min = x_excitation - excitation_width/2;
 excitation_max = x_excitation + excitation_width/2;
