@@ -30,35 +30,40 @@ body_impulse_response_v = body_impulse_response_v(:,2).';
 % body's impulse response.
 % Trim the attack transient to avoid listening to the hammer's sound
 % and only keep a sample of the whole response to reduce the size
-esprit_start_s = 0.2;
-esprit_start_n = esprit_start_s * Fs_Hz;
-esprit_sample_length_n = 1 * Fs_Hz;
-esprit_impulse_extract_v = ...
-    body_impulse_response_v( ...
-        esprit_start:esprit_start_n+esprit_sample_length_n-1);
+esprit_start_s = 1.1;
+esprit_start_n = floor(esprit_start_s * Fs_Hz);
+esprit_length_n = 0.2 * Fs_Hz;
+esprit_impulse_extract_v = body_impulse_response_v( ...
+        esprit_start_n:esprit_start_n+esprit_length_n-1);
 
 % Search for a lot of modes, then only keep the |body_modes_number| modes
 % with greatest amplitude
 esprit_search_number = body_modes_number * 10;
 [body_natural_frequencies_reduced_v, body_amplitudes_v, ...
         body_dampings_v, ~] = ...
-    F_esprit(esprit_impulse_extract_v.', Fs_Hz, body_modes_number, ...
-        esprit_sample_length_n, 2*body_modes_number);
+    F_esprit(esprit_impulse_extract_v.', Fs_Hz, esprit_search_number, ...
+        esprit_length_n, 2*esprit_search_number);
 
-[~, max_amp_modes_v] = max(body_amplitudes);
-    
+[~, max_amp_modes_v] = sort(body_amplitudes_v);
+max_amp_modes_v = max_amp_modes_v(1:body_modes_number);
+
+body_natural_frequencies_reduced_v = body_natural_frequencies_reduced_v(...
+    max_amp_modes_v);
+body_dampings_v = body_dampings_v(max_amp_modes_v);
+
+% Convert to the physical parameters needed
 body_natural_frequencies_Hz_v = Fs_Hz * body_natural_frequencies_reduced_v;
 body_dampings_v = abs(body_dampings_v);
-
-body_modes_number = length(body_natural_frequencies_Hz_v);
-modes_number = body_modes_number + string_modes_number;
 
 [ effective_masses_v ] = F_compute_effective_masses_v( ...
     Y_body_v/max(abs(Y_body_v)), Fs_Hz, ...
     body_natural_frequencies_Hz_v, body_dampings_v);
 effective_stiffnesses_v = ...
     effective_masses_v .* body_natural_frequencies_Hz_v.^2;
-body_q_factors_v = (1 ./ (eps + 2*body_dampings_v));
+% cf. formula (6.13) Arthur Paté's PhD
+body_q_factors_v = ( 2*pi* body_natural_frequencies_Hz_v ./ ...
+    (eps + 2*body_dampings_v));
+% body_q_factors_v = ( 1 ./ (eps + 2*body_dampings_v));
 
 % Temporary arbitrary values
 % effective_masses_v = linspace(1, 40, body_modes_number).' * 10^-2;
@@ -67,7 +72,7 @@ body_q_factors_v = (1 ./ (eps + 2*body_dampings_v));
 % body_q_factors_v = linspace(1, 10, body_modes_number).' * 10;
 
 % 3500, value given by Woodhouse A, constant Q-factor model for the string
-string_q_factors_v = ones(string_modes_number,1) * 10000;
+string_q_factors_v = ones(string_modes_number,1) * 3500;
 
 %%
 % TODO : replace with ESPRIT frequency extraction for _isolated_ string
@@ -146,18 +151,19 @@ end
 %     ones(body_modes_number,1) * 0.2];
 
 static_height_body = 0;
-excitation_width = 0.01;  % 1cm wide finger
+excitation_width = 0.01; % 0.01;  % 1cm wide finger
+initial_height = 0.01; % string_params.initial_height
 
 initial_excitation_v = F_compute_initial_excitation_v( ...
     string_modes_number, body_modes_number, ...
     string_params.string_length, string_params.x_excitation, ...
     excitation_width, ...
-    static_height_body, string_params.initial_height, ...    
+    static_height_body, initial_height, ...    
     modes_m );
 
 %% Resynthesis
-duration_s = 5;
-Fs_Hz = 8000;
+duration_s = 30;
+Fs_Hz = 22050;
 
 [ modal_synthesis_v ] = F_modal_synth( ...
     string_params.x_listening, initial_excitation_v,   ...
@@ -169,7 +175,7 @@ Fs_Hz = 8000;
 
 %% Derivate to yield speed instead of position
 duration_n = length(modal_synthesis_v);
-time_v = linspace(0, 5, duration_n);
+time_v = linspace(0, duration_s, duration_n);
 dt_v = diff(time_v);
 d_modal_synthesis_v = diff(modal_synthesis_v);
 speed_synthesis_v = d_modal_synthesis_v ./ dt_v;
