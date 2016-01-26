@@ -21,16 +21,7 @@ omega_rad_v = 2*pi*f_hz_v+eps;
 
 
 %% String Impedance Z for Nmodes
-TMP = zeros(string_modes_number,length(f_hz_v));
-
-string_damping_coeffs_m = repmat(string_damping_coeffs_v.', 1, length(omega_rad_v));
-string_frequency_m = repmat(string_frequency.', 1, length(omega_rad_v));
-omega_m = repmat(omega_rad_v, string_modes_number, 1);
-
-TMP = (2*omega_m - 1i*string_frequency_m.*string_damping_coeffs_m)./...
-      (omega_m.^2 - 1i*omega_m.*string_frequency_m.*string_damping_coeffs_m...
-      - (string_frequency_m.^2).*(1-(string_damping_coeffs_m.^2)/4));
-Z_string = -(1i*string_tension/string_length)*((1./(omega_rad_v+eps)) + sum(TMP));  % String impedance equation (29)
+Z_string = F_compute_z_string( string_params, string_modes_number, omega_rad_v );
 
 if DEBUG_MODE
     disp('*** DEBUG_MODE ***');
@@ -40,20 +31,15 @@ end
 
 %% Transfer function displacement/displacement
 
-power_v = (-1).^[1:string_modes_number].';
-power_m = repmat(power_v,1,length(omega_rad_v));
-sin_v   = sin([1:string_modes_number].'*pi*x_excitation/string_length);
-sin_m   = repmat(sin_v,1,length(omega_rad_v));
-
-TMP = power_m.*(2.*omega_m.*sin_m)./...
-       (omega_m.^2 - 1i*omega_m.*string_frequency_m.*string_damping_coeffs_m - string_frequency_m.^2);
-
-H_string = x_excitation/string_length + (celerity/string_length)*sum(TMP);
+H_string = F_compute_h_string( string_params, string_modes_number, omega_rad_v );
 
 if DEBUG_MODE
     disp('*** DEBUG_MODE ***');
     disp('* H_string');
     figure, plot(f_hz_v,db(H_string)), title('DEBUG : H_{string}')
 end
+
+Z_string = Z_string(:);
+H_string = H_string(:);
 
 end
