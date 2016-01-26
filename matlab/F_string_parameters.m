@@ -1,5 +1,5 @@
-function [ string_params, string_damping_coeffs_v ] = ...
-    F_string_parameters( string_modes_number, str_note_name )
+function [ string_params, string_loss_factors_v ] = ...
+    F_string_parameters( str_note_name, string_modes_number )
 % This function returns a structure with the parameters of the string
 % according to a given note, as well as the frequencies and the damping
 % coefficients.
@@ -12,11 +12,11 @@ end
 
 %% String physical characteristics
 [string_linear_mass, string_bending_stiffness, string_tension, eta_F, eta_B, eta_A]...
-    = select_string_parameters(str_note_name);
+    = F_select_string_parameters(str_note_name);
 
 string_length   = 0.65;
 celerity        = sqrt(string_tension/string_linear_mass);  
-initial_height  = 5*10^(-3);
+initial_height  = 0.01;
 x_listening     = string_length/8;  
 x_excitation    = string_length/4;     
 
@@ -37,11 +37,13 @@ string_params.x_listening       = x_listening;
 string_params.x_excitation      = x_excitation;
 
 %% String frequencies as described in Woodhouse (a)
-string_params.string_frequencies = F_compute_string_frequencies( string_params, string_modes_number ); 
+string_params.string_frequencies_v = F_compute_string_frequencies_v( ...
+    string_params, string_modes_number ); 
 
 %% Damping coefficients as described in Woodhouse (b)
-string_damping_coeffs_v = F_compute_string_dampings( string_params, string_modes_number ); 
+string_loss_factors_v = F_compute_string_loss_factors_v( ...
+    string_params, string_modes_number ); 
     
-string_params.string_dampings = string_damping_coeffs_v ;
+string_params.string_loss_factors_v = string_loss_factors_v ;
 
 end
