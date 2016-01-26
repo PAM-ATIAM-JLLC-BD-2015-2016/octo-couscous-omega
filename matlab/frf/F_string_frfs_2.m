@@ -17,11 +17,11 @@ f_hz_v = Fs*linspace(0,1,Nfft); f_hz_v = f_hz_v(1:Nfft/2+1);
 omega_rad_v = 2*pi*f_hz_v+eps;
 
 %% String parameters, frequencies, damping coefficients
-[ string_params, ~ ] = F_string_parameters( string_modes_number, str_note_name );
+[ string_params, ~ ] = F_string_parameters( str_note_name, string_modes_number );
 
 
 %% String Impedance Z for Nmodes
-Z_string = F_compute_z_string( string_params, string_modes_number, omega_rad_v );
+Z_string = F_compute_z_string( string_params, omega_rad_v );
 
 if DEBUG_MODE
     disp('*** DEBUG_MODE ***');
@@ -31,7 +31,7 @@ end
 
 %% Transfer function displacement/displacement
 
-H_string = F_compute_h_string( string_params, string_modes_number, omega_rad_v );
+H_string = F_compute_h_string( string_params, omega_rad_v );
 
 if DEBUG_MODE
     disp('*** DEBUG_MODE ***');

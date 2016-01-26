@@ -22,6 +22,7 @@ end
 % Arrays
 linear_masses_v = (1e-3)*[6.24, 3.61, 1.95, 0.9, 0.52, 0.38];
 bending_stiffnesses_v = (1e-6)*[57, 40, 51, 310, 160, 130];
+%bending_stiffnesses_v = [57, 40, 51, 310, 160, 130];
 tensions_v = [71.6, 73.9, 71.2, 58.3, 53.4, 70.3];
 
 eta_F_v = (1e-5)*[2,7,5,14,40,40];
