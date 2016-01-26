@@ -17,7 +17,7 @@ f_hz_v = Fs*linspace(0,1,Nfft); f_hz_v = f_hz_v(1:Nfft/2+1);
 omega_rad_v = 2*pi*f_hz_v+eps;
 
 %% String parameters, frequencies, damping coefficients
-[ string_params, ~ ] = F_string_parameters( str_note_name, string_modes_number );
+[ string_params ] = F_compute_full_string_parameters( str_note_name, string_modes_number );
 
 
 %% String Impedance Z for Nmodes
