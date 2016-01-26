@@ -22,4 +22,12 @@ title('TEST DB F compute Y string')
 xlabel('\omega')
 xlim([50 5000])
 
+%% Invert and listen
+res = F_duplicate_with_hermitian_symmetry( res );
+
+g = ifft( res );
+g = g/max(abs(g));
+soundsc( g, Fs );
+audiowrite( 'test_F_compute_y_string.wav', g/max(abs(g)), Fs );
+
 end

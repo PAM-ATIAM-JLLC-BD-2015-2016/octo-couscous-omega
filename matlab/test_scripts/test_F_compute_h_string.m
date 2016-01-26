@@ -14,12 +14,20 @@ res = F_compute_h_string( string_params, omega_rad_v );
 
 %% Plotting
 figure, plot( omega_rad_v, real(res) )
-title('TEST REAL H compute Z string')
+title('TEST REAL F compute H string')
 xlabel('\omega')
 xlim([50 5000])
 figure, plot( omega_rad_v, db(res) )
-title('TEST DB H compute Z string')
+title('TEST DB F compute H string')
 xlabel('\omega')
 xlim([50 5000])
+
+%% Invert and listen
+res = F_duplicate_with_hermitian_symmetry( res );
+
+g = ifft( res );
+g = g/max(abs(g));
+soundsc( g, Fs );
+audiowrite( 'test_F_compute_h_string.wav', g, Fs );
 
 end
