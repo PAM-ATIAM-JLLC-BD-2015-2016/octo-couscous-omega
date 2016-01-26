@@ -1,6 +1,6 @@
 %% Test script with arbitrary values to check the modal synthesis functions
 
-% clear all
+clear all
 project_path = genpath('../');
 addpath(project_path);
 
@@ -8,20 +8,29 @@ plots = false;
 
 %%
 
+chosen_string_name = 'E2';
+
 string_modes_number = 10;
 body_modes_number = 40;
 modes_number = body_modes_number + string_modes_number;
 
-[~, ~, string_params] = F_string_model( string_modes_number );
+% Strig parameters loading and computation
+[ string_params, string_loss_factors_v ] = F_string_parameters( ...
+    chosen_string_name, string_modes_number );
+string_q_factors_v = (1 ./ string_loss_factors_v).';
 
-% Efective stiffnesses/masses and Q-factors computation (via measures)
+% 3500, value given by Woodhouse A, constant Q-factor model for the string
+% string_q_factors_v = ones(string_modes_number,1) * 3500;
 
+% Effective stiffnesses/masses and Q-factors computation (via measures)
 Fs_Hz = 25600;
 Y_body_v = load('body_z.mat', 'data_FRF_1');
 Y_body_v = Y_body_v.data_FRF_1;
 % body_temporal_data = load('parfait_90.mat', 'data');
 % body_temporal_data = body_temporal_data.data;
-body_impulse_response_v = load('body-no_string_E2/mesure_z1.mat', ...
+measure_filename = ['body-no_string_', chosen_string_name, ...
+    '/mesure_z1.mat'];
+body_impulse_response_v = load(measure_filename, ...
     'data_Temporel_1');
 body_impulse_response_v = body_impulse_response_v.data_Temporel_1;
 body_impulse_response_v = body_impulse_response_v(:,2).';
@@ -64,15 +73,6 @@ effective_stiffnesses_v = ...
 body_q_factors_v = ( 2*pi* body_natural_frequencies_Hz_v ./ ...
     (eps + 2*body_dampings_v));
 % body_q_factors_v = ( 1 ./ (eps + 2*body_dampings_v));
-
-% Temporary arbitrary values
-% effective_masses_v = linspace(1, 40, body_modes_number).' * 10^-2;
-% effective_stiffnesses_v = effective_masses_v .* ...
-%     (linspace(1, 5, body_modes_number).').^2;
-% body_q_factors_v = linspace(1, 10, body_modes_number).' * 10;
-
-% 3500, value given by Woodhouse A, constant Q-factor model for the string
-string_q_factors_v = ones(string_modes_number,1) * 3500;
 
 %%
 % TODO : replace with ESPRIT frequency extraction for _isolated_ string
