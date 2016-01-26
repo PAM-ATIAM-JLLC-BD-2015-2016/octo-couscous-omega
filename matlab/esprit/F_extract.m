@@ -7,7 +7,7 @@ clear all;
 [signal,Fs] = audioread('A3_piano.wav');
 signal = signal(2000:20000);
 
-Nfft = 2^(nextpow2(length(signal)));
+Nfft = 2^(nextpow2(length(signal))+2);
 incert = 10;
 
 number_modes = 10; %selection of a number of modes
@@ -81,7 +81,7 @@ for i=1:number_modes
     f_esprit(i) = f_esprit_temp(pos);
 end
 
-%f_esprit = f_esprit*decimation_freq + freq_estimate*Fs;
+f_esprit = f_esprit*decimation_freq + freq_estimate;
 
 %% re-synthesis
 
