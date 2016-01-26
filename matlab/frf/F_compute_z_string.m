@@ -1,14 +1,14 @@
 
 function Z_string = F_compute_z_string( string_params, omega_rad_v )
 
-string_modes_number = length( string_params.string_loss_factors_v );
+string_modes_number = length( string_params.loss_factors_v );
 
-T       = string_params.string_tension;
-L       = string_params.string_length;
+T       = string_params.tension;
+L       = string_params.length;
 W_m     = repmat(omega_rad_v, string_modes_number, 1);
 
-Wn_v    = string_params.string_frequencies_v;
-etan_v  = string_params.string_loss_factors_v;
+Wn_v    = string_params.natural_frequencies_rad_v;
+etan_v  = string_params.loss_factors_v;
 
 Wn_m    = repmat(Wn_v.', 1, length(omega_rad_v));
 etan_m  = repmat(etan_v.', 1, length(omega_rad_v));

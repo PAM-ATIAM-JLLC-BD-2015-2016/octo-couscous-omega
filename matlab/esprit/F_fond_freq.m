@@ -9,7 +9,7 @@ abs_fft_sig = abs(fft_signal);
 %f_min = 50;
 %f_max = 900;
 
-H = 3; %number of specter foldings
+H = 10; %number of specter foldings
 R_max = floor((Nfft-1)/(2*H));
  
     

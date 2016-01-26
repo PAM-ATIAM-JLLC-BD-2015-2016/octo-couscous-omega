@@ -1,4 +1,4 @@
-function [W,W_orth] = sigSpace( x, n, K )
+function [W,W_orth] = F_sig_space( x, n, K )
 % This function computes the correlation matrix R and then the space signal
 % matrix W
 N = length(x);
@@ -8,7 +8,7 @@ X = X(1:n,1:l);
 
 Rxx = (1/l)*X*X';
 
-[U1,Lambda,U2]=svd(Rxx);
+[U1,~,~]=svd(Rxx);
 
 W=U1(:,1:K);
 

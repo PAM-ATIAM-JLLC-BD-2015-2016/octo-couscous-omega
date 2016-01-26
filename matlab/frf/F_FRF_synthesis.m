@@ -11,7 +11,7 @@ Fs = 25600; Nfft = 2^19; df = Fs/Nfft;
 f1 = 50; f2 = 5000; f1_bin = floor(f1/df); f2_bin = floor(f2/df);
 f = [0:Nfft/2]*Fs/Nfft;
 f = f(1:Nfft/2+1);
-nb_modes = 20;
+nb_modes = 40;
 
 %% Loading the measure of admittance
 [Y11_b,~] = F_compute_FRF(str_path_measure_mat,Fs,Nfft);
@@ -22,6 +22,7 @@ Y11_b = -Y11_b;
 
 %% Multiplying admittance with transfer function to complete the model
 G = H.*Y11_b./(1+Z.*Y11_b);
+%G = H.*Z.*Y11_b./(Z+Y11_b);
 
 
 %% Inverting the FFT
@@ -47,7 +48,7 @@ if DEBUG_MODE
 end    
 %% 
 t = [0:length(g)-1]/Fs;     
-g2 = [g(floor(length(g)*0.4):end);g(1:floor(length(g)*0.4)-1)];
+g2 = [g(floor(length(g)*0.4):end),g(1:floor(length(g)*0.4)-1)];
 
 if DEBUG_MODE
     figure, plot(t,g), title('g') 

@@ -22,8 +22,8 @@ integrate_b = true;
 %% Normal Direction Admittances
 %
 % Y11
-%name = 'mesure_z';
-name = 'mesure_micro_';
+name = 'mesure_z';
+%name = 'mesure_micro_';
 
 figure_fullscreen
 subplot 221

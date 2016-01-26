@@ -1,7 +1,7 @@
 function test_F_compute_y_string()
 
 str_note_name = 'E2';
-string_modes_number = 40;
+string_modes_number = 60;
 Nfft = 2^19;
 Fs = 25600;
 f_hz_v = Fs*linspace(0,1,Nfft); f_hz_v = f_hz_v(1:Nfft/2+1);
