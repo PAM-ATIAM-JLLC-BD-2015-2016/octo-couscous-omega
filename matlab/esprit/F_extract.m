@@ -27,7 +27,7 @@ k = 1;
 %%
 for i=1:number_modes 
     if i==1
-        nu_c1 =  freq_estimate(i)/2;
+        nu_c1 =  freq_estimate(1)/2;
     else
         nu_c1 = (freq_estimate(i)+freq_estimate(i-1))/2;
     end
@@ -42,12 +42,12 @@ for i=1:number_modes
     end
     
     freq_coord = [0 nu_c1 nu_b1 nu_b2 nu_c2 1];
-    B(i,:) = generateBandPassFilter(nu_b1, nu_c1, nu_b2, nu_c2, Fs);
+    B = generateBandPassFilter(nu_b1, nu_c1, nu_b2, nu_c2, Fs);
     
 
     
-    [h,w] = freqz(B(i,:),1,Nfft/2);
-    B(i,:) = B(i,:)/max(abs(h)); 
+    [h,w] = freqz(B,1,Nfft/2);
+    B = B/max(abs(h)); 
     h = h./max(h);
 %     figure;
 %     plot(w/pi,abs(h));
@@ -60,20 +60,20 @@ for i=1:number_modes
 
 k = k+1;
     % Recalage du filtre en zéro
-    y(i,:) = filter(B(i,:),1,signal).*exp(2*1i*pi*freq_estimate(i)*(1:length(signal))/Fs)';   
+    y(i,:) = filter(B,1,signal).*exp(2*1i*pi*freq_estimate(i)*(1:length(signal))/Fs)';   
 end
 
+%% decimation
 
-%% Etape de décimation
-% La décimation doit être au moins supérieur à (nu_b2-nu_b1)/2 soit 50 Hz on prend
-% deux fois plus grand
-f = Fs*linspace(0,1,length(y));
-decimation_freq = 8*incert;
-decimation_factor = round(Fs/decimation_freq);
+dec_bandpass = freq_estimate(1)/2; %bandpass of the filtered signal
+%f = Fs*linspace(0,1,length(y));
+decimation_freq = 8*dec_bandpass;
+decimation_factor = round(Fs/decimation_freq); %decimation factor
+decimation_freq = Fs/decimation_factor; %exact decimation frequency
 y_new(:,:) = y(:,1:decimation_factor:end);
-f_new = decimation_freq*linspace(0,1,length(y_new));
+%f_new = decimation_freq*linspace(0,1,length(y_new));
 
 %% application esprit
 K = 1; n = length(y_new(1,:));
-[delta_esprit, f_esprit] = TP_esprit(y_new(7,:),n,K);
+[delta_esprit, f_esprit] = TP_esprit(y_new(7,:),n,K)
 
