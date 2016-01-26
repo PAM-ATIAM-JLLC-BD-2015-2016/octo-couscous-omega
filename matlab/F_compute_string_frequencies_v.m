@@ -9,7 +9,7 @@ B = string_params.string_bending_stiffness;
 T = string_params.string_tension;
 
 % Equation 30 from Woodhouse (a)
-string_frequencies_v = (mode_n_v * pi * c/L) .* ...
+string_frequencies_v = (mode_n_v * pi * c/(2*L)) .* ...
     ( 1 + (B/(2*T)) .* (mode_n_v*pi/L).^2 );
 
 end
