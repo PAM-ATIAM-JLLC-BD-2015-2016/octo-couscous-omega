@@ -34,3 +34,6 @@ res = F_compute_string_frequencies_v( string_params, string_modes_number );
 %% Display
 figure, plot( res )
 title('TEST F compute string frequencies');
+
+
+end
