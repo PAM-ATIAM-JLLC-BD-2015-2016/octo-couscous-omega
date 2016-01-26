@@ -12,13 +12,12 @@ T = string_params.tension;
 
 % Equation (31) de Woodhouse (a)
 
-%Wn_v    = string_params.string_frequencies_v.';
+Wn_v    = string_params.natural_frequencies_rad_v.';
 etan_v  = string_params.loss_factors_v.';
 
-
 % Introduction de d?viations par rapport au mod?le id?al 
-Wn_v = mode_n_v.' * pi * c/L ...
-    .* ( 1 + B*(mode_n_v.').^2 ) .* ( 1 + 1i*etan_v/2 );
+%Wn_v = mode_n_v.' * pi * c/L ...
+%    .* ( 1 + B*(mode_n_v.').^2 ) .* ( 1 + 1i*etan_v/2 );
 
 Wn_m    = repmat(Wn_v, 1, length(omega_rad_v));
 etan_m  = repmat(etan_v.', 1, length(omega_rad_v));
@@ -32,7 +31,5 @@ temp = sum( power_m ./ ( W_m - Wn_m ) );
 %temp = sum( power_m ./ ( W_m - mode_n_m*pi*c/L) );
 
 H_string = x/L + (c/L)*sin(omega_rad_v*x/c) .* temp;
-
-
 
 end

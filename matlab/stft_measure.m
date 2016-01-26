@@ -1,6 +1,6 @@
 function stft_measure()
 Fs = 25600;
-Nfft = 2^12;
+Nfft = 2^14;
 I = 1;
 
 measure_name = 'measures/yamaha-c40_1/body-no_string_E2/mesure_z2.mat';
@@ -25,7 +25,7 @@ ylabel('frequency')
 ylim([0 1000])
 title('Short term fourier tran5form of acceleration of the guitar bridge');
 
-function Xs = tfct_pam(x,Fe,Nfft,I)
+function Xs = stft_pam(x,Fe,Nfft,I)
 % analyse d'un signal ? l'aide de la TFCT
 % transform?e de Fourier ? Court Terme
 %clear all; close all;
