@@ -3,7 +3,7 @@ close all;
 clear all;
 
 [signal,Fs] = audioread('test_A3.wav');
-signal = signal(2000:10000);
+signal = signal(2000:20000);
 
 %[signal,Fs,string_frequency,string_damping_coeffs_v] = theoretical_string('E2');
 % transient_time = 0.2;              %200ms
@@ -30,7 +30,7 @@ fft_signal = fft_signal/max(fft_signal);
 
 dec_bandpass = freq_estimate(1)/2; %bandpass of the filtered signal
 %f = Fs*linspace(0,1,length(y));
-decimation_freq = 2*dec_bandpass;
+decimation_freq = 10*dec_bandpass;
 decimation_factor = round(Fs/decimation_freq); %decimation factor
 decimation_freq = Fs/decimation_factor; %exact decimation frequency
 
@@ -68,13 +68,14 @@ for i=1:number_modes
 %     close all
 
     y(i,:) = filter(B,1,signal); %filtering of the signal
+    %y(i,:) = y(i,:) - mean(y(i,:));
     y(i,:) = y(i,:).*exp(-2*1i*pi*freq_estimate(i)*(1:length(signal))/Fs); %frequency shift to 0 Hz
     
     y_new(i,:) = y(i,1:decimation_factor:end);
 
 
     %% ESPRIT
-    K = 2; n = length(y_new(1,:));
+    K = 2; n = 256;
     [delta_esprit_temp, f_esprit_temp] = F_esprit(y_new(i,:),n,K);
     [~,pos] = min(abs(f_esprit_temp));
     delta_esprit(i) = delta_esprit_temp(pos);
