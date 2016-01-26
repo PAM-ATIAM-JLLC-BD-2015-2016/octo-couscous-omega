@@ -15,9 +15,12 @@ function [ string_params ] = F_compute_full_string_parameters( ...
 % Common values for all strings
 string_length   = 0.65;
 celerity        = sqrt(string_tension/string_linear_mass);
+
+% Excitation parameters
 initial_height  = 0.01;
 x_listening     = string_length/8;
 x_excitation    = string_length/4;
+excitation_width = 0;  % Punctual wire excitation
 
 %% Parameters container
 string_params = {};
@@ -34,6 +37,7 @@ string_params.etaF               = eta_F;
 string_params.initial_height    = initial_height;
 string_params.x_listening       = x_listening;
 string_params.x_excitation      = x_excitation;
+string_params.excitation_width  = excitation_width;
 
 %% String frequencies as described in Woodhouse (a)
 string_natural_frequencies_rad_v = ...
