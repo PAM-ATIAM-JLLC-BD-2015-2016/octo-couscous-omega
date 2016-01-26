@@ -14,7 +14,7 @@ string_modes_number = 10;
 body_modes_number = 40;
 modes_number = body_modes_number + string_modes_number;
 
-% Strig parameters loading and computation
+% String parameters loading and computation
 [ string_params, string_loss_factors_v ] = F_string_parameters( ...
     chosen_string_name, string_modes_number );
 string_q_factors_v = (1 ./ string_loss_factors_v).';
