@@ -41,14 +41,14 @@ string_params.excitation_width  = excitation_width;
 
 %% String frequencies as described in Woodhouse (a)
 string_natural_frequencies_rad_v = ...
-    F_compute_string_natural_frequencies_rad_v( ...
-        string_params, string_modes_number ); 
+    F_compute_string_natural_frequencies_rad_v( string_params, ...
+    string_modes_number ); 
 
 string_params.natural_frequencies_rad_v = string_natural_frequencies_rad_v;
 
 %% Damping coefficients as described in Woodhouse (b)
-string_loss_factors_v = F_compute_string_loss_factors_v( ...
-    string_params, string_modes_number ); 
+string_loss_factors_v = F_compute_string_loss_factors_v( string_params, ...
+    string_modes_number ); 
     
 string_params.loss_factors_v = string_loss_factors_v ;
 
