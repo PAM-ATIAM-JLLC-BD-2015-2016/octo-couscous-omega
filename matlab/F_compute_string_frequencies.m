@@ -1,4 +1,6 @@
-function string_frequencies_v = F_compute_string_frequencies( string_params, string_modes_number )
+function string_frequencies_v = F_compute_string_frequencies( ...
+    string_params, string_modes_number )
+%% String natural frequencies computation via theoretical model
 
 n = 1:string_modes_number;
 c = string_params.celerity;
