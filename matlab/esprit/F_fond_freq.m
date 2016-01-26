@@ -1,10 +1,10 @@
-function f0 = F_fond_freq(signal,Nfft,Fs,f_min,f_max)
+function f0 = F_fond_freq(fft_signal,Nfft,Fs,f_min,f_max)
 
 %[signal,Fs] = audioread('measures\wav\test_A3.wav');
 %signal = signal(2000:end);
 
 %Nfft = 2^nextpow2(length(signal));
-%fft_sig = abs(fft(signal,Nfft));
+abs_fft_sig = abs(fft_signal);
 
 %f_min = 50;
 %f_max = 900;
@@ -17,7 +17,7 @@ R_max = floor((Nfft-1)/(2*H));
 P = ones(R_max,1);
 for i=1:R_max
     for k=1:H
-        P(i)=P(i)*fft_sig(1:k:R_max);
+        P(i)=P(i)*abs_fft_sig(k*i);
     end
 end
  

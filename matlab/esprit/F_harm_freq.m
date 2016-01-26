@@ -5,7 +5,7 @@ fft_signal = fft(signal, Nfft);
 harm_freq = zeros(1,number_harm); %array of precise harmonic frequencies
 harm_freq(1) = F_fond_freq(fft_signal,Nfft,Fs,50,1000);
 
-search_interv = 10; %size of the interval in which each freq will be searched
+search_interv = 10; %size of the interval in which each freq will be purchased [Hz]
 
 for i=2:number_harm
     if i==2

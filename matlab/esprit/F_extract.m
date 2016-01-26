@@ -2,16 +2,17 @@ clc;
 close all;
 clear all;
 
-[signal,Fs] = audioread('A3_piano.wav');
+[signal,Fs] = audioread('measures\wav\A3_piano.wav');
 %signal = signal(2000:end);
 F_fond = 220; %approximate fundamental frequency [Hz]
 
 transient_time = 0.2;              %2OOms
 transient_n = transient_time*Fs;
 signal = signal(transient_n:end);
+Nfft = 2^nextpow2(length(signal));
 
 number_modes = 10; %signal is supposed quasi-harmonic
-freq_estimate = [1:number_modes]*F_fond;
+freq_estimate = F_harm_freq(signal,number_modes,Fs,Nfft);%[1:number_modes]*F_fond;
 
 filter_order = floor(length(signal)/100); %filter order is based on the portion of the signal we can sacrifice to the transition
 incert = 5;                         %incertitude en Hertz in normalized frequency
@@ -19,9 +20,7 @@ incert = 5;                         %incertitude en Hertz in normalized frequenc
 %B = zeros(number_modes,filter_order+1);
 y = zeros(number_modes,length(signal));
 
-
-Nfft = 2^nextpow2(length(signal));
-fft_signal = abs(fft(signal,Nfft));
+%fft_signal = abs(fft(signal,Nfft));
 %fft_signal = fft_signal/max(fft_signal);
 f = Fs*linspace(0,1,Nfft);
 k = 1;
