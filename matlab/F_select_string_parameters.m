@@ -1,5 +1,5 @@
-
-function [lin_mass, bend_stif, tens, etaF, etaB, etaA] = F_select_string_parameters(str_note_name)
+function [ string_params ] = F_select_string_parameters( str_note_name )
+%% String parameters selection wrapper, using values provided by Woodhouse
 
 if strcmp(str_note_name,'E2')
     nb_note = 1;
@@ -30,5 +30,30 @@ etaF = eta_F_arr(nb_note);
 etaB = eta_B_arr(nb_note);
 etaA = eta_A_arr(nb_note);
 
-end
+%% String physical characteristics
 
+string_length = 0.65;
+string_linear_mass = lin_mass;
+string_bending_stiffness = bend_stif;
+string_tension = tens;
+celerity = sqrt(string_tension/string_linear_mass);  
+
+%% Observation parameters
+initial_height = 0.01;  % 1cm
+x_listening = string_length/8;  % Listening point
+x_excitation = string_length/4;                        
+
+%% Parameters container
+string_params = {};
+
+string_params.string_length = string_length;
+string_params.string_linear_mass = string_linear_mass;
+string_params.string_bending_stiffness = string_bending_stiffness;
+string_params.string_tension = string_tension;
+string_params.celerity = celerity;
+
+string_params.initial_height = initial_height;
+string_params.x_listening = x_listening;
+string_params.x_excitation = x_excitation;
+
+end
