@@ -15,6 +15,8 @@ elseif strcmp(str_note_name,'B3')
     note_n = 5;
 elseif strcmp(str_note_name,'E4')
     note_n = 6;
+else
+    error('Must input note name');
 end             
    
 % Arrays
