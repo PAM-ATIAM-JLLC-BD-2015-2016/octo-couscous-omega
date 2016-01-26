@@ -174,23 +174,26 @@ Fs_Hz = 22050;
     duration_s, Fs_Hz );
 
 %% Derivate to yield speed instead of position
-duration_n = length(modal_synthesis_v);
-time_v = linspace(0, duration_s, duration_n);
-dt_v = diff(time_v);
-d_modal_synthesis_v = diff(modal_synthesis_v);
-speed_synthesis_v = d_modal_synthesis_v ./ dt_v;
+% It is mostly speed that is heard when listening in close field to the
+% coupled system, rather than displacement
+d = fdesign.differentiator;
+Hd = design(d,'equiripple');
+
+speed_synthesis_v = filter(Hd, modal_synthesis_v);
 
 %%
+plotted_v = speed_synthesis_v;
+
 figure
 subplot(1,2,1)
-dt_s = length(modal_synthesis_v) / duration_s;
-time_s_v = (0:length(modal_synthesis_v)-1) * dt_s;
-plot(time_s_v, real(modal_synthesis_v)/max(abs(real(modal_synthesis_v))));
+dt_s = length(plotted_v) / duration_s;
+time_s_v = (0:length(plotted_v)-1) * dt_s;
+plot(time_s_v, real(plotted_v)/max(abs(real(plotted_v))));
 
 subplot(1,2,2)
 N_fft = 2^12;
-modal_synthesis_fft_v = fft(modal_synthesis_v(200:N_fft/4), N_fft);
+plotted_fft_v = fft(plotted_v(200:N_fft/4), N_fft);
 dF_Hz = Fs_Hz/N_fft;
 fft_freqs_Hz_v = (0:N_fft-1)*dF_Hz;
 plot(fft_freqs_Hz_v(1:end/2), ...
-    db(modal_synthesis_fft_v(1:end/2)/max(abs(modal_synthesis_fft_v(1:end/2)))));
+    db(plotted_fft_v(1:end/2)/max(abs(plotted_fft_v(1:end/2)))));
