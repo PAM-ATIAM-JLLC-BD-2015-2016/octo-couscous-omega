@@ -11,11 +11,11 @@ if nargin < 2
 end
 
 %% String physical characteristics
-[string_linear_mass, string_bending_stiffness, string_tension, eta_F, eta_B, eta_A]...
-    = F_select_string_parameters(str_note_name);
+[string_linear_mass, string_bending_stiffness, string_tension, ...
+    eta_F, eta_B, eta_A] = F_select_string_parameters(str_note_name);
 
 string_length   = 0.65;
-celerity        = sqrt(string_tension/string_linear_mass);  
+celerity        = sqrt(string_tension/string_linear_mass);
 initial_height  = 0.01;
 x_listening     = string_length/8;  
 x_excitation    = string_length/4;     
