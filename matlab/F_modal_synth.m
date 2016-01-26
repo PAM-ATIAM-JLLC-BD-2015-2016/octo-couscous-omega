@@ -87,24 +87,55 @@ sampled_damped_exponentials_m = exp( ...
 
 modal_synthesis_v = zeros(1,duration_n);
 
-% Very slow, could be made a lot faster by a matricial computation.
-% Maybe add a third dimension to the matrices.
-% Check http://www.mathworks.com/matlabcentral/fileexchange/...
-%   25977-mtimesx-fast-matrix-multiply-with-multi-dimensional-support
+% Precompute part of the matrix product
+left_row_v = amplitude_modes_v * U_upper_m;
+right_column_v = (U_right_inv_m / mass_m) * initial_excitation_v;
 
-% modal_contributions_v = (U_upper_m * ...
-%         diag(sampled_damped_exponentials_m(:,t_ind)) * ...
-%         U_right_inv_m / mass_m) * initial_excitation_v;
-    
-% modal_contributions_m = repmat(modal_contributions_v, duration_n);
-% size(modal_contributions_m)
+% To avoid overflow's, compute by segments of segment_length_n samples
+segment_duration_n = 10000;
+segments_number = floor(duration_n/segment_duration_n);
 
-parfor t_ind = 1:duration_n
-    modal_contributions_v = (U_upper_m * ...
-        diag(sampled_damped_exponentials_m(:,t_ind)) * ...
-        U_right_inv_m / mass_m) * initial_excitation_v;
+column_renormalization_m = repmat(left_row_v.', 1, segment_duration_n);
+
+    function [ ] = F_compute_add_segment_v(...
+        start_segment_n, segment_duration_n, ...    
+        renormalization_m)
+    current_segment_v = (start_segment_n:...
+        start_segment_n + segment_duration_n-1);
+    exponentials_segment_m = sampled_damped_exponentials_m(:,...
+        current_segment_v);
     
-    modal_synthesis_v(t_ind) = amplitude_modes_v * modal_contributions_v;
+    modal_synthesis_segment_v = ...
+        (renormalization_m .* exponentials_segment_m).' * ...
+         right_column_v;
+    modal_synthesis_v(current_segment_v) = modal_synthesis_segment_v.'; 
+    end
+
+
+for segment_n = 0:segments_number-2
+    start_n = 1+segment_duration_n*segment_n;
+    F_compute_add_segment_v(...
+        start_n, segment_duration_n, ...    
+        column_renormalization_m);
 end
+
+last_segment_start_n = 1+segment_duration_n*(segments_number-1);
+last_segment_duration_n = mod(duration_n, segment_duration_n);
+last_column_renormalization_m = repmat(left_row_v.', 1, ...
+    last_segment_duration_n);
+ F_compute_add_segment_v(last_segment_start_n, last_segment_duration_n, ...
+     last_column_renormalization_m);
+
+% parfor t_ind = 1:duration_n
+%     % row * diagonal matric product amounts to a renormalization of each
+%     % of the columns of the row, which in turn amounts to a simple
+%     % dot product
+%     current_exponentials_v = sampled_damped_exponentials_m(:,t_ind);
+%     
+%     current_displacement = (left_row_v .* current_exponentials_v.') * ... 
+%         right_column_v;
+%     
+%     modal_synthesis_v(t_ind) = current_displacement;
+% end
 
 end
