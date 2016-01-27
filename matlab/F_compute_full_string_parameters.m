@@ -18,14 +18,11 @@ celerity        = sqrt(string_tension/string_linear_mass);
 
 % Excitation parameters, following the experiments
 initial_height  = 0.01;
-<<<<<<< Updated upstream
 delta_excitation = 0.017;  % Distance to the bridge
 x_excitation    = string_length-delta_excitation;
 x_listening     = string_length*(1-0.9999);  % Very close to the bridge
-=======
 x_listening     = string_length;  % Listen sound at the body
 x_excitation    = string_length-0.017;  % Values used in the expirements
->>>>>>> Stashed changes
 excitation_width = 0;  % Punctual wire excitation
 
 %% Parameters container
