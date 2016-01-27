@@ -6,11 +6,14 @@ addpath(project_path);
 
 plots = false;
 
-%%
+%% String and body parameters definition
 
 string_name = 'E2';
 
-string_modes_number = 60;
+string_modes_number = 100;
+% Only consider low-frequency body modes, since the high modal-density
+% in the higher frequency makes the use of ESPRIT very unstable,
+% Up to 1500Hz there are about 15 body modes
 body_modes_number = 15;
 modes_number = body_modes_number + string_modes_number;
 
@@ -162,7 +165,7 @@ end
 % Either use the defaults, following the values used during the experiments
 % or a modelled finger excitation
 
-static_height_body = 1e-5;  % Fixed by hand
+static_height_body = 1e-5;  % Fixed by hand...
 initial_height = 0.01;
 
 string_params_copy = string_params;
