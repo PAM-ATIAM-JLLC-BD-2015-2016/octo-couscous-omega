@@ -3,12 +3,12 @@
 \paragraph*{}
 Le terme "hybride" dénote d'un lien étroit tissé entre plusieurs domaines à priori très distincts. Dans le cas d'une synthèse sonore, cela peut tenir à son utilisation de plusieurs algorithmes de synthèses, son utilisation de données d'origines différentes... les possibilités sont nombreuses.
 
-Dans notre cas, le côté hybride de nos synthèses physiques vient du fait qu'elles utilisent à la fois des données mesurées et des données issues de modèles théoriques : si l'idée peut paraître étrange au premier abord, les applications en sont pourtant nombreuses. Dans le cadre de la facture d'un instrument, il est envisageable d'avoir façonné son corps et de chercher à tester un éventail très large d'oscillateurs avec lequel les coupler, ou servir directement en tant que synthétiseur partiellement physique, gardant à la fois les propriétés familières d'un instrument réel tout en permettant des réalisations hautement improbables.
+Dans notre cas, le côté hybride de nos synthèses physiques vient du fait qu'elles utilisent à la fois des données mesurées et des données issues de modèles théoriques : si l'idée peut paraître étrange au premier abord, les applications en sont pourtant nombreuses. Dans le cadre de la facture d'un instrument, il est envisageable d'avoir façonné son corps et de chercher à tester un éventail très large d'oscillateurs avec lesquels le coupler, ou de s'en servir directement en tant que synthétiseur partiellement physique, gardant à la fois les propriétés familières d'un instrument réel tout en permettant des réalisations hautement improbables.
 
 Ayant défini le champ des données accessibles à nos synthétiseurs, il nous faut maintenant leur choisir un algorithme de synthèses : trois grandes catégories s'offrent alors à nous.
 
-La première, celle des synthèses modales se basant sur une expression des déplacement de la structure sur la base modale du système a l'avantage d'être facilement interprétable mais peu précise à haute fréquence.
-La deuxième, celle des synthèses sur le domaine fréquentiel s'implémente de façon assez directe mais peut causer des problèmes de causalité du signal synthétisé, tandis que la dernière, celle des synthèses sur domaine temporel, ne présente pas de résultats très convaincant tout en étant pourtant extrêmement couteuse.
-C'est donc pour cette raison que nous choisissons de nous concentrer sur les méthodes modales et fréquentielles.
+La première, celle des synthèses modales, se basant sur l'expression des déplacements de la structure sur la base modale du système, a l'avantage d'être facilement interprétable mais peu précise à haute fréquence.
+La deuxième, celle des synthèses sur le domaine fréquentiel s'implémente de façon assez directe mais peut causer des problèmes de causalité du signal synthétisé. La dernière, celle des synthèses sur domaine temporel (\cite{karplus1983digital},\cite{smith1987music},\cite{bensa2003simulation}), ne présente pas de résultats très convaincants sans devenir extrêmement couteuse.
+C'est principalement pour cette raison que nous choisissons de nous concentrer sur les méthodes modales et fréquentielles.
 
 Commençons dans un premier temps par présenter ces deux méthodes.
