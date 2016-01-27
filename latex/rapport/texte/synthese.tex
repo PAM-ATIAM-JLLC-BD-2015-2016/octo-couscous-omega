@@ -62,10 +62,6 @@ peut s'exprimer grâce à l'admittance des cordes et celle du corps au niveau du
 chevalet (par corps, il faut comprendre la table d'harmonie et la caisse de la
 guitare), par l'équation \ref{eq:eq_frf_1}.
 
-\begin{equation}
-  \frac{1}{Y_{total}} = \frac{1}{Y_{corps}} + \frac{1}{Y_{corde}}
-  \label{eq:eq_frf_1}
-\end{equation}
 
 Cette admittance totale au niveau du chevalet nous fournit la vitesse de
 celui-ci en fonction d'une force qui y serait appliquée. \\
@@ -74,13 +70,9 @@ Le second élément nécessaire est la fonction de transfert $H$ reliant un
 déplacement de la corde à un déplacement au niveau du chevalet. En multipliant
 cette fonction avec $Y_{total}$, on obtient la FRF fournissant le déplacement
 $\delta_{excitation}$ en fonction de la force $F_{chevalet}$. Le système étant
-supposé linéaire, cette fonction de transfert fournit aussi le déplacement
-$\delta_{chevalet}$ en fonction de la force $F_{excitation}$ :
+supposé linéaire, le principe de réciprocité de Betty d'applique et cette fonction de transfert fournit aussi le déplacement
+$\delta_{chevalet}$ en fonction de la force $F_{excitation}$ (équation 
 
-\begin{equation}
-  \frac{\delta_{chevalet}}{F_{excitation}} = \frac{\delta_{excitation}}{F_{chevalet}} = \frac{Y_{total}H}({j\omega})^2
-  \label{eq:eq_frf_2}
-\end{equation}
 
 \subsection{Mise en place}
 % implémentation

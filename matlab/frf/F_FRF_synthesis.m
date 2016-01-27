@@ -14,7 +14,7 @@ Fs = 25600; Nfft = 2^19; df = Fs/Nfft;
 f1 = 50; f2 = 5000; f1_bin = floor(f1/df); f2_bin = floor(f2/df);
 f = [0:Nfft/2]*Fs/Nfft;
 f = f(1:Nfft/2+1);
-nb_modes = 40;
+nb_modes = 50;
 
 %% Loading the measure of admittance
 [Y11_b,~] = F_compute_FRF(str_path_measure_mat,Fs,Nfft);
@@ -33,18 +33,24 @@ g = ifft(G_sym);
 
 %% Plotting
 if DEBUG_MODE
-    figure_fullscreen 
-    subplot 411
-        plot(f,db(H)), xlim([f1 f2]), title('H')
-        %plot(f,real(H)), xlim([f1 f2]), title('H')
-    subplot 412
-        plot(f,db(1./(Z+eps))), xlim([f1 f2]), title('1/Z_{string}')
-        %plot(f,real(1./(Z+eps))), xlim([f1 f2]), title('1/Z_{string}')
-    subplot 413
-        plot(f,db(Y11_b)), xlim([f1 f2]), title('Y_{body}')
-        %plot(f(1:Nfft/2+1),real(Y11_b)), xlim([f1 f2]), title('Y_{body}')
-    subplot 414
-        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), xlim([f1 f2]), title('G_{whole}')
+    figure
+    %figure_fullscreen 
+%     subplot 411
+%         plot(f,db(H)), xlim([f1 f2]), title('H')
+%         %plot(f,real(H)), xlim([f1 f2]), title('H')
+%     subplot 412
+%         plot(f,db(1./(Z+eps))), xlim([f1 f2]), title('1/Z_{string}')
+%         %plot(f,real(1./(Z+eps))), xlim([f1 f2]), title('1/Z_{string}')
+%     subplot 413
+%         plot(f,db(Y11_b)), xlim([f1 f2]), title('Y_{body}')
+%         %plot(f(1:Nfft/2+1),real(Y11_b)), xlim([f1 f2]), title('Y_{body}')
+%     subplot 414
+%     
+        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('FRF from excitation point to bridge')
+        xlim([50 800]), xlabel('Frequency(Hz)'), ylabel('Gain(dB)')
+        figure
+        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('FRF from excitation point to bridge')
+        xlim([3000 3800]), xlabel('Frequency(Hz)'), ylabel('Gain(dB)')
         %plot([0:Nfft-1]*Fs/Nfft,real(G_sym)), xlim([f1 f2]), title('G_{whole}')
 end    
 %% 
