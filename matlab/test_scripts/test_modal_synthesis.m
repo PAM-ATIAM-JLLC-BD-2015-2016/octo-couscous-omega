@@ -201,9 +201,7 @@ Hd = design(d,'equiripple');
 
 speed_synthesis_v = filter(Hd, modal_synthesis_v);
 
-%%
-[ real_guitar_v, plot_Fs_Hz ] = audioread('Open_E2.wav');
-plotted_v = real_guitar_v;
+%% Plot synthesized sound
 
 plotted_v = modal_synthesis_v;
 % plotted_v = speed_synthesis_v;
