@@ -185,17 +185,14 @@ les paramètres physiques pertinents peuvent être extraits ou fixés.
 
 \subsubsection{Corde}
   \paragraph{}
-  \begin{huge}
-    INSERT VICTOR'S PART.
-  \end{huge}
   
-%   La corde suit un modèle théorique basé sur sa longueur \( L \), sa tension
-% \( T \), sa raideur de torsion \( B \) et sa masse linéique \( \rho{} \).
-%   On choisit ensuite le nombre de modes de corde désiré.
-%   Pour une corde de Mi grave (\( E2 \)), dont la fréquence fondamentale est
-% de \( \si{82 \hertz}\), le \( 65 \)ème harmonique aura une fréquence (modulo 
-% inharmonicité) proche de \( \si{5330\hertz} \), c'est la valeur maximale que
-% l'on fixe, suivant ici les recommandations de Woodhouse.
+  La corde suit un modèle théorique basé sur sa longueur \( L \), sa tension
+\( T \), sa raideur de torsion \( B \) et sa masse linéique \( \rho{} \).
+  On choisit ensuite le nombre de modes de corde désiré.
+  Pour une corde de Mi grave (\( E2 \)), dont la fréquence fondamentale est
+de \( \si{82.4 \hertz}\), le \( 39 \)ème harmonique aura une fréquence (modulo 
+inharmonicité) proche de \( \si{3214\hertz} \), c'est la valeur maximale que
+l'on fixe.
 
   Concernant les conditions aux limites, la corde est supposée fixe-fixe
 en isolation et le couplage est ensuite réalisé au niveau du chevalet à l'aide
@@ -281,9 +278,34 @@ En résumé, pour la synthèse modale, les valeurs requises sont :
  \item Fréquences propres et amortissements pour les modes de corps.
 \end{itemize}
 
-\subsection{}
+\subsection{Statut de l'implémentation et observation de résultats}
 
-%   \emph{TODO : ajouter du quanti / des figures.}
-  
+Les valeurs requises ayant été obtenues comme décrit dans le chapitre suivant,
+l'implémentation de la synthèse modale hybride est pleinement fonctionnelle
+et efficace (moins de 10 secondes de calcul au total, calcul des paramètres
+inclus, pour synthétiser 30 secondes de signal) et pourrait donc opérer en
+temps réel.
+
+Les résultats de la synthèse sont comparés avec les valeurs mesurées dans une
+partie à venir.
+
+On propose en Figure~\ref{fig:synth:modal_synth} la visualisation du résultat
+de la synthèse du son de la corde \( E2 \) avec prise en compte d'une largeur
+de doigt, à \( \si{11\cm} \) du chevalet et un point d'écoute à
+\( \si{26\cm} \) du chevalet.
+On utilise \( 40 \) modes de corde et \( 15 \) modes de corps.
+On observe bien une enveloppe temporelle en exponentielle décroissante lente
+(décroissance de l'ordre de 5 à 10 secondes) et une répartition harmonique
+des fréquences propres, qui s'arrête autour de
+\( f_{max, graph} = \si{3300\Hz} \), comme attendu d'après le nombre de modes
+fixé.
+
+\begin{table}[hpbt]
+\centering
+\includegraphics[scale=0.6]{figures/modal_synthesis-E2-40_string_modes-15_body_modes-finger_pluck.eps}
+ \caption{Synthèse modale, \( E2 \), largeur de doigt, \( 40 \) modes de corps
+ \label{fig:synth:modal_synth}}
+\end{table}
+
 % \end{document}
 
