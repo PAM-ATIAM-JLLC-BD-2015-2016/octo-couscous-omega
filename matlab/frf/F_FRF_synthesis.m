@@ -23,7 +23,7 @@ Y11_b = -Y11_b;
 
 %% Multiplying admittance with transfer function to complete the model
 G = H.*Y11_b./(1+Z.*Y11_b);
-G = H./(Z+eps);
+%G = H./(Z+eps);
 %G = H.*Z.*Y11_b./(Z+Y11_b);
 
 
