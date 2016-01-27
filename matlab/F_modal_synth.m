@@ -38,7 +38,7 @@ left_row_v = amplitude_modes_v * U_upper_m;
 right_column_v = (U_right_inv_m / mass_m) * initial_excitation_v;
 
 % To avoid overflows, compute by segments of segment_length_n samples
-segment_duration_n = 10000;
+segment_duration_n = 5000;
 segments_number = floor(duration_n/segment_duration_n);
 
 column_renormalization_m = repmat(left_row_v.', 1, segment_duration_n);
@@ -71,4 +71,6 @@ last_column_renormalization_m = repmat(left_row_v.', 1, ...
  F_compute_add_segment_v(last_segment_start_n, last_segment_duration_n, ...
      last_column_renormalization_m);
 
+modal_synthesis_v = real(modal_synthesis_v);
+ 
 end
