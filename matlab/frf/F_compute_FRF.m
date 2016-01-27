@@ -20,8 +20,8 @@ force   = s.data_Temporel_fenetre_1(:,3);
 s       = load( measure_mat_filename, 'data_Temporel_fenetre_2' );
 an2     = s.data_Temporel_fenetre_2(:,2);
 
-Yn1 = c_FRF(force, an1, Fs, Nfft);
-Yn2 = c_FRF(force, an2, Fs, Nfft);
+Yn1     = c_FRF(force, an1, Fs, Nfft);
+Yn2     = c_FRF(force, an2, Fs, Nfft);
 end
     
     

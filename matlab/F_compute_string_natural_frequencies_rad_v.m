@@ -10,6 +10,6 @@ B = string_params.bending_stiffness;
 T = string_params.tension;
 
 % Equation 30 from Woodhouse (a)
-string_natural_frequencies_rad_v = (mode_n_v * pi * c/(L)) .* ...
-    ( 1 + (B/(2*T)) .* (mode_n_v*pi/L).^2 );
+string_natural_frequencies_rad_v = (mode_n_v * pi * c/L) .* ...
+    ( 1 + (B/(2*T)).* (mode_n_v*pi/L).^2 );
 end

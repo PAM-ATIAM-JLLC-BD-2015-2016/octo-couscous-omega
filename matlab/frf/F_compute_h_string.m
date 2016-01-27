@@ -11,15 +11,18 @@ B = string_params.bending_stiffness;
 T = string_params.tension;
 
 % Equation (31) de Woodhouse (a)
-
-%Wn_v    = string_params.natural_frequencies_rad_v.';
-etan_v  = string_params.loss_factors_v.';
+% Wn_v    = string_params.natural_frequencies_rad_v.';
+ etan_v  = string_params.loss_factors_v.';
 
 % Introduction de d?viations par rapport au mod?le id?al 
 Wn_v = mode_n_v.' * pi * c/L ...
     .* ( 1 + B*(mode_n_v.').^2 ) .* ( 1 + 1i*etan_v/2 );
 
+Wn_v = Wn_v.*(1+1i*etan_v/2);
+Wn_v2 = Wn_v.*(1-1i*etan_v/2);
+
 Wn_m    = repmat(Wn_v, 1, length(omega_rad_v));
+Wn_m2   = repmat(Wn_v2, 1, length(omega_rad_v));
 etan_m  = repmat(etan_v.', 1, length(omega_rad_v));
 
 W_m     = repmat(omega_rad_v, string_modes_number, 1);
@@ -27,8 +30,8 @@ power_m = repmat((-1).^mode_n_v.', 1, length(omega_rad_v));
 
 mode_n_m = repmat(mode_n_v.', 1, length(omega_rad_v));
 
-temp = sum( power_m ./ ( W_m - Wn_m ) );
-%temp = sum( power_m ./ ( W_m - mode_n_m*pi*c/L) );
+temp = sum( power_m ./ ( W_m - Wn_m + eps) );
+%temp = sum( power_m .* (1./ ( W_m - Wn_m + eps) + 1./ ( W_m + Wn_m2 + eps)) );
 
 H_string = x/L + (c/L)*sin(omega_rad_v*x/c) .* temp;
 

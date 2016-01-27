@@ -7,8 +7,8 @@ Fs = 25600;
 f_hz_v = Fs*linspace(0,1,Nfft); f_hz_v = f_hz_v(1:Nfft/2+1);
 omega_rad_v = 2*pi*f_hz_v+eps;
 
-[ string_params, ~ ] = ...
-    F_string_parameters( str_note_name, string_modes_number );
+[ string_params ] = ...
+    F_compute_full_string_parameters( str_note_name, string_modes_number );
 
 res = F_compute_y_string( string_params, omega_rad_v );
 
@@ -28,6 +28,6 @@ res = F_duplicate_with_hermitian_symmetry( res );
 g = ifft( res );
 g = g/max(abs(g));
 soundsc( g, Fs );
-audiowrite( 'test_F_compute_y_string.wav', g/max(abs(g)), Fs );
+%audiowrite( 'test_F_compute_y_string.wav', g/max(abs(g)), Fs );
 
 end
