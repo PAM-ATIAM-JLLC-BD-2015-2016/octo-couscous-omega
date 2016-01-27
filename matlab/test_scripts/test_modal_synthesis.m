@@ -10,7 +10,7 @@ plots = false;
 
 string_name = 'E2';
 
-string_modes_number = 100;
+string_modes_number = 40;
 % Only consider low-frequency body modes, since the high modal-density
 % in the higher frequency makes the use of ESPRIT very unstable,
 % Up to 1500Hz there are about 15 body modes
@@ -170,15 +170,16 @@ initial_height = 0.01;
 
 string_params_copy = string_params;
 
-finger_pluck_b = false;
+finger_pluck_b = true;
 if finger_pluck_b
     excitation_width = 0.01;  % 1cm wide finger
 
     delta_excitation = 0.11;
-    x_excitation    = string_length-delta_excitation;
-    x_listening     = string_length-3/(5*delta_excitation);
+%     x_excitation    = string_params.length-delta_excitation;
+    x_excitation    = string_params.length/2;
+    x_listening     = string_params.length/2;%-3/(5*delta_excitation);
 
-    string_params_copy.excitation_width = excitation_width;
+%     string_params_copy.excitation_width = excitation_width;
     string_params_copy.x_listening = x_listening;
     string_params_copy.x_excitation = x_excitation;
 end
@@ -188,7 +189,7 @@ initial_excitation_v = F_compute_initial_excitation_v( ...
     static_height_body, initial_height, coupled_modes_m );
 
 %% Resynthesis
-duration_s = 30;
+duration_s = 5;
 Fs_Hz = 26500;
 
 [ modal_synthesis_v ] = F_modal_synth( duration_s, Fs_Hz, ...
@@ -206,26 +207,50 @@ speed_synthesis_v = filter(Hd, modal_synthesis_v);
 
 %% Plot synthesized sound
 
-plotted_v = modal_synthesis_v;
-% plotted_v = speed_synthesis_v;
-plot_Fs_Hz = Fs_Hz;
+plot_final_b = true;
+if plot_final_b
+    plotted_v = modal_synthesis_v;
+    % plotted_v = speed_synthesis_v;
+    plot_Fs_Hz = Fs_Hz;
 
-plotted_v = plotted_v/max(abs(plotted_v));  % Normalize plotted sample
+    plotted_v = plotted_v/max(abs(plotted_v));  % Normalize plotted sample
 
-figure
-subplot(1,2,1)
-dt_s = 1/plot_Fs_Hz;
-time_s_v = (0:length(plotted_v)-1) * dt_s;
-plot(time_s_v, plotted_v);
+    figure
+    subplot(1,2,1)
+    dt_s = 1/plot_Fs_Hz;
+    time_s_v = (0:length(plotted_v)-1) * dt_s;
+    plot(time_s_v, plotted_v);
+    xlabel('Time (s)');
+    ylabel('Normalized amplitude');
+    title('Time-domain signal');
 
-subplot(1,2,2)
-N_fft = 2^19;
-sample_duration_n = 1 * plot_Fs_Hz;
-sample_start_n = 0.1 * plot_Fs_Hz;
-sample_v = plotted_v(sample_start_n:sample_start_n+sample_duration_n);
-plotted_fft_v = fft(sample_v, N_fft);
-dF_Hz = Fs_Hz/N_fft;
-fft_freqs_Hz_v = (0:N_fft-1)*dF_Hz;
-f_max_plot_Hz = 10000;
-f_max_plot_n = floor(f_max_plot_Hz / dF_Hz);
-plot(fft_freqs_Hz_v(1:f_max_plot_n), db(plotted_fft_v(1:f_max_plot_n)));
+    subplot(1,2,2)
+    N_fft = 2^19;
+    sample_duration_n = 1 * plot_Fs_Hz;
+    sample_start_n = 0.1 * plot_Fs_Hz;
+    sample_v = plotted_v(sample_start_n:sample_start_n+sample_duration_n);
+    plotted_fft_v = fft(sample_v, N_fft);
+    dF_Hz = Fs_Hz/N_fft;
+    fft_freqs_Hz_v = (0:N_fft-1)*dF_Hz;
+    f_max_plot_Hz = 6000;
+    f_max_plot_n = floor(f_max_plot_Hz / dF_Hz);
+    plot(fft_freqs_Hz_v(1:f_max_plot_n), ...
+        db(plotted_fft_v(1:f_max_plot_n)));
+    xlabel('Frequency (Hz)');
+    ylabel('Amplitude (dB)');
+    title('Spectrum');
+end
+    
+%% Save results (Normalized)
+
+if finger_pluck_b
+    file_path = '../sounds/synthesis/modal/finger_excitation/guitar-';
+else
+    file_path = '../sounds/synthesis/modal/experiment_like/guitar-';
+end
+
+filename = [file_path, string_name, '-', ...
+    int2str(string_modes_number), '_string_modes-', ...
+    int2str(body_modes_number), '_body_modes.wav' ];
+audiowrite(filename, ...
+    real(modal_synthesis_v)/max(abs(real(modal_synthesis_v))), Fs_Hz);
