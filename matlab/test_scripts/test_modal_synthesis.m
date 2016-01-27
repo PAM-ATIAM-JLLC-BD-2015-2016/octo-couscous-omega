@@ -159,7 +159,8 @@ if plots
 end
 
 %% Initial condition definition
-% Those values follow the values used during the experiments
+% Either use the defaults, following the values used during the experiments
+% or a modelled finger excitation
 
 static_height_body = 1e-5;  % Fixed by hand
 initial_height = 0.01;

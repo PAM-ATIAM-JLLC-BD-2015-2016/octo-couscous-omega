@@ -16,7 +16,7 @@ function [ string_params ] = F_compute_full_string_parameters( ...
 string_length   = 0.65;
 celerity        = sqrt(string_tension/string_linear_mass);
 
-% Excitation parameters
+% Excitation parameters, following the experiments
 initial_height  = 0.01;
 delta_excitation = 0.017;  % Distance to the bridge
 x_excitation    = string_length-delta_excitation;
