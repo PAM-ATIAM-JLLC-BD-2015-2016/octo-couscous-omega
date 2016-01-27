@@ -9,10 +9,10 @@ Le principe de la synthèse dans le domaine fréquentiel est relativement simple
 Il s'agit de calculer ou de mesurer des fonctions de transfert
 (\textit{Frequency Response Function}) nous permettant de relier une force
 appliquée au point d'excitation de la corde à un déplacement au niveau du
-chevalet, de la table d'harmonie de la guitare, ou d'un autre instrument comme le ukulélé. On parle de méthode hybride puisqu'elle conjugue modèles théoriques et mesures sur instruments. Le premier élément nécessaire est l'admittance au chevalet, qui peut s'exprimer grâce à l'admittance des cordes et celle du corps au niveau du chevalet (par corps, il faut comprendre la table d'harmonie et la caisse de la guitare), par l'équation \ref{eq:eq_frf_1}.\\
+chevalet, de la table d'harmonie de la guitare, ou d'un autre instrument comme le ukulélé. On parle de méthode hybride puisqu'elle conjugue modèles théoriques et mesures sur instruments. Le premier élément nécessaire est l'admittance au chevalet, qui peut s'exprimer grâce à l'admittance des cordes et celle du corps au niveau du chevalet (par corps, il faut comprendre la table d'harmonie et la caisse de la guitare), par l'équation \ref{eq:eq_frf_1}.
 
 Cette admittance totale au niveau du chevalet nous fournit la vitesse de
-celui-ci en fonction d'une force qui y serait appliquée. \\
+celui-ci en fonction d'une force qui y serait appliquée.
 
 Le second élément nécessaire est la fonction de transfert $H$ reliant un
 déplacement de la corde à un déplacement au niveau du chevalet. En multipliant cette fonction avec $Y_{total}$, on obtient la FRF fournissant le déplacement $\delta_{excitation}$ en fonction de la force $F_{chevalet}$. Le système étant supposé linéaire, le principe de réciprocité de Betty s'applique et cette fonction de transfert fournit aussi le déplacement $\delta_{chevalet}$ en fonction de la force $F_{excitation}$ (équation \ref{eq:eq_frf_2}).
@@ -28,28 +28,30 @@ unitaire $H$ à partir de la connaissance des caractéristiques de la corde :
 masse linéique, tension, coefficients d'amortissement, raideur de flexion (équations \ref{eq:eq_frf_4} et \ref{eq:eq_frf_5}). Ces fonctions de transfert sont dépendantes de l'écriture des modes de corde et le modèle de leur amortissement choisi par Woodhouse est présenté à l'équation \ref{eq:eq_frf_4}.
 
 \subsubsection{Mesures sur la guitare}
-Les mesures sur les instruments fournissent une estimation de $Y_{corps}$ et de $Y_{total}$. \\
+Les mesures sur les instruments fournissent une estimation de $Y_{corps}$ et de $Y_{total}$.
 
 La première approche est d'utiliser uniquement $Y_{total}$ mesurée en
 excitant au marteau d'impact un point proche du chevalet et en mesurant son accélération selon l'axe normal et l'axe transverse par rapport à la table
 d'harmonie. La corde que l'on souhait synthétiser est libre de vibrer
 alors que les autres sont étouffées. En réalité, nous mesurons l'inertance,
-ce qui doit ajouter une seconde intégration à l'équation \ref{eq:eq_frf_2}.\\
+ce qui doit ajouter une seconde intégration à l'équation \ref{eq:eq_frf_2}.
 
 La seconde approche est de n'utiliser que la mesure de $Y_{corps}$ .
-L'admittance de la corde $Y_{corde}$ au chevalet utilise les formulations théoriques de l'article (équation \ref{eq:eq_frf_4}) pour obtenir $Y_{total}$. \\
+L'admittance de la corde $Y_{corde}$ au chevalet utilise les formulations théoriques de l'article (équation~\ref{eq:eq_frf_4}) pour obtenir $Y_{total}$.
 
 \subsubsection{Implémentation}
 Les FRF issues des mesures temporelles sont calculées avec un très grand nombre de points pour que le signal final dure plusieurs secondes. L'obtention du son est en effet réalisée par FFT inverse, ce qui nous impose d'écrire la symétrie hermitienne pour notre fonction de transfert pour assurer que le signal synthétisé est bien réel.
 
-L'intégration de l'équation \ref{eq:eq_frf_2} fournit des valeurs en basses fréquences divergentes en zéro. Pour compenser cela nous intégrons dans le domaine fréquentiel en imposant des valeurs très faibles de la FRF en-dessous de \( \si{50\Hz} \) (notre note la plus basse était un Mi grave de \( \si{83\Hz} \)).
+L'intégration de l'équation~\ref{eq:eq_frf_2} fournit des valeurs en basses fréquences divergentes en zéro. Pour compenser cela nous intégrons dans le domaine fréquentiel en imposant des valeurs très faibles de la FRF en-dessous de
+\( \si{50\Hz} \) (notre note la plus basse était un Mi grave de
+\( \si{83\Hz} \)).
 
 Enfin, nous convoluons ce signal avec une ou plusieurs impulsions consécutives pour adoucir le son par un filtrage passe-bas et modéliser une force qui dure dans le temps.
 
 \subsection{Résultats}
 %
 
-Utiliser $Y_{total}$ mesuré ne fournit pas de résultats convaincants. Les sons synthétisés ne correspondent pas à ceux d'une guitare. Woodhouse suggère en effet d'effectuer la séparation de cette grandeur, ce que nous avons choisi de faire exclusivement.\\
+Utiliser $Y_{total}$ mesuré ne fournit pas de résultats convaincants. Les sons synthétisés ne correspondent pas à ceux d'une guitare. Woodhouse suggère en effet d'effectuer la séparation de cette grandeur, ce que nous avons choisi de faire exclusivement.
 
 Toutes les cordes à vide de la guitare sont synthétisées, avec comme excitation une force ponctuelle et une force qui dure dans le temps, ceci pour chaque mesure d'amittance à notre disposition. La partie théorique de cette synthèse utilise 40 modes de cordes, et les sons obtenus durent 11 secondes. On reconnait clairement un son de guitare à l'écoute. Voici une des fonctions de transfert obtenues de notre système :
 
@@ -59,7 +61,6 @@ Toutes les cordes à vide de la guitare sont synthétisées, avec comme excitati
 \caption{Admittance de la synthèse hybride}
 \label{fig:frf_fig_1}
 \end{figure}
-
 
 Plusieurs précisions ont du être apportés pour améliorer l'algorithme et le
 son. En effet, ce système comporte plusieurs limitations : l'admittance
