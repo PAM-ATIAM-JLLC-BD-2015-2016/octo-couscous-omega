@@ -159,23 +159,33 @@ if plots
 end
 
 %% Initial condition definition
+% Those values follow the values used during the experiments
 
-static_height_body = 0;
-excitation_width = 0.01; % 0.01;  % 1cm wide finger
-initial_height = 0.01; % string_params.initial_height
+static_height_body = 1e-5;  % Fixed by hand
+initial_height = 0.01;
 
 string_params_copy = string_params;
-string_paramas_copy.excitation_width = excitation_width;
-% string_paramas_copy.x_listening = string_params_copy.length / 4;
-% string_paramas_copy.x_excitation = string_params_copy.length / 8;
 
+finger_pluck_b = false;
+if finger_pluck_b
+    excitation_width = 0.01;  % 1cm wide finger
+
+    delta_excitation = 0.11;
+    x_excitation    = string_length-delta_excitation;
+    x_listening     = string_length-3/(5*delta_excitation);
+
+    string_params_copy.excitation_width = excitation_width;
+    string_params_copy.x_listening = x_listening;
+    string_params_copy.x_excitation = x_excitation;
+end
+    
 initial_excitation_v = F_compute_initial_excitation_v( ...
     string_modes_number, string_params_copy, body_modes_number, ...
     static_height_body, initial_height, coupled_modes_m );
 
 %% Resynthesis
 duration_s = 30;
-Fs_Hz = 22050;
+Fs_Hz = 26500;
 
 [ modal_synthesis_v ] = F_modal_synth( duration_s, Fs_Hz, ...
     string_modes_number, body_modes_number, initial_excitation_v, ...
