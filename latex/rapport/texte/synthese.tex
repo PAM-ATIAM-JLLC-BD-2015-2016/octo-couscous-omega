@@ -42,7 +42,7 @@ L'admittance de la corde $Y_{corde}$ au chevalet utilise les formulations théor
 \subsubsection{Implémentation}
 Les FRF issues des mesures temporelles sont calculées avec un très grand nombre de points pour que le signal final dure plusieurs secondes. L'obtention du son est en effet réalisée par FFT inverse, ce qui nous impose d'écrire la symétrie hermitienne pour notre fonction de transfert pour assurer que le signal synthétisé est bien réel.
 
-L'intégration de l'équation \ref{eq:eq_frf_2} fournit des valeurs en basses fréquences divergentes en zéro. Pour compenser cela nous intégrons dans le domaine fréquentiel en imposant des valeurs très faibles de la FRF en-dessous de 50 Hz (notre note la plus basse était un Mi grave de 83 Hz).
+L'intégration de l'équation \ref{eq:eq_frf_2} fournit des valeurs en basses fréquences divergentes en zéro. Pour compenser cela nous intégrons dans le domaine fréquentiel en imposant des valeurs très faibles de la FRF en-dessous de \( \si{50\Hz} \) (notre note la plus basse était un Mi grave de \( \si{83\Hz} \)).
 
 Enfin, nous convoluons ce signal avec une ou plusieurs impulsions consécutives pour adoucir le son par un filtrage passe-bas et modéliser une force qui dure dans le temps.
 

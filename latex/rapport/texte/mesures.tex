@@ -37,30 +37,30 @@ L'installation du banc de mesure est présenté en Annexe. %dans la Figure \ref{
 %\end{figure}
 
 \section{Protocole de mesures}
-Voici l'ensemble des mesures effectuées. Pour assurer une répétablité de la mesure, elles seront faites 5 fois chacune dans le même temps. Nous choisissons une valeur de fréquence d'echantillonnage pour l'accéléromètre de  $F_e = 25600Hz$.
+Voici l'ensemble des mesures effectuées. Pour assurer une répétablité de la mesure, elles seront faites 5 fois chacune dans le même temps. Nous choisissons une valeur de fréquence d'echantillonnage pour l'accéléromètre de  $F_e = \si{25600\Hz}$.
 \begin{itemize}
 \item Le corps seul, axe vertical(les cordes sont étouffées).
-\item Le corps et la corde de Mi2, axe vertical et horizontal.
-\item Le corps et la corde de Mi4, axe vertical et horizontal.
-\item La corde Mi4 excitée au fil perpendiculairement à la table.
-\item La corde Mi4 excitée au fil à $45$ degré de la table.
+\item Le corps et la corde de \( E2 \), axe vertical et horizontal.
+\item Le corps et la corde de \( E4 \), axe vertical et horizontal.
+\item La corde \( E4 \) excitée au fil perpendiculairement à la table.
+\item La corde \( E4 \) excitée au fil à \( \si{45 \degree} \) de la table.
 \item Mesure du rayonnement de la table seule.
 \end{itemize}
 Les deux dernières mesures consistent en l'excitation de la corde avec un fil de cuivre à une distance b = 17 mm du chevalet. 
 
 \section{Commentaire et exploitation des résultats}
 \subsection{Visualisation des résultats}
-La Figure \ref{fig:goll} montre l'ensemble de nos résultats d'admittance pour le corps seul, mesuré au niveau de la corde de Mi4 : 
+La Figure \ref{fig:goll} montre l'ensemble de nos résultats d'admittance pour le corps seul, mesuré au niveau de la corde de \( E4 \) : 
 \begin{figure}[h]
 \centering
-\includegraphics[width = 14cm]{figures/Y_body_E4.eps}
-\caption{Mesures pour le corps au niveau du chevalet et de la corde de Mi4}
+\includegraphics[width = \linewidth]{figures/Y_body_E4.eps}
+\caption{Mesures pour le corps au niveau du chevalet et de la corde de \( E4 \)}
 \label{fig:goll}
 \end{figure}
 La première ligne correspond à la mesure avec impulsion normale à la table, la seconde ligne, à une impulsion parallèle. On obtient deux dimensions de l'admittance pour ces mesures, effectuées 5 fois chacune. Pour nos synthèses, nous ne nous servirons que de l'admittance correspondant au déplacement transversal de la table ($Y_{body,11}$, $Y_{body,12}$ et $Y_{body,21}$) doivent être semblable.
 
 \subsection{Calcul de la cohérence}
-Dans le but de juger de la viabilité de nos mesures, nous calculons la cohérence des 5 mesures de $Y_{body,11}$ au niveau de la corde de Mi2 et de la corde de Mi4. La Figure \ref{fig:goll},  montre dans le graphe de $Y_{body,11}$ une mesure (la 5ème) que nous pourrons ignorer dans ce calcul. Les chutes locales de cohérence observées avant 2000Hz sont généralement dues à des anti-résonances autour desquelles les valeurs très faibles mesurées peuvent être assimilées à un bruit statistique.
+Dans le but de juger de la viabilité de nos mesures, nous calculons la cohérence des 5 mesures de $Y_{body,11}$ au niveau de la corde de \( E2 \) et de la corde de \( E4 \). La Figure \ref{fig:goll},  montre dans le graphe de $Y_{body,11}$ une mesure (la 5ème) que nous pourrons ignorer dans ce calcul. Les chutes locales de cohérence observées avant \( \si{2000\Hz} \) sont généralement dues à des anti-résonances autour desquelles les valeurs très faibles mesurées peuvent être assimilées à un bruit statistique.
 
 
 \begin{figure}[h]
@@ -69,7 +69,7 @@ Dans le but de juger de la viabilité de nos mesures, nous calculons la cohéren
    \includegraphics[width = 5cm]{figures/coherence_Z_1_E2.eps} &
    \includegraphics[width = 5cm]{figures/coherence_Z_1_E4.eps} \\
 \end{tabular}
-\caption{Cohérence des mesures Ybody1 au niveau de la corde de Mi2 et de celle de Mi4}
+\caption{Cohérence des mesures Ybody1 au niveau de la corde de \( E2 \) et de celle de \( E4 \)}
 \label{fig:gall}
 \end{figure}
-Nous observons sur la Figure \ref{fig:gall} une baisse importante de la cohérence autour de la fréquence de 2000 Hz. Cela est dû à un filtrage passe-bas du marteau qui ne produit pas une impulsion parfaitement ponctuelle lors de l'excitation. Nous pourrons donc dans nos synthèse, limiter notre recherche des modes de corps à la région fréquentielle entre 0 et 2000 Hz.
+Nous observons sur la Figure \ref{fig:gall} une baisse importante de la cohérence autour de la fréquence de \( \si{2000\Hz} \). Cela est dû à un filtrage passe-bas du marteau qui ne produit pas une impulsion parfaitement ponctuelle lors de l'excitation. Nous pourrons donc dans nos synthèse, limiter notre recherche des modes de corps à la région fréquentielle entre \( \si{0} \) et \( \si{2000\Hz} \).

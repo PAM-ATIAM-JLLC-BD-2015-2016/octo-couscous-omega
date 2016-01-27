@@ -11,18 +11,20 @@ Pour ce faire, et en se basant sur la relation \ref{eq:eq_frf_1}, il est en thé
 \subsubsection{Analyse ESPRIT par bandes}
 \label{esprit}
 
-Supposons donc que nous disposions d'une admittance $Y$, issue d'une mesure sur corde : il est donc à priori possible, en extrayant sa fréquence fondamentale via produit spectral, puis en recherchant chaque harmonique sur une plage de fréquence dictée par les valeurs des harmoniques précédents, d'obtenir une première série de valeurs de fréquences de modes. Cette méthode n'a cependant pas le mérite d'être très précise, et ne renvoie pas non plus de valeurs d'amortissement : elle peut cependant servir de base à une analyse par méthode à haute-résolution (dans le cas présent, la méthode ESPRIT \cite{badeau2005methodes}) centrée autour de ces premières approximations de fréquences.\\
-Le signal est dans un premier temps filtré autour de chacun de ces harmoniques par filtre passe-bande à réponse finie et phase linéaire, ceci afin de garantir des signaux filtrés présentant les mêmes pôles que le signal d'origine (le résultat est visible en \ref{pre_proc} (b)). Afin d'accélérer l'analyse par méthode ESPRIT, il est ensuite modulé par la fréquences de l'harmonique approximatif afin de la recentrer autour de $0 Hz$ (voir \ref{pre_proc} (c)) et de permettre une décimation (voir \ref{pre_proc} (d)). S'ensuit alors une analyse par ESPRIT, qui donne directement accès aux valeurs exactes de fréquences propres et amortissement de $Y$.
+Supposons donc que nous disposions d'une admittance $Y$, issue d'une mesure sur corde : il est donc à priori possible, en extrayant sa fréquence fondamentale via produit spectral, puis en recherchant chaque harmonique sur une plage de fréquence dictée par les valeurs des harmoniques précédents, d'obtenir une première série de valeurs de fréquences de modes. Cette méthode n'a cependant pas le mérite d'être très précise, et ne renvoie pas non plus de valeurs d'amortissement : elle peut cependant servir de base à une analyse par méthode à haute-résolution (dans le cas présent, la méthode ESPRIT~\cite{badeau2005methodes}) centrée autour de ces premières approximations de fréquences.\\
+Le signal est dans un premier temps filtré autour de chacun de ces harmoniques par filtre passe-bande à réponse finie et phase linéaire, ceci afin de garantir des signaux filtrés présentant les mêmes pôles que le signal d'origine (le résultat est visible en~\ref{pre_proc} (b)). Afin d'accélérer l'analyse par méthode ESPRIT, il est ensuite modulé par la fréquences de l'harmonique approximatif afin de la recentrer autour de $\si{0\Hz}$ (voir~\ref{pre_proc} (c)) et de permettre une décimation (voir~\ref{pre_proc} (d)). S'ensuit alors une analyse par ESPRIT, qui donne directement accès aux valeurs exactes de fréquences propres et amortissement de $Y$.
 
 \begin{figure}[hpbt]
-\includegraphics[scale=0.5]{figures/pre_proc.png}
-\caption{\textit{(a) spectre du signal d'entrée - (b) spectre du signal filtré sur un harmonique - (c) spectre du signal modulé par la fréquence de l'harmonique - (d)spectre du signal décimé.}}
+\centering
+\includegraphics[width=\linewidth]{figures/pre_proc.png}
+\caption{\textit{(a)~Spectre du signal d'entrée, (b)~Spectre du signal filtré sur une harmonique, (c)~Spectre du signal modulé par la fréquence de l'harmonique,
+(d)~Spectre du signal décimé}}
 \label{pre_proc}
 \end{figure}
 
 \subsubsection{Valeurs utilisées}
 
-A défaut d'utiliser ce protocole pour extraire les paramètres de la synthèse par FRF, les valeurs fournies par Woodhouse \cite{woodhouse2004plucked} seront utilisées.
+A défaut d'utiliser ce protocole pour extraire les paramètres de la synthèse par FRF, les valeurs fournies par~\textcite{woodhouse2004plucked} seront utilisées.
 
 \subsection{Paramètres de synthèse modale}
 
@@ -49,10 +51,11 @@ Afin de pouvoir comparer les résultats de synthèse à un signal réel obtenu p
 Afin de comparer les signaux de synthèse au signal mesuré, il est entièrement possible d'utiliser le protocole développé en partie \ref{esprit} afin d'extraire les paramètres de de signaux de corde et qui renvoyait les valeurs des fréquences de résonances et leurs atténuation.\\
 
 \begin{figure}[hpbt]
-\includegraphics[scale=0.65]{figures/apotheose.png}
-\caption{\textit{haut-dessus : tracé des fréquences de résonances des différents signaux (synthèses et réel); en-bas : tracé des atténuations en fonction des fréquences de résonance.}}
-\label{apo}
+\centering
+\includegraphics[width=\linewidth]{figures/apotheose.png}
+\caption{En haut : fréquences de résonances des différents signaux (synthèses et réel), en~bas : atténuations en fonction des fréquences de résonance%
+\label{fig:apo}}
 \end{figure}
 
-Les résultats de ces extractions de paramètres sont visibles en figure \label{apo}. Les fréquences des deux méthodes de synthèses restent identiques, même en haute-fréquences, mais différent peu à peu de la fréquence du signal réel : cela peut être compris comme étant due à l'inharmonicité intrinsèque de la corde réelle qui, au contraire de celle issue du couplage avec le corps, n'est pas prise en compte par nos modèles de corde. Les atténuations sont satisfaisantes, puisqu'elles décrivent la même allure décroissante que celle du signal réel.
+Les résultats de ces extractions de paramètres sont visibles en figure~\ref{fig:apo}. Les fréquences des deux méthodes de synthèses restent identiques, même en haute-fréquences, mais différent peu à peu de la fréquence du signal réel : cela peut être compris comme étant due à l'inharmonicité intrinsèque de la corde réelle qui, au contraire de celle issue du couplage avec le corps, n'est pas prise en compte par nos modèles de corde. Les atténuations sont satisfaisantes, puisqu'elles décrivent la même allure décroissante que celle du signal réel.
 
