@@ -1,18 +1,18 @@
-function [ delta, f ] = F_esprit( x, n, K )
+function [ dampings_v, reduced_frequencies_v ] = F_esprit( x_v, ...
+    full_space_dim, signal_space_dim )
+%% Compute frequencies and dampings for the ESPRIT method
 
-% High resolution method for frequency extraction
+W_m = F_sig_space( x_v, full_space_dim, signal_space_dim );
 
-W = F_sig_space( x, n, K );
+W_down_m = W_m(1:end-1,:);
+W_up_m = W_m(2:end,:);
 
-% Estimation des frequences et des facteurs d'amortissement
-Wdown = W(1:end-1,:);
-Wup = W(2:end,:);
+% pinv(W) is the pseudo-inverse of W
+Phi_m = pinv(W_down_m) * W_up_m;
 
-PHI = pinv(Wdown)*Wup;
+poles_v = eig(Phi_m);
 
-[~,Z] = eig(PHI);
-delta = diag(log(abs(Z)));
-f = (1/(2*pi))*diag(angle(Z));
+reduced_frequencies_v = (1/(2*pi)) * angle(poles_v);
+dampings_v = log(eps+abs(poles_v));
 
 end
-
