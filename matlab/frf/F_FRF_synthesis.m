@@ -19,12 +19,10 @@ nb_modes = 40;
 Y11_b = -Y11_b;
 
 %% Computing the response transfer function 
-[H,Z] = F_string_frfs_2(nb_modes, Nfft, note_str,DEBUG_MODE);
+[H,Z] = F_string_frfs(nb_modes, Nfft, note_str,DEBUG_MODE);
 
 %% Multiplying admittance with transfer function to complete the model
 G = H.*Y11_b./(1+Z.*Y11_b);
-%G = H./(Z+eps);
-%G = H.*Z.*Y11_b./(Z+Y11_b);
 
 
 %% Inverting the FFT

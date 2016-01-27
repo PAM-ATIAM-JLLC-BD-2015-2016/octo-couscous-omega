@@ -1,5 +1,5 @@
 function [ H_string, Z_string ] = ...
-    F_string_frfs_2( string_modes_number, Nfft, str_note_name, DEBUG_MODE )
+    F_string_frfs( string_modes_number, Nfft, str_note_name, DEBUG_MODE )
 % Computes the frf necessary for the frequency domain synthesis
 % 
 % INPUTS
