@@ -44,7 +44,7 @@ f_esprit = zeros(1,number_modes);
 
 dec_bandpass = freq_estimate(1)/2; %bandpass of the filtered signal
 decimation_freq = 10*dec_bandpass;
-decimation_factor = round(Fs/decimation_freq) %decimation factor
+decimation_factor = round(Fs/decimation_freq); %decimation factor
 decimation_freq = Fs/decimation_factor; %exact decimation frequency
 y_dec = zeros(number_modes,length(1:decimation_factor:length(signal)));
 %% filtering of each harmonics and ESPRIT method
@@ -84,11 +84,10 @@ for i=1:number_modes
 %     close all
 
     y(i,:) = filter(B,1,signal); %signal filtering
-    %y(i,:) = y(i,:) - mean(y(i,:));
+    y(i,:) = y(i,:) - mean(y(i,:));
     y(i,:) = y(i,:).*exp(-2*1i*pi*freq_estimate(i)*(1:length(signal))/Fs); %frequency shift to 0 Hz
     
     y_dec(i,:) = y(i,1:decimation_factor:end);
-    
 
 
     %% ESPRIT
