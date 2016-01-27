@@ -55,7 +55,7 @@ Toutes les cordes à vide de la guitare sont synthétisées, avec comme excitati
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{../figures/FRF_E2.eps}
+\includegraphics[width=\linewidth]{figures/FRF_E2.eps}
 \caption{Admittance de la synthèse hybride}
 \label{fig:frf_fig_1}
 \end{figure}
@@ -90,19 +90,28 @@ posés, pour la corde via un modèle théorique, pour le corps en appliquant
 paramètres physiques du système.
   Ensuite, le système d'équations différentielles à \( N \) modes du système
 couplé est posé et on résout ce système pour en extraire les déformées modales
-et les fréquences propres du système couplé. Enfin, en posant fixant des
-conditions initiales, on peut resynthétiser le son de la corde couplée au
+et les fréquences propres du système couplé. Enfin, en fixant des
+conditions initiales, on peut synthétiser le son de la corde couplée au
 chevalet.
+
+  L'intérêt de cette méthode face à la méthode par FRF est la possibilité
+d'accéder directement à des paramètres physiques pertinents du problème et
+d'ainsi pouvoir les modifier pour écouter leur effet sur le son synthétisé.
+  En outre, la résolution du système du premier ordre avec matrice
+d'amortissement retourne des modes complexes et prend donc naturellement en
+compte l'amortissement de chaque mode couplé et évite l'effet de
+"\emph{veering}" décrit par Woodhouse.
 
 \subsection{Paramètres physiques}
 
 \paragraph{}
-Par souci de concision, on ne présente pas dans ce rapport le détail des
+  Par souci de concision, on ne présente pas dans ce rapport le détail des
 matrices développées dans l'article de Woodhouse, mais seulement la façon dont
-les paramètres physiques pertinents sont extraits ou fixés.
+les paramètres physiques pertinents peuvent être extraits ou fixés.
 
 \subsubsection{Corde}
   \paragraph{}
+  
   La corde suit un modèle théorique basé sur sa longueur \( L \), sa tension
 \( T \), sa raideur de torsion \( B \) et sa masse linéique \( \rho{} \).
   On choisit ensuite le nombre de modes de corde désiré.
@@ -119,75 +128,62 @@ d'un mode de contrainte rigide qui permet d'inclure les vibrations du corps.
 
   \paragraph{}
   Les paramètres physiques du corps sont extraits par analyse modale via ESPRIT.
-Dans l'état actuel, nous ne suivons pas complètement le processus proposé par
-Woodhouse, qui ne fait de l'analyse modale que jusqu'à \( \si{1500\hertz} \)
-puis, dans la partie haute-fréquences, pose un modèle de répartition modale
-statistique.
-Notre version souffre d'un overfitting dans les basses-fréquences, on se limite
-donc à un nombre restreint de modes de corps pour éviter cet overfitting.
+Attendu que la densité modale devient très élevée au-delà de \( \si{1500\Hz} \),
+et sachant que la première fréquence de résonance du corps est de l'ordre de
+\( \si{100\Hz} \), on cherche des fréquences de résonance de corps dans
+l'intervalle de \( \si{90\Hz} \) à \( \si{1500\Hz} \).
+On ne considère donc que \( 15 \) modes de corps, dans l'ordre des observations
+sur cette plage de fréquence.
 
-  Une fois les fréquences propres et les amortissements du corps isolé
-extraites, on en déduit les paramètres physiques du corps au niveau du
-chevalet, modélisé comme un ensemble unidimensionnel de systèmes masse-ressorts
-à \( N_b \) modes, d'admittance :
-  \[ Y(\omega) = \sum_{k=1}^{N_b} \frac{j\omega{}}
-    {m_k(\omega_k^2 + 2 j \omega{} \omega{}_k \xi{}_k - \omega{}^2)} \]
+Woodhouse pose dans les hautes fréquences un modèle de distribution modale
+statistique qui n'est pas considéré ici.
+
+%   Une fois les fréquences propres et les amortissements du corps isolé
+% extraits, on en déduit les paramètres physiques du corps au niveau du
+% chevalet, modélisé comme un ensemble unidimensionnel de systèmes masse-ressorts
+% à \( N_b \) modes, d'admittance :
+%   \[ Y(\omega) = \sum_{k=1}^{N_b} \frac{j\omega{}}
+%     {m_k(\omega_k^2 + 2 j \omega{} \omega{}_k \xi{}_k - \omega{}^2)} \]
     
-Pour ce faire, on définit pour chaque mode calculé une masse effective
-\( m_k \) et une raideur effective \( s_k \) ainsi définies :
+% Pour ce faire, on définit pour chaque mode calculé une masse effective
+% \( m_k \) et une raideur effective \( s_k \) ainsi définies :
 
+\paragraph*{}
+
+Parmi les paramètres physiques utilisés par Woodhouse, les masses modales
+posent un léger problème : Woodhouse ne fournit qu'une expression qui suppose
+de connaître les amplitudes au niveau du chevalet des déformées modales
+relatives à chaque mode de corps, valeurs requérant une analyse modale
+complète du système.
+  
+  On remplace ce calcul par une valeur proposée par~\textcite{pate14:phd}.
   Les masses modales sont obtenues par inversion locale autour de
-\( \omega = \omega_k \) de l'expression de l'admittance~\cite{pate14:phd} et
+\( \omega = \omega_k \) de l'expression de l'admittance et
 valent \[ m_k = \frac{1}{2 |Y(\omega_k)| \omega{}_k \xi{}_k} \] une valeur plus
-simple à calculer que celle proposée par Woodhouse -- son expression suppose de
-connaître les déformées modales du corps.
-
-  Les raideurs effectives en sont directement déduites et valent
-\( s_k = m_k \omega{}_k^2 \), valeur qui permet d'assurer la vibration du système
-à la pulsation \( \omega{}_k \).
+simple à calculer que celle proposée par Woodhouse.
 
 \subsubsection{Couplage par équations différentielles matricielles}
 
-  \paragraph{}
-  L'étape suivante est la définition du système d'équations différentielles
-cou\-plées. On se place dans la base des modes propres découplés de corde et de corps,
-avec \( N_s \) modes de corde et \( N_b \) modes de corps. On a donc
-pour vecteur de coordonnées le vecteur
-  \( \bm{q}(t) = [a_1(t), a_2(t), \dots a_{N_s}(t),
-    b_1(t), b_2(t), \dots, b_{N_b}(t)] \) de dimension
-\( N = N_s + N_b \).
-% , où les valeurs \( a_k(t) \) sont les amplitudes (variables
-% dans le temps) des \( N_s \) modes de cordes modélisés et les \( b_k(t) \)
-% celles des modes de corps retenus.
-
-  L'équation différentielle matricielle du second ordre décrivant le système
-couplé soumis à une excitation \( \bm{F} \) s'écrit alors
-  \[ \label{eq:diff_second}
-    M \ddot{\bm{q}} + C \dot{\bm{q}} + K \bm{q} = \bm{F} \]
+  \paragraph*{}
+  L'étape suivante est la définition --classique -- du système d'équations
+différentielles cou\-plées :
+\[ M \ddot{\bm{q}} + C \dot{\bm{q}} + K \bm{q} = \bm{F} \]
 
   Les valeurs des matrices \( M \) et \( K \), respectivement de masse et de
 raideur, sont obtenues dans l'article de Woodhouse par une analyse énergétique
-du système et une inversion des résultats obtenus (une sorte de fitting
-modal).
+du système et une inversion des résultats obtenus (une sorte de fitting modal).
 
   L'amortissement est supposé (hypothèse simplificatrice choisie par Woodhouse)
 visqueux (i.e. proportionnel pour chaque mode découplé à sa vitesse) et la
 matrice d'amortissement \( C \) est donc diagonale dans la base des
 modes découplés.
 
-  Enfin, en supposant \( M \) inversible et en posant le vecteur
-\( \bm{p} = \begin{pmatrix} \bm{q} \\ \bm{\dot{q}} \end{pmatrix} \) et la
-matrice \( A = \begin{pmatrix} 0 & I \\ -M^{-1}K & -M^{-1}C \end{pmatrix} \)
-(entachée d'erreur dans l'article de Woodhouse, ce qui a été la cause de pas
-mal de tracas avant que nous ne nous en rendions compte\dots), on réécrit
-\ref{eq:diff_second} comme une équation différentielle du premier ordre :
-\[ \bm{\dot{p}} = A\bm{p} \]
+Notons que, bien que très classique et naturelle, la conversion en système
+d'équations différentielles du premier ordre est entachée d'erreur dans
+l'article de Woodhouse, qui intervertit les matrices \( C \) et \( K \), ce
+qui a été la cause de pas mal de tracas\dots
 
-\paragraph{}
-  Les modes propres du système couplé alors obtenus en extrayant les valeurs
-propres et une base de vecteurs propres de \( A \).
-
-\section{Synthèse modale}
+\subsection{Somme modale}
 
   La synthèse modale est effectuée selon des formules décrites
 dans le livre de~\textcite{newland}, qui traduisent une sommation des modes
@@ -221,7 +217,9 @@ fixé.
 
 \begin{table}[hpbt]
 \centering
-\includegraphics[scale=0.6]{figures/modal_synthesis-E2-40_string_modes-15_body_modes-finger_pluck.eps}
+\includegraphics[scale=0.8]{figures/modal_synthesis-E2-40_string_modes-15_body_modes-finger_pluck.eps}
  \caption{Synthèse modale, \( E2 \), largeur de doigt, \( 40 \) modes de corps
  \label{fig:synth:modal_synth}}
 \end{table}
+
+% \end{document}

@@ -14,7 +14,7 @@ Pour ce faire, et en se basant sur la relation [REF NEEDED], il est en théorie 
 Supposons donc que nous disposions d'une admittance $Y$, issue d'une mesure sur corde : il est donc à priori possible, en extrayant sa fréquence fondamentale via produit spectral, puis en recherchant chaque harmonique sur une plage de fréquence dictée par les valeurs des harmoniques précédents, d'obtenir une première série de valeurs de fréquences de modes. Cette méthode n'a cependant pas le mérite d'être très précise, et ne renvoie pas non plus de valeurs d'amortissement : elle peut cependant servir de base à une analyse par méthode à haute-résolution (dans le cas présent, la méthode ESPRIT [REF NEEDED]) centrée autour de ces premières approximations de fréquences.\\
 Le signal est dans un premier temps filtré autour de chacun de ces harmoniques par filtre passe-bande à réponse finie et phase linéaire, ceci afin de garantir des signaux filtrés présentant les mêmes pôles que le signal d'origine (le résultat est visible en [REF NEEDED]). Afin d'accélérer l'analyse par méthode ESPRIT, il est ensuite modulé par la fréquences de l'harmonique approximatif afin de la recentrer autour de $0 Hz$ (voir [REF NEEDED]) et de permettre une décimation (voir [REF NEEDED]). S'ensuit alors une analyse par ESPRIT, qui donne directement accès aux valeurs exactes de fréquences propres et amortissement de $Y$.
 
-\begin{figure}[h]
+\begin{figure}[hpbt]
 \includegraphics[scale=0.5]{figures/pre_proc.png}
 \caption{\textit{(a) spectre du signal d'entrée - (b) spectre du signal filtré sur un harmonique - (c) spectre du signal modulé par la fréquence de l'harmonique - (d)spectre du signal décimé.}}
 \label{pre_proc}
@@ -48,7 +48,7 @@ Les paramètres ayant été rassemblés, il est maintenant possible de produire 
 Afin de pouvoir comparer les résultats de synthèse à un signal réel obtenu par mesure, nous utilisons $y_{string,wire}$ comme référant et implémentons ses conditions initiales (à savoir une impulsion de force à une distance donnée du chevalet) dans nos deux algorithme de synthèse.\\
 Afin de comparer les signaux de synthèse au signal mesuré, il est entièrement possible d'utiliser le protocole développé en partie \ref{esprit} afin d'extraire les paramètres de de signaux de corde et qui renvoyait les valeurs des fréquences de résonances et leurs atténuation.\\
 
-\begin{figure}[h]
+\begin{figure}[hpbt]
 \includegraphics[scale=0.65]{figures/apotheose.png}
 \caption{\textit{haut-dessus : tracé des fréquences de résonances des différents signaux (synthèses et réel); en-bas : tracé des atténuations en fonction des fréquences de résonance.}}
 \label{apo}
