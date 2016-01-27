@@ -1,0 +1,31 @@
+%\appendix
+
+\section{Synthèse FRF}
+
+\begin{equation}
+  \frac{1}{Y_{total}} = \frac{1}{Y_{corps}} + \frac{1}{Y_{corde}}
+  \label{eq:eq_frf_1}
+\end{equation}
+
+\begin{equation}
+  \frac{\delta_{chevalet}}{F_{excitation}} = \frac{\delta_{excitation}}{F_{chevalet}} = \frac{Y_{total}H}{j\omega}
+  \label{eq:eq_frf_2}
+\end{equation}
+
+\begin{equation}
+	\omega_n = n\omega_0(1+\frac{B}{2T}(\frac{n\pi}{L})^2)
+ \label{eq:eq_frf_3}
+\end{equation}
+
+
+\begin{equation}
+ Z(\omega) = -\frac{iT}{L} \left[ \frac{1}{\omega} + \sum_{j=1}^{\infty} \left\lbrace \frac{1}{\omega - \omega_j (1+ i\eta_j/2)} + \frac{1}{\omega + \omega_j (1+ i\eta_j/2)} \right\rbrace  \right]
+  \label{eq:eq_frf_4}
+\end{equation}
+
+\begin{equation}
+H(\omega) = \frac{y}{w} = \frac{c}{L} sin(\omega x/c )\sum_n (-1)^n \frac{1}{\omega - \omega_n(1 + i\eta_n)}
+  \label{eq:eq_frf_5}
+\end{equation}
+
+
