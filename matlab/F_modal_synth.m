@@ -56,7 +56,6 @@ column_renormalization_m = repmat(left_row_v.', 1, segment_duration_n);
         modal_synthesis_v(current_segment_v) = modal_synthesis_segment_v.'; 
     end
 
-
 for segment_n = 0:segments_number-2
     start_n = 1+segment_duration_n*segment_n;
     F_compute_add_segment_v(...

@@ -18,9 +18,10 @@ celerity        = sqrt(string_tension/string_linear_mass);
 
 % Excitation parameters
 initial_height  = 0.01;
-x_listening     = string_length;  % Listen sound at the body
-x_excitation    = string_length-0.017;  % Values used in the expirements
-excitation_width = 0;  % Punctual wire excitation
+delta_excitation = 0.11;
+x_excitation    = string_length-delta_excitation;
+x_listening     = string_length-3/(5*delta_excitation);
+excitation_width = 0.1;  % Punctual wire excitation
 
 %% Parameters container
 string_params = {};

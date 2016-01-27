@@ -1,4 +1,4 @@
-function [f, a, delta, phi] = F_esprit_bis(x, Fs, K, N, n, dis)
+function [f, a, delta, phi] = F_esprit_bis(x, K, N, n, dis)
 %% Computes the ESPRIT method on a signal
 % INPUTS
 %   x, a column array : signal
