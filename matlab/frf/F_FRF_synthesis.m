@@ -14,7 +14,7 @@ Fs = 25600; Nfft = 2^19; df = Fs/Nfft;
 f1 = 50; f2 = 5000; f1_bin = floor(f1/df); f2_bin = floor(f2/df);
 f = [0:Nfft/2]*Fs/Nfft;
 f = f(1:Nfft/2+1);
-nb_modes = 60;
+nb_modes = 40;
 
 %% Loading the measure of admittance
 [Y11_b,~] = F_compute_FRF(str_path_measure_mat,Fs,Nfft);

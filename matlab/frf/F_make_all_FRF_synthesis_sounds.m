@@ -32,7 +32,7 @@ for folder_index = 1:3
             audio_str = [folder_name ...
                 sprintf('/sound_frf_%s_%s_z%d.wav', note_str,instr_str, measure_index)];
 
-            sound_frf = F_FRF_synthesis( measure_str, note_str, 'wide', 0);
+            sound_frf = F_FRF_synthesis( measure_str, note_str, 'point', 0);
 
             sound_frf = sound_frf/max(abs(sound_frf));
             audiowrite( audio_str, sound_frf, Fs);

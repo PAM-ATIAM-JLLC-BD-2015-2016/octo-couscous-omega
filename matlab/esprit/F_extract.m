@@ -1,12 +1,31 @@
+<<<<<<< Updated upstream
 function [f_extract,delta_extract] = F_extract(signal,Fs,number_modes,Nfft)
+=======
+<<<<<<< Updated upstream
+clc;
+close all;
+clear all;
+>>>>>>> Stashed changes
 
 %% pre-processing
 
 % [signal,Fs] = audioread('A3_piano.wav');
 % signal = signal(2000:20000);
 
+<<<<<<< Updated upstream
 % Nfft = 2^(nextpow2(length(signal))+2);
+=======
+<<<<<<< Updated upstream
+Nfft = 2^(nextpow2(length(signal))+4);
+>>>>>>> Stashed changes
 incert = 10;
+=======
+transient_time = 0.2;              %2OOms
+transient_n = transient_time*Fs;
+signal = signal(1:transient_n);
+Nfft = 2^(nextpow2(length(signal))+3);
+incert = 5;
+>>>>>>> Stashed changes
 
 % number_modes = 10; %selection of a number of modes
 freq_estimate = F_harm_freq(signal,number_modes,Fs,Nfft); %estimation of harmonic frequencies
@@ -149,6 +168,11 @@ rs = 60;          % Second Stopband Attenuation
 % Calculate the order from the parameters using firpmord.
 [N, Fo, Ao, W] = firpmord([Fstop1 Fpass1 Fpass2 Fstop2]/(Fs/2), [0 1 0], [10^(-rs/20) (10^(rp/20)-1)/(10^(rp/20)+1)  10^(-rs/20)]);
 
+<<<<<<< Updated upstream
 % Calculate the coefficients using the FIRPM function.
 BPFilter  = firpm(N, Fo, Ao, W);
 end
+=======
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes

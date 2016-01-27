@@ -32,6 +32,6 @@ g = g/max(abs(g));
 figure, plot(real(abs(g)))
 
 soundsc( g, Fs );
-audiowrite( 'test_F_compute_h_string2.wav', g, Fs );
+%audiowrite( 'test_F_compute_h_string2.wav', g, Fs );
 
 end
