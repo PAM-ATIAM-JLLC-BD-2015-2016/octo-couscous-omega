@@ -178,12 +178,11 @@ chevalet.
 
   L'intérêt de cette méthode face à la méthode par FRF est la possibilité
 d'accéder directement à des paramètres physiques pertinents du problème et
-de les modifier pour écouter leur effet sur le son synthétisé.
+d'ainsi pouvoir les modifier pour écouter leur effet sur le son synthétisé.
   En outre, la résolution du système du premier ordre avec matrice
 d'amortissement retourne des modes complexes et prend donc naturellement en
 compte l'amortissement de chaque mode couplé et évite l'effet de
 "\emph{veering}" décrit par Woodhouse.
-
 
 \subsection{Paramètres physiques}
 
@@ -269,7 +268,7 @@ d'équations différentielles du premier ordre est entachée d'erreur dans
 l'article de Woodhouse, qui intervertit les matrices \( C \) et \( K \), ce
 qui a été la cause de pas mal de tracas\dots
 
-\section{Synthèse modale}
+\subsection{Somme modale}
 
   La synthèse modale est effectuée selon des formules décrites
 dans le livre de~\textcite{newland}, qui traduisent une sommation des modes
@@ -279,7 +278,7 @@ pondérée par les amplitudes issues des conditions initiales.
 de la corde, avec prise en compte d'une largeur de doigt (d'un \( \si{\cm} \))
 qui opère comme un filtre passe-bas.
 
-\section{Récapitulatif des valeurs requises}
+\subsection{Récapitulatif des valeurs requises}
 
 En résumé, pour la synthèse modale, les valeurs requises sont :
 \begin{itemize}
@@ -290,8 +289,9 @@ En résumé, pour la synthèse modale, les valeurs requises sont :
  \item Fréquences propres et amortissements pour les modes de corps.
 \end{itemize}
 
+\subsection{}
 
-  \emph{TODO : ajouter du quanti / des figures.}
+%   \emph{TODO : ajouter du quanti / des figures.}
   
 \end{document}
 
