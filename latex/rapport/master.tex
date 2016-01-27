@@ -45,10 +45,13 @@
 
 
 \begin{document}
+\pagenumbering{gobble}
 %\maketitle
 \begin{titlepage}
 \input{texte/cover.tex}
 \end{titlepage}
+
+\pagenumbering{arabic}
 
 \input{texte/intro.tex}
 
@@ -58,7 +61,7 @@
 
 \input{texte/conclu.tex}
 
-
 \printbibliography{}
+\pagenumbering{Roman}
 
 \end{document}
