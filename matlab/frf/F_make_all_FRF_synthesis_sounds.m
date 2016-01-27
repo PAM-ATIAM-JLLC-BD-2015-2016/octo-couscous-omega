@@ -28,7 +28,7 @@ for folder_index = 1:3
         audio_str = [folder_name ...
             sprintf('/sound_frf_%s_%s_z%d.wav', instr_str, note_str, measure_index)];
         
-        sound_frf = F_FRF_synthesis( measure_str, note_str, 0);
+        sound_frf = F_FRF_synthesis( measure_str, note_str, 'point', 0);
         %figure, plot(sound_frf);
         %soundsc(sound_frf,Fs);
 

@@ -1,10 +1,11 @@
 
-function sound_frf = F_FRF_synthesis( str_path_measure_mat, note_str, DEBUG_MODE)
+function sound_frf = F_FRF_synthesis( str_path_measure_mat, note_str, excitation_str, DEBUG_MODE)
 % Synthesizes the guitar sound thanks to a frequency domain synthesis
 % INPUTS
 %   str_path_measure_mat : path to the mesure of admittance
 %   note_str : 'E2', 'A2', 'D3', 'G3', 'B3', 'E4'
 %   mode_debug (optional) : displays plots if true.
+%   excitation_str : 'point' or 'wide'
 
 %% Parameters
 Fs = 25600; Nfft = 2^19; df = Fs/Nfft;
@@ -22,6 +23,7 @@ Y11_b = -Y11_b;
 
 %% Multiplying admittance with transfer function to complete the model
 G = H.*Y11_b./(1+Z.*Y11_b);
+G = H./(Z+eps);
 %G = H.*Z.*Y11_b./(Z+Y11_b);
 
 
@@ -64,16 +66,16 @@ end
 
 %% 
 g3 = g(1:floor(length(g)*0.4));
-sound_frf = g3;
 
-exc_size = 100;
-x = zeros(1,3*Fs);
-x(1:exc_size) = ones(1,exc_size);
+if (strcmp(excitation_str,'point') == 1)
+    sound_frf = g3;
+elseif (strcmp(excitation_str,'wide') == 1)
+    exc_size = 100;
+    x = zeros(1,3*Fs);
+    x(1:exc_size) = ones(1,exc_size);
 
-y1 = conv(x,g3);
-
-sound_frf = y1;
-
+    sound_frf = conv(x,g3);
+end
 % if DEBUG_MODE
 %     figure, plot(g3), title('g')
 %     figure, plot(x), title('x1')
