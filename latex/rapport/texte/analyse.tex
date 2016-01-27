@@ -26,7 +26,20 @@ A défaut d'utiliser ce protocole pour extraire les paramètres de la synthèse 
 
 \subsection{Paramètres de synthèse modale}
 
-Les paramètres utilisés en entré de la synthèse modale sont des paramètres physiques, notamment : [THEIS ?]. N'ayant pu les mesurer pour la plupart, nous utiliserons des valeurs...
+Les paramètres utilisés en entré de la synthèse modale sont des paramètres physiques, notamment :
+\begin{itemize}
+ \item Tension \( T \), raideur de flexion \( B \), longueur \( L \) et
+  masse linéique \( \rho \) pour la corde,
+ \item Facteurs de qualité pour les modes de corde et de corps en isolation,
+ \item Admittance de corps pour calculer les masses effectives,
+ \item Fréquences propres et amortissements pour les modes de corps.
+\end{itemize}
+N'ayant pu les mesurer pour la plupart, nous utiliserons des valeurs pour
+partie fournies par Woodhouse dans son article de mesures,
+% (\( T, B, L, \rho \)),
+% pour partie calculées par des modèles théoriques
+% proposés par Woodhouse (facteurs de qualité de la corde)
+ou des valeurs mesurées.
 \\\\
 
 Les paramètres ayant été rassemblés, il est maintenant possible de produire par chacune des méthodes de synthèses un son dont les conditions initiales sont contrôlées.
