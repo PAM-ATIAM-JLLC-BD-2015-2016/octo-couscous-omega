@@ -1,4 +1,51 @@
-\chapter{Syntèse}
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{csquotes}
+\usepackage{graphicx}
+\usepackage[margin=1.2in]{geometry}
+
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{lmodern}% just for the example
+\usepackage{lipsum}% just for the example
+
+\colorlet{ctcolorchapterline}{black}
+\colorlet{ctcolorchapternum}{black}
+
+\newcommand\mychapformat[1]{%
+  \parbox[b]{\dimexpr\textwidth-3em\relax}{\raggedright#1}}
+\titleformat{\chapter}[display]%
+  {\usekomafont{chapter}\sectfont}%
+  {\vspace{-8em}\raggedleft{%
+    {\color{ctcolorchapterline}%
+        \rule[-5pt]{2pt}{5cm}}\quad%
+    {\color{ctcolorchapternum}
+        \fontsize{60}{60}\selectfont\thechapter}%
+    }%
+  }%
+  {-2.1em}%
+  {\mychapformat}%
+  [\phantomsection]
+
+
+\usepackage[backend=biber]{biblatex}
+\bibliography{bibfile}
+
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{siunitx}
+\usepackage{bm}
+\usepackage{amsmath}
+
+\title{PAM Synthèse hybride d'instruments à cordes}
+\author{Théis Bazin, Louis Moreau-Gaudry, Victor Rosi \\ Hugo Caracalla et Maxime Dickerson}
+
+\begin{document}
+
+
+\chapter{Synthèse}
 \section{Synthèse FRF}
 
 \subsection{Principe}
@@ -125,21 +172,32 @@ posés, pour la corde via un modèle théorique, pour le corps en appliquant
 paramètres physiques du système.
   Ensuite, le système d'équations différentielles à \( N \) modes du système
 couplé est posé et on résout ce système pour en extraire les déformées modales
-et les fréquences propres du système couplé. Enfin, en posant fixant des
-conditions initiales, on peut resynthétiser le son de la corde couplée au
+et les fréquences propres du système couplé. Enfin, en fixant des
+conditions initiales, on peut synthétiser le son de la corde couplée au
 chevalet.
+
+  L'intérêt de cette méthode face à la méthode par FRF est la possibilité
+d'accéder directement à des paramètres physiques pertinents du problème et
+de les modifier pour écouter leur effet sur le son synthétisé.
+  En outre, la résolution du système du premier ordre avec matrice
+d'amortissement retourne des modes complexes et prend donc naturellement en
+compte l'amortissement de chaque mode couplé et évite l'effet de
+"\emph{veering}" décrit par Woodhouse.
+
 
 \subsection{Paramètres physiques}
 
 \paragraph{}
-Par souci de concision, on ne présente pas dans ce rapport le détail des
+  Par souci de concision, on ne présente pas dans ce rapport le détail des
 matrices développées dans l'article de Woodhouse, mais seulement la façon dont
-les paramètres physiques pertinents sont extraits ou fixés.
+les paramètres physiques pertinents peuvent être extraits ou fixés.
 
 \subsubsection{Corde}
   \paragraph{}
-  % INSERT Victor's part.
-
+  \begin{huge}
+    INSERT VICTOR'S PART.
+  \end{huge}
+  
 %   La corde suit un modèle théorique basé sur sa longueur \( L \), sa tension
 % \( T \), sa raideur de torsion \( B \) et sa masse linéique \( \rho{} \).
 %   On choisit ensuite le nombre de modes de corde désiré.
@@ -156,73 +214,60 @@ d'un mode de contrainte rigide qui permet d'inclure les vibrations du corps.
 
   \paragraph{}
   Les paramètres physiques du corps sont extraits par analyse modale via ESPRIT.
-Dans l'état actuel, nous ne suivons pas complètement le processus proposé par
-Woodhouse, qui ne fait de l'analyse modale que jusqu'à \( \si{1500\hertz} \)
-puis, dans la partie haute-fréquences, pose un modèle de répartition modale
-statistique.
-Notre version souffre d'un overfitting dans les basses-fréquences, on se limite
-donc à un nombre restreint de modes de corps pour éviter cet overfitting.
+Attendu que la densité modale devient très élevée au-delà de \( \si{1500\Hz} \),
+et sachant que la première fréquence de résonance du corps est de l'ordre de
+\( \si{100\Hz} \), on cherche des fréquences de résonance de corps dans
+l'intervalle de \( \si{90\Hz} \) à \( \si{1500\Hz} \).
+On ne considère donc que \( 15 \) modes de corps, dans l'ordre des observations
+sur cette plage de fréquence.
 
-  Une fois les fréquences propres et les amortissements du corps isolé
-extraites, on en déduit les paramètres physiques du corps au niveau du
-chevalet, modélisé comme un ensemble unidimensionnel de systèmes masse-ressorts
-à \( N_b \) modes, d'admittance :
-  \[ Y(\omega) = \sum_{k=1}^{N_b} \frac{j\omega{}}
-    {m_k(\omega_k^2 + 2 j \omega{} \omega{}_k \xi{}_k - \omega{}^2)} \]
+Woodhouse pose dans les hautes fréquences un modèle de distribution modale
+statistique qui n'est pas considéré ici.
+
+%   Une fois les fréquences propres et les amortissements du corps isolé
+% extraits, on en déduit les paramètres physiques du corps au niveau du
+% chevalet, modélisé comme un ensemble unidimensionnel de systèmes masse-ressorts
+% à \( N_b \) modes, d'admittance :
+%   \[ Y(\omega) = \sum_{k=1}^{N_b} \frac{j\omega{}}
+%     {m_k(\omega_k^2 + 2 j \omega{} \omega{}_k \xi{}_k - \omega{}^2)} \]
     
-Pour ce faire, on définit pour chaque mode calculé une masse effective
-\( m_k \) et une raideur effective \( s_k \) ainsi définies :
+% Pour ce faire, on définit pour chaque mode calculé une masse effective
+% \( m_k \) et une raideur effective \( s_k \) ainsi définies :
 
+\paragraph*{}
+
+Parmi les paramètres physiques utilisés par Woodhouse, les masses modales
+posent un léger problème : Woodhouse ne fournit qu'une expression qui suppose
+de connaître les amplitudes au niveau du chevalet des déformées modales
+relatives à chaque mode de corps, valeurs requérant une analyse modale
+complète du système.
+  
+  On remplace ce calcul par une valeur proposée par~\textcite{pate14:phd}.
   Les masses modales sont obtenues par inversion locale autour de
-\( \omega = \omega_k \) de l'expression de l'admittance~\cite{pate14:phd} et
+\( \omega = \omega_k \) de l'expression de l'admittance et
 valent \[ m_k = \frac{1}{2 |Y(\omega_k)| \omega{}_k \xi{}_k} \] une valeur plus
-simple à calculer que celle proposée par Woodhouse -- son expression suppose de
-connaître les déformées modales du corps.
-
-  Les raideurs effectives en sont directement déduites et valent
-\( s_k = m_k \omega{}_k^2 \), valeur qui permet d'assurer la vibration du système
-à la pulsation \( \omega{}_k \).
+simple à calculer que celle proposée par Woodhouse.
 
 \subsubsection{Couplage par équations différentielles matricielles}
 
-  \paragraph{}
-  L'étape suivante est la définition du système d'équations différentielles
-cou\-plées. On se place dans la base des modes propres découplés de corde et de corps,
-avec \( N_s \) modes de corde et \( N_b \) modes de corps. On a donc
-pour vecteur de coordonnées le vecteur
-  \( \bm{q}(t) = [a_1(t), a_2(t), \dots a_{N_s}(t),
-    b_1(t), b_2(t), \dots, b_{N_b}(t)] \) de dimension
-\( N = N_s + N_b \).
-% , où les valeurs \( a_k(t) \) sont les amplitudes (variables
-% dans le temps) des \( N_s \) modes de cordes modélisés et les \( b_k(t) \)
-% celles des modes de corps retenus.
-
-  L'équation différentielle matricielle du second ordre décrivant le système
-couplé soumis à une excitation \( \bm{F} \) s'écrit alors
-  \[ \label{eq:diff_second}
-    M \ddot{\bm{q}} + C \dot{\bm{q}} + K \bm{q} = \bm{F} \]
+  \paragraph*{}
+  L'étape suivante est la définition --classique -- du système d'équations
+différentielles cou\-plées :
+\[ M \ddot{\bm{q}} + C \dot{\bm{q}} + K \bm{q} = \bm{F} \]
 
   Les valeurs des matrices \( M \) et \( K \), respectivement de masse et de
 raideur, sont obtenues dans l'article de Woodhouse par une analyse énergétique
-du système et une inversion des résultats obtenus (une sorte de fitting
-modal).
+du système et une inversion des résultats obtenus (une sorte de fitting modal).
 
   L'amortissement est supposé (hypothèse simplificatrice choisie par Woodhouse)
 visqueux (i.e. proportionnel pour chaque mode découplé à sa vitesse) et la
 matrice d'amortissement \( C \) est donc diagonale dans la base des
 modes découplés.
 
-  Enfin, en supposant \( M \) inversible et en posant le vecteur
-\( \bm{p} = \begin{pmatrix} \bm{q} \\ \bm{\dot{q}} \end{pmatrix} \) et la
-matrice \( A = \begin{pmatrix} 0 & I \\ -M^{-1}K & -M^{-1}C \end{pmatrix} \)
-(entachée d'erreur dans l'article de Woodhouse, ce qui a été la cause de pas
-mal de tracas avant que nous ne nous en rendions compte\dots), on réécrit
-\ref{eq:diff_second} comme une équation différentielle du premier ordre :
-\[ \bm{\dot{p}} = A\bm{p} \]
-
-\paragraph{}
-  Les modes propres du système couplé alors obtenus en extrayant les valeurs
-propres et une base de vecteurs propres de \( A \).
+Notons que, bien que très classique et naturelle, la conversion en système
+d'équations différentielles du premier ordre est entachée d'erreur dans
+l'article de Woodhouse, qui intervertit les matrices \( C \) et \( K \), ce
+qui a été la cause de pas mal de tracas\dots
 
 \section{Synthèse modale}
 
@@ -234,28 +279,19 @@ pondérée par les amplitudes issues des conditions initiales.
 de la corde, avec prise en compte d'une largeur de doigt (d'un \( \si{\cm} \))
 qui opère comme un filtre passe-bas.
 
-\section{Statut de l'implémentation}
+\section{Récapitulatif des valeurs requises}
+
+En résumé, pour la synthèse modale, les valeurs requises sont :
+\begin{itemize}
+ \item Tension \( T \), raideur de flexion \( B \), longueur \( L \) et
+  masse \( M \) pour la corde,
+ \item Facteurs de qualité pour les modes de corde et de corps en isolation,
+ \item Admittance de corps pour calculer les masses effectives,
+ \item Fréquences propres et amortissements pour les modes de corps.
+\end{itemize}
+
 
   \emph{TODO : ajouter du quanti / des figures.}
   
-  Les résultats sont plutôt satisfaisants à l'oreille avec \( N_s = 40 \) et
-\( N_b = 60 \), si l'on augmente \( N_b \), on observe un overfitting
-progressif dans les basses fréquences qui concentre de plus en plus d'énergie.
-L'amélioration (en cours) de l'utilisation de la méthode \textsc{esprit}
-pourrait être la solution à ce problème.
-
-Le véritable point problématique est le temps de calcul très élevé (de l'ordre
-de dix minutes pour générer \( 5 \) secondes à \( \si{22050\hertz{}} \))
-pour l'étape de resynthèse. Ceci est dû au fait que plusieurs produits
-matriciels sont calculés pour chaque sample, au sein d'une boucle for.
-L'écriture du calcul de l'ensemble des échantillons en une seule expression
-matricielle est difficile en 2D, mais aisée en 3D (le temps devenant la
-troisième dimension des matrices).
-
-  L'utilisation d'une bibliothèque MATLAB permettant du calcul rapide sur
-des matrices à N-dimensions (un candidat est
-\texttt{mmx}~\footnote{%
-\url{http://www.mathworks.com/matlabcentral/fileexchange/37515-mmx-multithreaded-matrix-operations-on-n-d-matrices}})
-est en cours d'étude et pourrait grandement accélérer le processus.
-
+\end{document}
 
