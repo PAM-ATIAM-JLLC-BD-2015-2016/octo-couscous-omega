@@ -10,7 +10,7 @@ function [ string_params ] = F_compute_full_string_parameters( ...
 %% String physical characteristics
 % String specific values
 [string_linear_mass, string_bending_stiffness, string_tension, ...
-    eta_F, eta_B, eta_A] = F_select_basic_string_parameters(str_note_name);
+    eta_F, eta_B, eta_A] = F_select_basic_string_parameters( str_note_name );
 
 % Common values for all strings
 string_length   = 0.65;
@@ -19,7 +19,7 @@ celerity        = sqrt(string_tension/string_linear_mass);
 % Excitation parameters
 initial_height  = 0.01;
 x_listening     = string_length;  % Listen sound at the body
-x_excitation    = string_length-0.017;  % Values used in the expirements
+x_excitation    = string_length-0.12;  % Values used in the expirements
 excitation_width = 0;  % Punctual wire excitation
 
 %% Parameters container
