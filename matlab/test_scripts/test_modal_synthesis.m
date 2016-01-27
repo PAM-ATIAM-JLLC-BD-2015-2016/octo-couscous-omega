@@ -96,10 +96,10 @@ body_dampings_v = abs(body_dampings_v);
     body_natural_frequencies_Hz_v, body_dampings_v);
 body_effective_stiffnesses_v = ...
     body_effective_masses_v .* (2*pi * body_natural_frequencies_Hz_v).^2;
+
 % cf. formula (6.13) Arthur Paté's PhD
 body_q_factors_v = body_natural_frequencies_Hz_v/Fs_Hz ./ ...
     (eps + 2*body_dampings_v);
-% body_q_factors_v = 1 ./ (eps + 2*body_dampings_v);
 
 %% System matrices computation
 [ mass_m ] = F_compute_mass_m( ...
@@ -175,26 +175,26 @@ if finger_pluck_b
     excitation_width = 0.01;  % 1cm wide finger
 
     delta_excitation = 0.11;
-%     x_excitation    = string_params.length-delta_excitation;
-    x_excitation    = string_params.length/2;
-    x_listening     = string_params.length/2;%-3/(5*delta_excitation);
+    x_excitation    = string_params.length-delta_excitation;
+%     x_excitation    = string_params.length/2;
+    x_listening     = string_params.length*(1 - 2/5);
 
-%     string_params_copy.excitation_width = excitation_width;
+    string_params_copy.excitation_width = excitation_width;
     string_params_copy.x_listening = x_listening;
     string_params_copy.x_excitation = x_excitation;
 end
     
 initial_excitation_v = F_compute_initial_excitation_v( ...
     string_modes_number, string_params_copy, body_modes_number, ...
-    static_height_body, initial_height, coupled_modes_m );
+    static_height_body, coupled_modes_m );
 
 %% Resynthesis
-duration_s = 5;
-Fs_Hz = 26500;
+duration_s = 10;
+Fs_Hz = 25600;
 
 [ modal_synthesis_v ] = F_modal_synth( duration_s, Fs_Hz, ...
     string_modes_number, body_modes_number, initial_excitation_v, ...
-    string_params, coupled_modes_m, ...
+    string_params_copy, coupled_modes_m, ...
     coupled_complex_natural_frequencies_v, mass_m );
 
 %% Derivate to yield speed instead of position
