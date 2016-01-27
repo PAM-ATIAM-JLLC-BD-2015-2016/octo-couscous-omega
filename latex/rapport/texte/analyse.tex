@@ -1,65 +1,39 @@
-\chapter{Méthode ESPRIT - Extraction des paramètres de corde}
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc} 
+\usepackage{geometry}
 
-\subsection{Objectifs}
+\section{Extraction des paramètres}
 
-Les paramètres physiques et fréquentiels de corde sont nécessaires à la fois à
-la synthèse par FRF et à la synthèse modale : dans la première, il est besoin
-d'une admittance en extrémité de corde et d'une fonction de transfert entre le
-déplacement de deux points de la corde, tandis que la seconde demande la
-connaissance des modes de cordes. Pour obtenir l'ensemble de ces données,
-plusieurs possibilités s'offrent à nous : s'il est possible de se servir
-directement du modèle proposé par l'article de Woodhouse et des valeurs qui y
-sont fournies, il pourrait être avantageux d'extraire nous-même ces valeurs de
-mesures réelles.\\ Pour cela, il est envisageable de se placer dans une
-position "guitariste", en mesurant uniquement la longueur de la corde, sa
-tension et sa réponse impulsionnelle en un point. A partir de là, il est
-nécessaire de conduire une analyse modale pour extraire de cette réponse les
-valeurs des fréquences modales et de leurs amortissements : avec eux, la
-synthèse FRF sera assurée. Pour obtenir les données nécessaires à la synthèse
-modale, il faudra ensuite "fitter" nos données avec le modèle de Woodhouse
-(c.f. partie Victor) afin de déterminer les paramètres $B$, $c$ (et donc
-$\rho$), $\eta_A$, $\eta_B$ et $\eta_F$. Un des avantages à effectuer cette
-démarche tient ensuite au fait que cette corde pourrait être jouée par nos
-méthodes de synthèse en la tendant (i.e. modifiant $T$) ou la raccourcissant
-(i.e. modifiant $L$) à volonté, comme une corde d'instrument réel.\\ Procédons
-donc comme si nous avions connaissance d'une réponse impulsionnelle de corde,
-de sa tension et de sa longueur.
+Une fois la qualité des mesures évaluée, il s'agit maintenant d'en extraire les paramètres nécessaires à la fois à la synthèse par FRF et à la synthèse modale.
 
-\subsection{Pré-traitement}
+\subsection{Paramètres de synthèse FRF}
 
-Au lieu d'effectuer immédiatement une analyse modale via la méthode ESPRIT
-(c.f. un ou deux papiers) de la réponse impulsionnelle, qui risque de se
-révéler couteuse en temps, nous utilisons le fait que nous avons déjà une
-certaine idée de la forme de l'admittance de la corde et des valeurs de ses
-résonances pour effectuer un pré-traitement du signal : afin de n'utiliser la
-méthode ESPRIT qu'à faible ordre, nous traitons le signal temporel par un banc
-de filtres centrés sur les valeurs approximatives des fréquences attendues. Un
-autre intérêt est ensuite de pouvoir effectuer un décalage fréquentiel des
-signaux traités (en les modulant par une sinusoïde complexe à la fréquence du
-passe-bande correspondant) afin de le décimer et de réduire les temps de calcul
-à suivre, tout en permettant aisément de remonter aux valeurs véritables des
-pôles du signal. Il est à noter que les signaux en sortie de banc de filtre
-sont amputés de leur partie transitoire, qui trahirai le fait qu'il ne s'agit
-pas d'exponentielles infinies au yeux de la méthode ESPRIT : pour cela, il est
-utile d'utiliser un banc de filtre à réponse impulsionnelle finie (FRI) ,
-puisque cette transition contiendra alors précisément autant d'échantillons que
-l'ordre des filtres.
+Dans le cadre de la première, l'admittance $Y_{body}$ du corps sans corde de l'instrument est obtenue de façon directe au travers des mesures de la partie précédente : ne restent à être extraites uniquement les valeurs des fréquences de résonance de la corde et celles de leurs amortissements.\\
 
-\subsection{Méthode ESPRIT et moindres carrés}
+Pour ce faire, et en se basant sur la relation [REF NEEDED], il est en théorie possible de commencer par extraire $Y_{string}$ des valeurs mesurées de $Y_{body}$ et $Y_{total}$ puis d'analyser $Y_{string}$ et d'identifier au moyen de la relation [REF NEEDED] les fréquences et amortissements. Malheureusement il existe entre l'admittance de corde et les deux autres une différence d'ordre de grandeur telle que les simple bruit de mesure de ces dernières noie le signal qui aurait du être $Y_{string}$ : cela nous pousse donc à la mesurer directement sur banc de corde, ce qui par manque de temps ne sera pas fait au cours de ce projet. La suite de cette partie s'attache cependant à mettre en place un protocole d'extraction des fréquences et amortissement en supposant la connaissance de $Y_{string}$.\\
 
-- à remplir par une brève explication du principe des méthodes ? -
+\subsubsection{Analyse ESPRIT par bandes}
 
+Supposons donc que nous disposions d'une admittance $Y$, issue d'une mesure sur corde : il est donc à priori possible, en extrayant sa fréquence fondamentale via produit spectral, puis en recherchant chaque harmonique sur une plage de fréquence dictée par les valeurs des harmoniques précédents, d'obtenir une première série de valeurs de fréquences de modes. Cette méthode n'a cependant pas le mérite d'être très précise, et ne renvoie pas non plus de valeurs d'amortissement : elle peut cependant servir de base à une analyse par méthode à haute-résolution (dans le cas présent, la méthode ESPRIT [REF NEEDED]) centrée autour de ces premières approximations de fréquences.\\
+Le signal est dans un premier temps filtré autour de chacun de ces harmoniques par filtre passe-bande à réponse finie et phase linéaire, ceci afin de garantir des signaux filtrés présentant les mêmes pôles que le signal d'origine (le résultat est visible en [REF NEEDED]). Afin d'accélérer l'analyse par méthode ESPRIT, il est ensuite modulé par la fréquences de l'harmonique approximatif afin de la recentrer autour de $0 Hz$ (voir [REF NEEDED]) et de permettre une décimation (voir [REF NEEDED]). S'ensuit alors une analyse par ESPRIT, qui donne directement accès aux valeurs exactes de fréquences propres et amortissement de $Y$.
 
-\subsection{Extractions des paramètres}
+\begin{figure}[h]
+\includegraphics[scale=0.5]{figures/pre_proc.png}
+\caption{\textit{(a) spectre du signal d'entrée - (b) spectre du signal filtré sur un harmonique - (c) spectre du signal modulé par la fréquence de l'harmonique - (d)spectre du signal décimé.}}
+\label{pre_proc}
+\end{figure}
 
-Les données obtenues via le traitement précédant permettent immédiatement
-l'utilisation de la synthèse de type FRF, mais ne suffisent pas à celle de type
-modale. Pour cette dernière, il faut encore remonter aux valeurs de $B$ et de
-$\rho$ : pour cela, et comme exposé plus haut, on se sert de l'expression des
-valeurs attendues des fréquences et amortissements (c.f. partie Victor) pour
-remonter aux paramètres encore inconnus de ces équations. Une fois obtenus, nos
-seront en mesure de manipuler ce type de corde à volonté sur nos deux méthodes
-de synthèses.
+\subsubsection{Valeurs utilisées}
 
+A défaut d'utiliser ce protocole pour extraire les paramètres de la synthèse par FRF, les valeurs fournies par Woodhouse [REF NEEDED] seront utilisées.
+
+\subsection{Paramètres de synthèse modale}
+
+Les paramètres utilisés en entré de la synthèse modale sont des paramètres physiques, notamment : [THEIS ?]. N'ayant pu les mesurer pour la plupart, nous utiliserons des valeurs...
+\\\\
+
+Les paramètres ayant été rassemblés, il est maintenant possible de produire par chacune des méthodes de synthèses 
+
+\section{Paramètres de synthèse modale}
 
 
