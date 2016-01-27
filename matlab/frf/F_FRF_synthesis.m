@@ -45,11 +45,11 @@ if DEBUG_MODE
 %         plot(f,db(Y11_b)), xlim([f1 f2]), title('Y_{body}')
 %         %plot(f(1:Nfft/2+1),real(Y11_b)), xlim([f1 f2]), title('Y_{body}')
 %     subplot 414
-%     
-        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('FRF from excitation point to bridge')
+     subplot 121
+        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('Guitar FRF \delta_{bridge} / F_{excitation}')
         xlim([50 800]), xlabel('Frequency(Hz)'), ylabel('Gain(dB)')
-        figure
-        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('FRF from excitation point to bridge')
+     subplot 122
+        plot([0:Nfft-1]*Fs/Nfft,db(G_sym)), title('Guitar FRF \delta_{bridge} / F_{excitation}')
         xlim([3000 3800]), xlabel('Frequency(Hz)'), ylabel('Gain(dB)')
         %plot([0:Nfft-1]*Fs/Nfft,real(G_sym)), xlim([f1 f2]), title('G_{whole}')
 end    
