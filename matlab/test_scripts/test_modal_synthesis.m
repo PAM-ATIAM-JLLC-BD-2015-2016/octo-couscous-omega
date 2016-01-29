@@ -142,28 +142,36 @@ end
 [ coupled_modes_m, coupled_complex_natural_frequencies_v ] = ...
     F_compute_coupled_modes_m( dissipation_m, mass_m, stiffness_m);
 
+% coupled_modes_m = diag([ones(1, string_modes_number), ...
+%     (zeros(1, body_modes_number) + eps), ones(1, string_modes_number), ...
+%     (zeros(1, body_modes_number) + eps) ]) * coupled_modes_m;
+
 %% Mode shapes plot
-% plots = true;
+plots = false;
 if plots
     x_length = 10000;
     mode_sums_m = zeros(x_length,modes_number);
     acc_v = zeros(1,x_length);
-    for i=1:modes_number
+    for i=string_modes_number+1:modes_number
         mode_shape_v = coupled_modes_m(1:string_modes_number,i);
-        mode_sum_v = F_compute_mode_sum_v(...
-            string_modes_number, string_params.string_length, ...
+        [ mode_sum_v, x_v ] = F_compute_mode_sum_v(...
+            string_modes_number, string_params.length, ...
             x_length, mode_shape_v);
-        plot(mode_sum_v);
+        subplot(2,1,1)
+        plot(x_v, abs(mode_sum_v));
         mode_sums_m(:,i) = mode_sum_v;
         acc_v = acc_v + mode_sum_v;
-        pause(0.02);
+        subplot(2,1,2)
+        plot(x_v, abs(acc_v));
+        pause(0.2);
     end
-    plot(acc_v);
 end
-
+plots = false;
 %% Initial condition definition
 % Either use the defaults, following the values used during the experiments
 % or a modelled finger excitation
+
+plot_excitation_b = true;
 
 static_height_body = 1e-5;  % Fixed by hand...
 initial_height = 0.01;
@@ -173,11 +181,22 @@ string_params_copy = string_params;
 finger_pluck_b = true;
 if finger_pluck_b
     excitation_width = 0.01;  % 1cm wide finger
-
+    
     delta_excitation = 0.11;
-    x_excitation    = string_params.length-delta_excitation;
-%     x_excitation    = string_params.length/2;
-    x_listening     = string_params.length*(1 - 2/5);
+    x_excitation = string_params.length-delta_excitation;
+    x_listening  = string_params.length*(1 - 2/7);
+
+    string_params_copy.excitation_width = excitation_width;
+    string_params_copy.finger_pluck_bx_listening = x_listening;
+    string_params_copy.x_excitation = x_excitation;
+end
+
+antinode_b = false;
+if antinode_b
+    excitation_width = 0.001;  % 1cm wide finger
+    
+    x_excitation  = string_params.length/2;
+    x_listening  = string_params.length*(1 - 2/5);
 
     string_params_copy.excitation_width = excitation_width;
     string_params_copy.x_listening = x_listening;
@@ -186,8 +205,12 @@ end
     
 initial_excitation_v = F_compute_initial_excitation_v( ...
     string_modes_number, string_params_copy, body_modes_number, ...
-    static_height_body, coupled_modes_m );
+    static_height_body, coupled_modes_m, plot_excitation_b );
 
+if plot_excitation_b
+    stem(abs(initial_excitation_v))
+end
+    
 %% Resynthesis
 duration_s = 10;
 Fs_Hz = 25600;
