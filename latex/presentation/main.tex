@@ -1,0 +1,386 @@
+\pdfoptionpdfminorversion=7 % To suppress warining related to pdf inclusion.
+
+\documentclass{beamer}
+
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+\usepackage{etex}
+
+% This file is a solution template for:
+
+% - Giving a talk on some subject.
+% - The talk is between 15min and 45min long.
+% - Style is ornate.
+
+
+\mode<presentation>
+{
+  \usetheme{Warsaw} % CambridgeUS} % Goettingen}
+  \usecolortheme{dove}  %lily}
+
+  \setbeamercovered{transparent=30}
+  % or whatever (possibly just delete it)
+}
+
+\addtobeamertemplate{navigation symbols}{}{%
+    \usebeamerfont{footline}%
+    \usebeamercolor[fg]{footline}%
+    \hspace{1em}%
+    \insertframenumber/\inserttotalframenumber
+  }
+
+%gets rid of bottom navigation bars
+\setbeamertemplate{footline}[frame number]{}
+
+%gets rid of navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+\usepackage[absolute,overlay]{textpos}      %for positioning
+
+\usepackage{xcolor}
+\usepackage{xifthen}
+\usepackage{xstring}
+\usepackage{tikz}
+\usetikzlibrary{arrows, arrows.meta}
+\usetikzlibrary{automata,positioning}
+\usetikzlibrary{math}
+\usetikzlibrary{calc}
+\usepackage{etoolbox} % For \ifblank{#5}{true}{false}
+\usepackage{adjustbox} % To resize pictures
+
+  % https://tex.stackexchange.com/a/55849/85582
+  % Keys to support piece-wise uncovering of elements in TikZ pictures:
+  % \node[visible on=<2->](foo){Foo}
+  % \node[visible on=<{2,4}>](bar){Bar}   % put braces around comma expressions
+  %
+  % Internally works by setting opacity=0 when invisible, which has the 
+  % adavantage (compared to \node<2->(foo){Foo} that the node is always there, hence
+  % always consumes space that (foo) is always available.
+  %
+  % The actual command that implements the invisibility can be overriden
+  % by altering the style invisible. For instance \tikzsset{invisible/.style={opacity=0.2}}
+  % would dim the "invisible" parts. Alternatively, the color might be set to white, if the
+  % output driver does not support transparencies (e.g., PS) 
+  %
+  \tikzset{
+    invisible/.style={opacity=0},
+    visible on/.style={alt={#1{}{invisible}}},
+    alert on/.style={alt={#1{color=red}{}}},
+    alt/.code args={<#1>#2#3}{%
+      \alt<#1>{\pgfkeysalso{#2}}{\pgfkeysalso{#3}} % \pgfkeysalso doesn't change the path
+    },
+  }
+
+\usepackage{times}
+% \usepackage[T1]{fontenc}
+\usepackage{mathpartir}
+
+\usepackage[all]{xy}
+
+\usepackage{changepage}
+
+% Or whatever. Note that the encoding and the font should match. If T1
+% does not look nice, try deleting the line with the fontenc.
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+\title % (optional, use only with long paper titles)
+{Synthèse hybride d'instruments à cordes}
+\subtitle
+{Vers un outil d'aide à la facture} % (optional)
+
+\author % (optional, use only with lots of authors)
+{Th\'{e}is Bazin and Toto}
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute % (optional, but mostly needed)
+{
+  M2 ATIAM 2015-2016
+}
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date % (optional)
+{\today{}}
+
+%\subject{Talks}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+% \AtBeginSubsection[]
+% {
+%   \begin{frame}<beamer>{Outline}
+%     \tableofcontents[currentsection,currentsubsection]
+%     \addtocounter{framenumber}{-1} 
+%   \end{frame}
+% }
+
+% If you wish to uncover everything in a step-wise fashion, uncomment
+% the following command: 
+
+\beamerdefaultoverlayspecification{<+->}
+
+
+% \makeatletter
+% \@ifundefined{lhs2tex.lhs2tex.sty.read}%
+%   {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
+%    \newcommand\SkipToFmtEnd{}%
+%    \newcommand\EndFmtInput{}%
+%    \long\def\SkipToFmtEnd#1\EndFmtInput{}%
+%   }\SkipToFmtEnd
+
+\usepackage[backend=biber,
+  natbib=true,
+  style=authoryear,
+  hyperref=false,
+%   sorting=none % To sort items by order of appearance in the article
+  ]{biblatex}
+\usepackage{bibentry}
+\usepackage{silence}
+\WarningFilter{biblatex}{Patching footnotes failed}
+
+  
+\iffalse % Gets \cite{} auto-complete to work
+    \bibliography{../bibliography/bibfile.bib}
+\fi
+\addbibresource{../bibliography/bibfile.bib}
+
+\usepackage[autolanguage]{numprint}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{textcomp}
+\usepackage{array}
+% \usepackage[french, algoruled]{algorithm2e}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+\usepackage{pdfpages}
+
+% \usepackage{listings}
+
+% \edef\oldt{\ttdefault}
+% \usepackage[scaled=0.85]{beramono}
+% \renewcommand*\ttdefault{\oldtt}
+% \newcommand{\bera}[1]{{\fontfamily{fvm}\selectfont #1}}
+
+\usepackage{stmaryrd} %used for brackets
+\usepackage{graphicx}
+\usepackage{wrapfig}
+
+\usepackage{url}
+\usepackage{polytable}
+\newcommand{\Conid}[1]{\mathit{#1}}
+\newcommand{\Varid}[1]{\mathit{#1}}
+\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+\newcommand{\plus}{\mathbin{+\!\!\!+}}
+\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+\newcommand{\sequ}{\mathbin{>\!\!\!>}}
+\renewcommand{\leq}{\leqslant}
+\renewcommand{\geq}{\geqslant}
+
+\def\couleur<#1>{\temporal<#1>{\color{gray!50}}{\color{red}}{\color{black}}}
+
+\def\xscale{0.3} % Back-up: 0.3
+\def\yscale{0.23} % Back-up : 0.23
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.gif}
+
+\newcommand{\code}[2]{
+  \hrulefill
+  \subsection*{#1}
+  \lstinputlisting{#2}
+  \vspace{2em}
+}
+\newcommand\gts[1]{\og#1\fg}
+
+\newcommand{\arrow}{\item[$\rightarrow{}$]}
+%\addtolength{\textwidth}{70pt}
+%\addtolength{\voffset}{-30pt}
+%\addtolength{\marginparwidth}{-1cm}
+
+% \usepackage[margin=2.8cm]{geometry}
+
+\usepackage{graphics}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \usepackage{algorithmicx}
+
+% \algrenewcomment[1]{\hfill \(\triangleright\) \textit{#1}}
+% \algnewcommand{\LineComment}[1]{\State
+%   \begin{minipage}{0.8\textwidth}
+%     \(\triangleright\) \textit{#1}
+%   \end{minipage}}
+
+\usepackage{minted}
+\usepackage{csquotes}
+
+\newminted[pycode]{python}{}
+\newmintinline[pyline]{python}{}
+
+\usepackage{xfrac}
+
+\newcommand<>{\overitem}[1]{
+  \onslide#2
+    \begin{center}
+      {\( \triangleright \) #1} 
+    \end{center}
+}
+    
+\newcommand{\lbracket}{[\!\!\![\;}
+\newcommand{\rbracket}{\;]\!\!\!]\;}
+
+\newcommand{\fo}{FO}
+\newcommand{\folong}{Factor Oracle}
+\newcommand{\ao}{AO}
+\newcommand{\aolong}{Audio Oracle}
+\newcommand{\vmo}{VMO}
+\newcommand{\vmolong}{Variable Markov Oracle}
+
+\newcommand{\sfx}{\text{\textit{sfx}}}
+\newcommand{\argmin}{\arg\!\min}
+
+% CTL
+\newcommand{\ctlex}[1]{\mathsf{EX}\: #1}
+\newcommand{\ctleu}[2]{\mathsf{E}\: (#1 \:\mathsf{U}\: #2)}
+\newcommand{\ctlax}[1]{\mathsf{AX}\: #1}
+\newcommand{\ctlau}[2]{\mathsf{A}\: (#1 \:\mathsf{U}\: #2)}
+\newcommand{\ctlef}[1]{\mathsf{EF}\: #1}
+\newcommand{\ctlaf}[1]{\mathsf{AF}\: #1}
+\newcommand{\ctleg}[1]{\mathsf{EG}\: #1}
+\newcommand{\ctlag}[1]{\mathsf{AG}\: #1}
+
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}
+\newtheorem{pte}{Property}
+\newtheorem{cor}{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}
+\newtheorem*{exm}{Example}
+\newtheorem*{exms}{Examples}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remark}
+
+% French
+% \theoremstyle{plain}
+% \newtheorem{thm}{Théorème}
+% \newtheorem{pte}{Propriété}
+% \newtheorem{cor}{Corollaire}
+% 
+% \theoremstyle{definition}
+% \newtheorem{dfn}{Définition}
+% \newtheorem{exm}{Exemple}
+% \newtheorem{exms}[exm]{Exemples}
+% 
+% \theoremstyle{remark}
+% \newtheorem{rem}{Remarque}
+
+% \usepackage[colorlinks,citecolor=black,
+% filecolor=black,
+% linkcolor=black,
+% urlcolor=black,]{hyperref}
+
+\newenvironment{reference}[2]{%                                            %
+\begin{textblock*}{\textwidth}(#1,#2)                                      % creates the reference environment              
+  \footnotesize\it\bgroup\color{red!50!black}}{\egroup\end{textblock*}}    %
+
+% \pgfdeclareimage[height=1.5cm]{university-logo}{logo}
+% \logo{\pgfuseimage{university-logo}}
+
+% \setbeamertemplate{sidebar left}{
+% \begin{reference}{109mm}{73mm}
+% \tikz\node[opacity=0.5]{\pgfuseimage{university-logo}};
+% \end{reference}
+%   }
+
+
+% Tikz layers
+
+\pgfdeclarelayer{back}
+\pgfdeclarelayer{front}
+\pgfsetlayers{back,main,front}
+
+\makeatletter
+\pgfkeys{%
+  /tikz/on layer/.code={
+    \pgfonlayer{#1}\begingroup
+    \aftergroup\endpgfonlayer
+    \aftergroup\endgroup
+  },
+  /tikz/node on layer/.code={
+    \gdef\node@@on@layer{%
+      \setbox\tikz@tempbox=\hbox\bgroup\pgfonlayer{#1}
+      \unhbox\tikz@tempbox\endpgfonlayer\egroup}
+    \aftergroup\node@on@layer
+  },
+  /tikz/end node on layer/.code={
+    \endpgfonlayer\endgroup\endgroup
+  }
+}
+
+\def\node@on@layer{\aftergroup\node@@on@layer}
+
+\makeatother
+
+\usepackage{graphics}
+
+% Pictures
+
+\begin{document}
+
+\begin{frame}
+%   \begin{reference}{109mm}{73mm}
+%   \tikz\node[opacity=0.4]{\pgfuseimage{university-logo}};
+%   \end{reference} 
+   \titlepage{}
+\end{frame}
+
+\begin{frame}{CTL: an example of model}
+  
+\beamerdefaultoverlayspecification{} % Regardez pas ça, c'est juste pour
+% temporairement pas faire le dévoilement pas-à-pas.
+
+  \begin{columns}[]
+    \begin{column}{.48\textwidth}
+      Un exemple
+    \end{column}
+    
+    \hfill{}
+    
+    \begin{column}{.48\textwidth}
+	\begin{itemize}
+	  \item De,
+	  \item Silde,
+	  \item Sur,
+	  \item Deux colonnes.
+	\end{itemize}
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \Huge
+    Thank You!
+  \end{center}
+\end{frame}
+
+
+\end{document}
