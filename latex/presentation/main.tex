@@ -4,7 +4,6 @@
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
-\usepackage{csquotes}
 
 \usepackage{etex}
 
@@ -152,8 +151,6 @@
 \addbibresource{../bibliography/bibfile.bib}
 
 \usepackage[autolanguage]{numprint}
-\usepackage{siunitx}
-\usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -226,11 +223,11 @@
 %     \(\triangleright\) \textit{#1}
 %   \end{minipage}}
 
-%\usepackage{minted}
-%\usepackage{csquotes}
+\usepackage{minted}
+\usepackage{csquotes}
 
-%\newminted[pycode]{python}{}
-%\newmintinline[pyline]{python}{}
+\newminted[pycode]{python}{}
+\newmintinline[pyline]{python}{}
 
 \usepackage{xfrac}
 
@@ -324,8 +321,6 @@
 
 \begin{document}
 
-
-
 \begin{frame}
 %   \begin{reference}{109mm}{73mm}
 %   \tikz\node[opacity=0.4]{\pgfuseimage{university-logo}};
@@ -334,14 +329,36 @@
 \end{frame}
 
 \input{sections/intro}
-
-\input{sections/analyse}
+\input{sections/mesures}
 \input{sections/modal}
 \input{sections/frf}
+\input{sections/comparaison}
 
+\begin{frame}{Un petit exemple pour vous mes amis}
+  
+\beamerdefaultoverlayspecification{} % Regardez pas ça, c'est juste pour
+% temporairement pas faire le dévoilement pas-à-pas.
 
-\include{sections/conclusion}
+  \begin{columns}[]
+    \begin{column}{.48\textwidth}
+      Un exemple
+    \end{column}
+    
+    \hfill{}
+    
+    \begin{column}{.48\textwidth}
+	\begin{itemize}
+	  \item De,
+	  \item Silde,
+	  \item Sur,
+	  \item Deux colonnes.
+	\end{itemize}
+    \end{column}
+  \end{columns}
 
+\end{frame}
+
+\include{conclu.tex}
 \begin{frame}
   \begin{center}
     \Huge
@@ -349,28 +366,5 @@
   \end{center}
 \end{frame}
 
-\end{document}
 
-% \begin{frame}{Un petit exemple pour vous mes amis}
-%   
-% \beamerdefaultoverlayspecification{} % Regardez pas ça, c'est juste pour
-% % temporairement pas faire le dévoilement pas-à-pas.
-% 
-%   \begin{columns}[]
-%     \begin{column}{.48\textwidth}
-%       Un exemple
-%     \end{column}
-%     
-%     \hfill{}
-%     
-%     \begin{column}{.48\textwidth}
-% 	\begin{itemize}
-% 	  \item De,
-% 	  \item Silde,
-% 	  \item Sur,
-% 	  \item Deux colonnes.
-% 	\end{itemize}
-%     \end{column}
-%   \end{columns}
-% 
-% \end{frame}
+\end{document}
