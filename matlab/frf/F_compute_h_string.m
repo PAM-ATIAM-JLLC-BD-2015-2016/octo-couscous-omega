@@ -14,12 +14,24 @@ T = string_params.tension;
  Wn_v    = string_params.natural_frequencies_rad_v.';
  etan_v  = string_params.loss_factors_v.';
 
+ Wn_v_plot = Wn_v;
 % Introduction de d?viations par rapport au mod?le id?al 
 %Wn_v = mode_n_v.' * pi * c/L ...
-%    .* ( 1 + B*(mode_n_v.').^2 ) .* ( 1 + 1i*etan_v/2 );
-
-Wn_v = Wn_v.*(1+1i*etan_v/2);
-Wn_v2 = Wn_v.*(1-1i*etan_v/2);
+%        .* ( 1 + B*(mode_n_v.').^2 );
+  
+ figure, hold on, plot(abs(Wn_v_plot)), plot(abs(Wn_v)), hold off
+ title('abs(Wn)'), legend( 'Wn1','Wn2')
+ figure, hold on, plot(real(Wn_v_plot)), plot(real(Wn_v)), hold off
+ title('abs(Wn)'), legend( 'Wn1','Wn2')
+ figure, hold on, plot(imag(Wn_v_plot)), plot(imag(Wn_v)), hold off
+ title('abs(Wn)'), legend( 'Wn1','Wn2')
+ figure, hold on, plot(angle(Wn_v_plot)), plot(angle(Wn_v)), hold off
+ title('abs(Wn)'), legend( 'Wn1','Wn2')
+ disp(Wn_v(end))
+ disp(Wn_v_plot(end))
+ 
+ Wn_v = Wn_v.*(1+1i*etan_v/2);
+ Wn_v2 = Wn_v.*(1-1i*etan_v/2);
 
 Wn_m    = repmat(Wn_v, 1, length(omega_rad_v));
 Wn_m2   = repmat(Wn_v2, 1, length(omega_rad_v));

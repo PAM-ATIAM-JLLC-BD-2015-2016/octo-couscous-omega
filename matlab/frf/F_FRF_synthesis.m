@@ -26,6 +26,9 @@ Y11_b = -Y11_b;
 %% Multiplying admittance with transfer function to complete the model
 G = H.*Y11_b./(1+Z.*Y11_b);
 
+%% Integrating the admittance
+
+
 %% Inverting the FFT
 G_sym = F_duplicate_with_hermitian_symmetry( G );
 
