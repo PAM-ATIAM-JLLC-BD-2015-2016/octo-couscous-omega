@@ -196,7 +196,7 @@
 \def\xscale{0.3} % Back-up: 0.3
 \def\yscale{0.23} % Back-up : 0.23
 
-\DeclareGraphicsExtensions{.pdf,.png,.jpg,.gif}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg,.gif,.eps}
 
 \newcommand{\code}[2]{
   \hrulefill
@@ -211,7 +211,12 @@
 %\addtolength{\voffset}{-30pt}
 %\addtolength{\marginparwidth}{-1cm}
 
-\usepackage{graphics}
+\usepackage{graphicx}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\epstopdfsetup{update} % only regenerate pdf files when eps file is newer
+
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
