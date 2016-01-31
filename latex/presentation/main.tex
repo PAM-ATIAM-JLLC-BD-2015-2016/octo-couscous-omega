@@ -84,6 +84,14 @@
 % If you have a file called "university-logo-filename.xxx", where xxx
 % is a graphic format that can be processed by latex or pdflatex,
 % resp., then you can add a logo as follows:
+% \pgfdeclareimage[height=1.5cm]{university-logo}{logo}
+% \logo{\pgfuseimage{university-logo}}
+
+% \setbeamertemplate{sidebar left}{
+% \begin{reference}{109mm}{73mm}
+% \tikz\node[opacity=0.5]{\pgfuseimage{university-logo}};
+% \end{reference}
+%   }
 
 \title % (optional, use only with long paper titles)
 {Synthèse hybride d'instruments à cordes}
@@ -158,11 +166,6 @@
 \usepackage{amssymb}
 \usepackage{textcomp}
 \usepackage{array}
-% \usepackage[french, algoruled]{algorithm2e}
-%\usepackage{algorithm}
-%\usepackage{algorithmic}
-\usepackage[retainorgcmds]{IEEEtrantools}
-
 \usepackage{pdfpages}
 
 % \usepackage{listings}
@@ -208,16 +211,10 @@
 %\addtolength{\voffset}{-30pt}
 %\addtolength{\marginparwidth}{-1cm}
 
-% \usepackage[margin=2.8cm]{geometry}
-
 \usepackage{graphics}
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{amssymb}
-
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-% \usepackage{algorithmicx}
 
 % \algrenewcomment[1]{\hfill \(\triangleright\) \textit{#1}}
 % \algnewcommand{\LineComment}[1]{\State
@@ -225,7 +222,6 @@
 %     \(\triangleright\) \textit{#1}
 %   \end{minipage}}
 
-\usepackage{minted}
 \usepackage{csquotes}
 
 \newminted[pycode]{python}{}
@@ -256,20 +252,6 @@
 \theoremstyle{remark}
 \newtheorem*{rem}{Remarque}
 
-% French
-% \theoremstyle{plain}
-% \newtheorem{thm}{Théorème}
-% \newtheorem{pte}{Propriété}
-% \newtheorem{cor}{Corollaire}
-% 
-% \theoremstyle{definition}
-% \newtheorem{dfn}{Définition}
-% \newtheorem{exm}{Exemple}
-% \newtheorem{exms}[exm]{Exemples}
-% 
-% \theoremstyle{remark}
-% \newtheorem{rem}{Remarque}
-
 % \usepackage[colorlinks,citecolor=black,
 % filecolor=black,
 % linkcolor=black,
@@ -279,45 +261,6 @@
 \begin{textblock*}{\textwidth}(#1,#2)                                      % creates the reference environment              
   \footnotesize\it\bgroup\color{red!50!black}}{\egroup\end{textblock*}}    %
 
-% \pgfdeclareimage[height=1.5cm]{university-logo}{logo}
-% \logo{\pgfuseimage{university-logo}}
-
-% \setbeamertemplate{sidebar left}{
-% \begin{reference}{109mm}{73mm}
-% \tikz\node[opacity=0.5]{\pgfuseimage{university-logo}};
-% \end{reference}
-%   }
-
-
-% Tikz layers
-
-% \pgfdeclarelayer{back}
-% \pgfdeclarelayer{front}
-% \pgfsetlayers{back,main,front}
-% 
-% \makeatletter
-% \pgfkeys{%
-%   /tikz/on layer/.code={
-%     \pgfonlayer{#1}\begingroup
-%     \aftergroup\endpgfonlayer
-%     \aftergroup\endgroup
-%   },
-%   /tikz/node on layer/.code={
-%     \gdef\node@@on@layer{%
-%       \setbox\tikz@tempbox=\hbox\bgroup\pgfonlayer{#1}
-%       \unhbox\tikz@tempbox\endpgfonlayer\egroup}
-%     \aftergroup\node@on@layer
-%   },
-%   /tikz/end node on layer/.code={
-%     \endpgfonlayer\endgroup\endgroup
-%   }
-% }
-% 
-% \def\node@on@layer{\aftergroup\node@@on@layer}
-% 
-% \makeatother
-
-\usepackage{graphics}
 
 % Pictures
 
