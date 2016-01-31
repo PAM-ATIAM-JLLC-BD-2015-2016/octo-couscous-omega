@@ -38,14 +38,11 @@
 \usepackage[absolute,overlay]{textpos}      %for positioning
 
 \usepackage{xcolor}
-% \usepackage{xifthen}
-% \usepackage{xstring}
 \usepackage{tikz}
 % \usetikzlibrary{arrows, arrows.meta}
 % \usetikzlibrary{automata,positioning}
 % \usetikzlibrary{math}
 % \usetikzlibrary{calc}
-% \usepackage{etoolbox} % For \ifblank{#5}{true}{false}
 \usepackage{adjustbox} % To resize pictures
 
   % https://tex.stackexchange.com/a/55849/85582
@@ -71,8 +68,7 @@
     },
   }
 
-\usepackage{times}
-% \usepackage[T1]{fontenc}
+% \usepackage{times}
 
 \usepackage[all]{xy}
 
@@ -133,15 +129,6 @@
 
 \beamerdefaultoverlayspecification{<+->}
 
-
-% \makeatletter
-% \@ifundefined{lhs2tex.lhs2tex.sty.read}%
-%   {\@namedef{lhs2tex.lhs2tex.sty.read}{}%
-%    \newcommand\SkipToFmtEnd{}%
-%    \newcommand\EndFmtInput{}%
-%    \long\def\SkipToFmtEnd#1\EndFmtInput{}%
-%   }\SkipToFmtEnd
-
 \usepackage[backend=biber,
   natbib=true,
   style=authoryear,
@@ -164,34 +151,26 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{textcomp}
 \usepackage{array}
 \usepackage{pdfpages}
-
-% \usepackage{listings}
-
-% \edef\oldt{\ttdefault}
-% \usepackage[scaled=0.85]{beramono}
-% \renewcommand*\ttdefault{\oldtt}
-% \newcommand{\bera}[1]{{\fontfamily{fvm}\selectfont #1}}
 
 \usepackage{stmaryrd} %used for brackets
 \usepackage{graphicx}
 \usepackage{wrapfig}
 
 \usepackage{url}
-\usepackage{polytable}
-\newcommand{\Conid}[1]{\mathit{#1}}
-\newcommand{\Varid}[1]{\mathit{#1}}
-\newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
-\newcommand{\plus}{\mathbin{+\!\!\!+}}
-\newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
-\newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
-\newcommand{\sequ}{\mathbin{>\!\!\!>}}
-\renewcommand{\leq}{\leqslant}
-\renewcommand{\geq}{\geqslant}
-
-\def\couleur<#1>{\temporal<#1>{\color{gray!50}}{\color{red}}{\color{black}}}
+% \usepackage{polytable}
+% \newcommand{\Conid}[1]{\mathit{#1}}
+% \newcommand{\Varid}[1]{\mathit{#1}}
+% \newcommand{\anonymous}{\kern0.06em \vbox{\hrule\@width.5em}}
+% \newcommand{\plus}{\mathbin{+\!\!\!+}}
+% \newcommand{\bind}{\mathbin{>\!\!\!>\mkern-6.7mu=}}
+% \newcommand{\rbind}{\mathbin{=\mkern-6.7mu<\!\!\!<}}% suggested by Neil Mitchell
+% \newcommand{\sequ}{\mathbin{>\!\!\!>}}
+% \renewcommand{\leq}{\leqslant}
+% \renewcommand{\geq}{\geqslant}
 
 \def\xscale{0.3} % Back-up: 0.3
 \def\yscale{0.23} % Back-up : 0.23
@@ -212,20 +191,8 @@
 %\addtolength{\marginparwidth}{-1cm}
 
 \usepackage{graphicx}
-
-\usepackage{graphicx}
 \usepackage{epstopdf}
 \epstopdfsetup{update} % only regenerate pdf files when eps file is newer
-
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amssymb}
-
-% \algrenewcomment[1]{\hfill \(\triangleright\) \textit{#1}}
-% \algnewcommand{\LineComment}[1]{\State
-%   \begin{minipage}{0.8\textwidth}
-%     \(\triangleright\) \textit{#1}
-%   \end{minipage}}
 
 \usepackage{csquotes}
 
@@ -254,17 +221,9 @@
 \theoremstyle{remark}
 \newtheorem*{rem}{Remarque}
 
-% \usepackage[colorlinks,citecolor=black,
-% filecolor=black,
-% linkcolor=black,
-% urlcolor=black,]{hyperref}
-
 \newenvironment{reference}[2]{%                                            %
 \begin{textblock*}{\textwidth}(#1,#2)                                      % creates the reference environment              
   \footnotesize\it\bgroup\color{red!50!black}}{\egroup\end{textblock*}}    %
-
-
-% Pictures
 
 \begin{document}
 
