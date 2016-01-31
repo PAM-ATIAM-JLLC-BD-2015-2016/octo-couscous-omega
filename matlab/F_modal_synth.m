@@ -19,7 +19,7 @@ modes_inv_m = inv(coupled_modes_m);
 U_right_inv_m = modes_inv_m(:,modes_number+1:end);
 
 amplitude_modes_v = [ sin(...
-        pi*x_listening*(1:string_modes_number) / L) , ... % String modes
+        pi*x_listening*(1:string_modes_number) / L) , ...  % String modes
     x_listening/L * ones(1,body_modes_number) % Body modes
     ];
 
