@@ -151,6 +151,8 @@
 \addbibresource{../bibliography/bibfile.bib}
 
 \usepackage[autolanguage]{numprint}
+\usepackage{siunitx}
+\usepackage{bm}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -289,31 +291,31 @@
 
 % Tikz layers
 
-\pgfdeclarelayer{back}
-\pgfdeclarelayer{front}
-\pgfsetlayers{back,main,front}
-
-\makeatletter
-\pgfkeys{%
-  /tikz/on layer/.code={
-    \pgfonlayer{#1}\begingroup
-    \aftergroup\endpgfonlayer
-    \aftergroup\endgroup
-  },
-  /tikz/node on layer/.code={
-    \gdef\node@@on@layer{%
-      \setbox\tikz@tempbox=\hbox\bgroup\pgfonlayer{#1}
-      \unhbox\tikz@tempbox\endpgfonlayer\egroup}
-    \aftergroup\node@on@layer
-  },
-  /tikz/end node on layer/.code={
-    \endpgfonlayer\endgroup\endgroup
-  }
-}
-
-\def\node@on@layer{\aftergroup\node@@on@layer}
-
-\makeatother
+% \pgfdeclarelayer{back}
+% \pgfdeclarelayer{front}
+% \pgfsetlayers{back,main,front}
+% 
+% \makeatletter
+% \pgfkeys{%
+%   /tikz/on layer/.code={
+%     \pgfonlayer{#1}\begingroup
+%     \aftergroup\endpgfonlayer
+%     \aftergroup\endgroup
+%   },
+%   /tikz/node on layer/.code={
+%     \gdef\node@@on@layer{%
+%       \setbox\tikz@tempbox=\hbox\bgroup\pgfonlayer{#1}
+%       \unhbox\tikz@tempbox\endpgfonlayer\egroup}
+%     \aftergroup\node@on@layer
+%   },
+%   /tikz/end node on layer/.code={
+%     \endpgfonlayer\endgroup\endgroup
+%   }
+% }
+% 
+% \def\node@on@layer{\aftergroup\node@@on@layer}
+% 
+% \makeatother
 
 \usepackage{graphics}
 
@@ -334,31 +336,8 @@
 \input{sections/frf}
 \input{sections/comparaison}
 
-\begin{frame}{Un petit exemple pour vous mes amis}
-  
-\beamerdefaultoverlayspecification{} % Regardez pas ça, c'est juste pour
-% temporairement pas faire le dévoilement pas-à-pas.
+\input{sections/conclusion}
 
-  \begin{columns}[]
-    \begin{column}{.48\textwidth}
-      Un exemple
-    \end{column}
-    
-    \hfill{}
-    
-    \begin{column}{.48\textwidth}
-	\begin{itemize}
-	  \item De,
-	  \item Silde,
-	  \item Sur,
-	  \item Deux colonnes.
-	\end{itemize}
-    \end{column}
-  \end{columns}
-
-\end{frame}
-
-\include{conclu.tex}
 \begin{frame}
   \begin{center}
     \Huge
@@ -368,3 +347,26 @@
 
 
 \end{document}
+
+% \begin{frame}{Un petit exemple pour vous mes amis}
+%   
+% \beamerdefaultoverlayspecification{} % Regardez pas ça, c'est juste pour
+% % temporairement pas faire le dévoilement pas-à-pas.
+% 
+%   \begin{columns}[]
+%     \begin{column}{.48\textwidth}
+%       Un exemple
+%     \end{column}
+%     
+%     \hfill{}
+%     
+%     \begin{column}{.48\textwidth}
+% 	\begin{itemize}
+% 	  \item De,
+% 	  \item Silde,
+% 	  \item Sur,
+% 	  \item Deux colonnes.
+% 	\end{itemize}
+%     \end{column}
+%   \end{columns}
+%  \end{frame}
