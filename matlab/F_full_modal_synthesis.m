@@ -1,4 +1,5 @@
-function [ modal_synthesis_v, Fs_Hz ] = F_full_modal_synthesis( varargin )
+function [ modal_displacement_synthesis_v, modal_speed_synthesis_v, ...
+    Fs_Hz ] = F_full_modal_synthesis( varargin )
 %% Test script checking the modal synthesis functions
 
 %% Arguments parsing
@@ -10,44 +11,47 @@ string_name_check = @(string) (...
 
 duration_default = 10;
 
-string_modes_number_default = 40;
-
+string_modes_number_default = 80;
 % Only consider low-frequency body modes, since the high modal-density
 % in the higher frequency makes the use of ESPRIT very unstable,
 % Up to 1500Hz there are about 15 body modes
-body_modes_number_default = 15;
+body_modes_number_default = 10;
+
+measure_number_check = @(x) (isnumeric(x) && (x >= 1) && (x <= 5));
 
 excitation_check = @(string) (ismember(string, {'finger', 'dirac'}));
 
 addOptional(p, 'string_name', string_name_default, string_name_check);
 addOptional(p, 'duration_s', duration_default, @isnumeric);
-addOptional(p, 'Fs_Hz', 25600, @isnumeric);
+addOptional(p, 'Fs_Hz', 16000, @isnumeric);
 addOptional(p, 'string_modes_number', string_modes_number_default, ...
     @isnumeric);
 addOptional(p, 'body_modes_number', body_modes_number_default, ...
     @isnumeric);
-
-addOptional(p, 'excitation_type', 'finger_pluck', excitation_check);
+addOptional(p, 'body_measure_number', 3, measure_number_check);
+addOptional(p, 'excitation_type', 'finger', excitation_check);
 addOptional(p, 'plots', false, @isnumeric);
 addOptional(p, 'save_results_b', false, @isnumeric)
+addOptional(p, 'string_parameters', {}, @(x) true)
 
 parse(p, varargin{:});
 input = p.Results;
 
 Fs_Hz = input.Fs_Hz;
+string_params = input.string_parameters;
 
 %%
-project_path = genpath('../');
-addpath(project_path);
+% project_path = genpath('/');
+% addpath(project_path);
 
 %% String and body parameters definition
-close all
-
 modes_number = input.body_modes_number + input.string_modes_number;
 
 % String parameters loading and computation
-[ string_params ] = F_compute_full_string_parameters( ...
-    input.string_name, input.string_modes_number );
+if isempty(string_params)
+    [ string_params ] = F_compute_full_string_parameters( ...
+        input.string_name, input.string_modes_number );
+end
 string_q_factors_v = (1 ./ string_params.loss_factors_v).';
 
 % 3500, value given by Woodhouse A, constant Q-factor model for the string
@@ -56,8 +60,13 @@ string_q_factors_v = (1 ./ string_params.loss_factors_v).';
 % Effective stiffnesses/masses and Q-factors computation (via measures)
 measures_Fs_Hz = 25600;
 
-measure_filename = ['body-no_string_', input.string_name, ...
-    '/mesure_z3.mat'];
+if ismember(input.string_name, {'E2', 'A2', 'D3'})
+    body_measure_name = 'E2';
+else
+    body_measure_name = 'E4';
+end
+measure_filename = ['body-no_string_', body_measure_name, ...
+    '/mesure_z', num2str(input.body_measure_number), '.mat'];
 measure_struct = load(measure_filename, 'data_Temporel_1', ...
     'data_FRF_1');
 body_impulse_response_v = measure_struct.data_Temporel_1;
@@ -71,7 +80,7 @@ Y_body_v = measure_struct.data_FRF_1;
 % and only keep a sample of the whole response to reduce the size
 esprit_start_s = 0.025;
 esprit_start_n = floor(esprit_start_s * measures_Fs_Hz);
-esprit_length_n = 0.4 * measures_Fs_Hz;
+esprit_length_n = floor(0.2 * measures_Fs_Hz);
 esprit_impulse_extract_v = body_impulse_response_v( ...
         esprit_start_n:esprit_start_n+esprit_length_n-1).';
 
@@ -84,14 +93,13 @@ only_damped_exponentials_b = true;
 [ body_dampings_v, body_natural_frequencies_reduced_v ] = ...
     F_esprit(esprit_impulse_extract_v, esprit_full_space_dim, ...
         esprit_search_number, only_damped_exponentials_b);
-input.body_modes_number = length(body_dampings_v);
-    
+
 % Only keep body modes above 90Hz and below 1500Hz
 % (The first mode is none to be above 100Hz and Woodhouse notices that
 % above 1500Hz, the modes have a dense statistical distribution,
 % thus making the modal analysis very unstable).
 body_min_frequency_reduced = 80 / measures_Fs_Hz; % 90 / Fs_Hz;
-body_max_frequency_reduced = 1000 / measures_Fs_Hz; % 1500 / Fs_Hz;
+body_max_frequency_reduced = 1200 / measures_Fs_Hz; % 1500 / Fs_Hz;
 body_dampings_v = body_dampings_v(...
         body_natural_frequencies_reduced_v > body_min_frequency_reduced & ...
         body_natural_frequencies_reduced_v < body_max_frequency_reduced);
@@ -99,18 +107,16 @@ body_natural_frequencies_reduced_v = ...
     body_natural_frequencies_reduced_v(...
         body_natural_frequencies_reduced_v > body_min_frequency_reduced & ...
         body_natural_frequencies_reduced_v < body_max_frequency_reduced);
-body_modes_number = min(input.body_modes_number, length(body_dampings_v));
+
+input.body_modes_number = min(input.body_modes_number, ...
+    length(body_dampings_v));
 modes_number = input.body_modes_number + input.string_modes_number;
 
 [body_amplitudes_v, ~] = F_least_squares(esprit_impulse_extract_v, ...
     body_dampings_v, body_natural_frequencies_reduced_v);
 
-% [ body_natural_frequencies_reduced_v, body_amplitudes_v, ...
-%     body_dampings_v, ~ ] = F_esprit_bis(esprit_impulse_extract_v, ...
-%         esprit_search_number, esprit_length_n, esprit_full_space_dim);
-
 [~, max_amp_modes_v] = sort(body_amplitudes_v);
-max_amp_modes_v = max_amp_modes_v(1:body_modes_number);
+max_amp_modes_v = max_amp_modes_v(1:input.body_modes_number);
 
 body_natural_frequencies_reduced_v = body_natural_frequencies_reduced_v(...
     max_amp_modes_v);
@@ -190,43 +196,25 @@ end
 % or a modelled finger excitation
 
 plot_excitation_b = false;
-excitation_type = 'triangle';
 
 static_height_body = 1e-4;  % 1e-5;  % Fixed by hand...
 initial_height = 0.01;
 
 string_params.initial_height = initial_height;
 
-finger_pluck_b = true;
-if finger_pluck_b
-    excitation_width = 0.01;  % 1cm wide finger
-    
-    delta_excitation = 0.113;
-    x_excitation = string_params.length-delta_excitation;
-    x_listening  = string_params.length*(1-0.001);  % *(1 - *2/7);
-
-    string_params.excitation_width = excitation_width;
-    string_params.finger_pluck_bx_listening = x_listening;
-    string_params.x_excitation = x_excitation;
-end
-
-antinode_b = false;
-if antinode_b
+if strcmp(input.excitation_type, 'finger')
+    excitation_type = 'triangle';
+elseif strcmp(input.excitation_type, 'dirac')
     excitation_type = 'dirac';
-    excitation_width = 0.01;  % 1cm wide finger
-   
-    x_excitation  = string_params.length*(1 - 1/2);
-    x_listening  = string_params.length; % *(1 - 1.3/6.9);
-
+    excitation_width = 0.001;  % 1mm wide dirac
+    
     string_params.excitation_width = excitation_width;
-    string_params.x_listening = x_listening;
-    string_params.x_excitation = x_excitation;
 end
     
 initial_excitation_v = F_compute_initial_excitation_v( ...
     input.string_modes_number, string_params, input.body_modes_number, ...
     static_height_body, coupled_modes_m, excitation_type, ...
-    plot_excitation_b );
+    plot_excitation_b )
 
 % initial_excitation_norm = initial_excitation_v' * mass_m * initial_excitation_v;
 % initial_excitation_v = initial_excitation_v / initial_excitation_norm;
@@ -236,11 +224,9 @@ if plot_excitation_b
 end
     
 %% Resynthesis
-input.Fs_Hz = 25600;
-
-[ modal_synthesis_v ] = F_modal_synth( input.duration_s, input.Fs_Hz, ...
-    input.string_modes_number, input.body_modes_number, initial_excitation_v, ...
-    string_params, coupled_modes_m, ...
+[ modal_displacement_synthesis_v ] = F_modal_synth( input.duration_s, ...
+    input.Fs_Hz, input.string_modes_number, input.body_modes_number, ...
+    initial_excitation_v, string_params, coupled_modes_m, ...
     coupled_complex_natural_frequencies_v, mass_m );
 
 %% Derivate to yield speed instead of position
@@ -249,7 +235,7 @@ input.Fs_Hz = 25600;
 d = fdesign.differentiator;
 Hd = design(d,'equiripple');
 
-speed_synthesis_v = filter(Hd, modal_synthesis_v);
+modal_speed_synthesis_v = filter(Hd, modal_displacement_synthesis_v);
 
 %% Plot synthesized sound
 
@@ -257,8 +243,8 @@ if input.plots
     close all;
 %     modal_synthesis_v = modal_synthesis_v(80:end);
 
-    plotted_v = modal_synthesis_v;
-    plotted_v = speed_synthesis_v;
+    plotted_v = modal_displacement_synthesis_v;
+%     plotted_v = modal_speed_synthesis_v;
     plot_Fs_Hz = input.Fs_Hz;
 
 %     plotted_v = plotted_v/max(abs(plotted_v));  % Normalize plotted sample
@@ -308,5 +294,5 @@ if input.save_results_b
         int2str(input.string_modes_number), '_string_modes-', ...
         int2str(input.body_modes_number), '_body_modes.wav' ];
     audiowrite(filename, ...
-        real(modal_synthesis_v)/max(abs(real(modal_synthesis_v))), input.Fs_Hz);
+        real(modal_displacement_synthesis_v)/max(abs(real(modal_displacement_synthesis_v))), input.Fs_Hz);
 end
