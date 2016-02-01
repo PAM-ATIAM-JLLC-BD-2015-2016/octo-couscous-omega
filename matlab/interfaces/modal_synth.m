@@ -56,6 +56,9 @@ function modal_synth_OpeningFcn(hObject, eventdata, handles, varargin)
 project_path = genpath('../');
 addpath(project_path);
 
+% Name window
+set(hObject, 'Name', 'MODAL - Maximum Overload Display for Analysis and Listening');
+
 % Choose default command line output for modal_synth
 handles.output = hObject;
 
@@ -238,10 +241,12 @@ function play_displacement_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 displacement_v = handles.synthesis.displacement_v;
+displacement_v = displacement_v / max(abs(displacement_v));
 Fs_Hz = handles.synthesis.Fs_Hz;
 
 soundsc(displacement_v, Fs_Hz);
-
+audiowrite('Displacement_modal-17mm-40_string-15_body.wav', ...
+    displacement_v, Fs_Hz);
 end
 
 % --- Executes on selection change in measure_select_list.
@@ -658,9 +663,11 @@ function play_speed_button_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 speed_v = handles.synthesis.speed_v;
+speed_v = speed_v / max(abs(speed_v));
 Fs_Hz = handles.synthesis.Fs_Hz;
 
 soundsc(speed_v, Fs_Hz);
+audiowrite('Speed_modal-17mm-40_string-15_body.wav', speed_v, Fs_Hz);
 end
 
 
