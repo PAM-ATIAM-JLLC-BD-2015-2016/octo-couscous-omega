@@ -152,7 +152,7 @@ sftp-config.json
 *.xdy
 *.tdo
 *.backup
-*.pdf
+# *.pdf
 *_minted-*
 
 ### Matlab ###
