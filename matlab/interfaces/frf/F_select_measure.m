@@ -1,26 +1,18 @@
-function path_measure_mat_str = F_select_measure( gui_str )
+function [ measure_filename_s ] = F_select_measure( guitar_measure_s )
 
-if strcmp(gui_str,'Guitar 1') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z1.mat';
-elseif strcmp(gui_str,'Guitar 2') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z2.mat';
-elseif strcmp(gui_str,'Guitar 3') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z3.mat';
-elseif strcmp(gui_str,'Guitar 4') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z4.mat';        
-elseif strcmp(gui_str,'Guitar 5') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z5.mat';            
+measure_folder_prefix = '../../measures/yamaha-c40_1/body-no_string_';
 
-elseif strcmp(gui_str,'Guitar 6') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E4/mesure_z1.mat'    
-elseif strcmp(gui_str,'Guitar 7') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E4/mesure_z2.mat';
-elseif strcmp(gui_str,'Guitar 8') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E4/mesure_z3.mat';    
-elseif strcmp(gui_str,'Guitar 9') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E4/mesure_z4.mat';        
-elseif strcmp(gui_str,'Guitar 10') == 1
-    path_measure_mat_str = 'matlab/measures/yamaha-c40_1/body-no_string_E4/mesure_z5.mat';            
+selected_measure_number = sscanf(guitar_measure_s, 'Guitar %d');
+
+if selected_measure_number <= 5
+    string_name = 'E2';
+else
+    string_name = 'E4';
 end
     
-    
+% The filenames of the guitar measures are indexed between 1 and 5
+measure_index = mod(selected_measure_number-1, 5) + 1;
+
+measure_filename_s = [measure_folder_prefix, string_name, '/mesure_z', ...
+    int2str(measure_index), '.mat' ];
+end
