@@ -143,7 +143,7 @@ body_q_factors_v = body_natural_frequencies_Hz_v/measures_Fs_Hz ./ ...
 %% System matrices computation
 [ mass_m ] = F_compute_mass_m( ...
     input.string_modes_number, input.body_modes_number, string_params, ...
-    body_effective_masses_v );
+    body_effective_masses_v);
 
 [ stiffness_m ] = F_compute_stiffness_m( ...
     input.string_modes_number, string_params, body_effective_stiffnesses_v );
@@ -155,14 +155,22 @@ body_q_factors_v = body_natural_frequencies_Hz_v/measures_Fs_Hz ./ ...
 
 %%
 if input.plots > 1
+    figure()
     imagesc(mass_m); pause;
     imagesc(stiffness_m); pause;
     imagesc(dissipation_m); pause;
+    close
 end
 
 %% Modes computation
 [ coupled_modes_m, coupled_complex_natural_frequencies_v ] = ...
     F_compute_coupled_modes_m( dissipation_m, mass_m, stiffness_m);
+
+% Sort by increasing frequency
+
+% imagesc(abs(coupled_modes_m));
+
+[~, sort_indexes] = sort(imag(coupled_complex_natural_frequencies_v));
 
 %% Mass-normalize the modes
 for mode_n = 1:length(coupled_modes_m)
@@ -173,13 +181,15 @@ end
 
 %% Mode shapes plot
 if input.plots > 1
+    figure();
+    
     x_length = 10000;
     mode_sums_m = zeros(x_length,modes_number);
     acc_v = zeros(1,x_length);
-    for i=string_modes_number+1:modes_number
-        mode_shape_v = coupled_modes_m(1:string_modes_number,i);
+    for i=1:modes_number
+        mode_shape_v = coupled_modes_m(1:input.string_modes_number,i);
         [ mode_sum_v, x_v ] = F_compute_mode_sum_v(...
-            string_modes_number, string_params.length, ...
+            input.string_modes_number, string_params.length, ...
             x_length, mode_shape_v);
         subplot(2,1,1)
         plot(x_v, abs(mode_sum_v));
@@ -189,6 +199,8 @@ if input.plots > 1
         plot(x_v, abs(acc_v));
         pause(0.2);
     end
+    
+    close
 end
 
 %% Initial condition definition
@@ -197,7 +209,7 @@ end
 
 plot_excitation_b = false;
 
-static_height_body = 1e-4;  % 1e-5;  % Fixed by hand...
+static_height_body = 1e-5;  % Fixed by hand...
 initial_height = 0.01;
 
 string_params.initial_height = initial_height;
@@ -206,7 +218,7 @@ if strcmp(input.excitation_type, 'finger')
     excitation_type = 'triangle';
 elseif strcmp(input.excitation_type, 'dirac')
     excitation_type = 'dirac';
-    excitation_width = 0.001;  % 1mm wide dirac
+    excitation_width = 0.0001;  % 0.1mm wide dirac
     
     string_params.excitation_width = excitation_width;
 end
@@ -217,7 +229,10 @@ initial_excitation_v = F_compute_initial_excitation_v( ...
     plot_excitation_b );
 
 if plot_excitation_b
-    stem(abs(initial_excitation_v))
+    figure()
+    stem(abs(initial_excitation_v));
+    pause(2)
+    close
 end
     
 %% Resynthesis

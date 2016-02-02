@@ -107,6 +107,7 @@ function calculate_button_Callback(hObject, eventdata, handles)
   handles.synthesis.displacement_v = modal_displacement_synthesis_v;
   handles.synthesis.speed_v = modal_speed_synthesis_v;
   
+  
   plotted_v = modal_displacement_synthesis_v;
 
   plot_Fs_Hz = handles.synthesis.Fs_Hz;
