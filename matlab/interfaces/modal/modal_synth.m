@@ -22,7 +22,7 @@ function varargout = modal_synth(varargin)
 
 % Edit the above text to modify the response to help modal_synth
 
-% Last Modified by GUIDE v2.5 01-Feb-2016 02:06:55
+% Last Modified by GUIDE v2.5 02-Feb-2016 18:29:33
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -62,6 +62,9 @@ set(hObject, 'Name', 'MODAL - Maximum Overload Display for Analysis and Listenin
 % Choose default command line output for modal_synth
 handles.output = hObject;
 
+% Initialize counter for file saving
+handles.filesave_count = 0;
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -98,17 +101,13 @@ function calculate_button_Callback(hObject, eventdata, handles)
         'string_parameters', handles.string.params, ...
         'string_modes_number', handles.string.modes_number, ...
         'body_modes_number', handles.body.modes_number, ...
-        'body_measure_number', handles.body.measure, ...
+        'body_measure_number', handles.body.selected_measure_number, ...
         'excitation_type', handles.synthesis.excitation_type);
  
   handles.synthesis.displacement_v = modal_displacement_synthesis_v;
   handles.synthesis.speed_v = modal_speed_synthesis_v;
   
   plotted_v = modal_displacement_synthesis_v;
-%   plotted_v = modal_speed_synthesis_v;
-  
-%   plotted_v = plotted_v/max(abs(plotted_v));  % Normalize plotted sample
-    
 
   plot_Fs_Hz = handles.synthesis.Fs_Hz;
   
@@ -184,7 +183,7 @@ handles.string.params.excitation_position = excitation_position;
 
 handles.string.modes_number = string_modes_number;
 handles.body.modes_number = body_modes_number;
-handles.body.measure = body_measure_selection;
+handles.body.selected_measure_number = body_measure_selection;
 
 handles.synthesis.duration_s = duration_s;
 handles.synthesis.Fs_Hz = Fs_Hz;
@@ -257,7 +256,7 @@ function measure_select_list_Callback(hObject, eventdata, handles)
 %        contents{get(hObject,'Value')} returns selected item from measure_select_list
 
 contents = cellstr(get(hObject,'String'));
-handles.body.measure = str2double(contents{get(hObject,'Value')}(end));
+handles.body.selected_measure_number = str2double(contents{get(hObject,'Value')}(end));
 
 guidata(hObject, handles);
 
@@ -730,4 +729,23 @@ function excitation_width_edit_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+end
+
+
+% --- Executes on button press in store_button.
+function store_button_Callback(hObject, eventdata, handles)
+% hObject    handle to store_button (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+synthesis = handles.synthesis;
+body_parameters = handles.body;
+string_parameters = handles.string;
+
+save(['saved_modal_synth-', int2str(handles.filesave_count), '.mat'], ...
+    '-struct', 'handles', 'synthesis', 'body', 'string');
+
+handles.filesave_count = handles.filesave_count + 1;
+
+guidata(hObject, handles);
 end
