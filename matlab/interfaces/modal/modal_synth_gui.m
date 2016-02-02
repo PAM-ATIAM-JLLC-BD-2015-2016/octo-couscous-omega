@@ -90,8 +90,6 @@ function calculate_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-handles.string.params.x_excitation
-
 [ modal_displacement_synthesis_v, modal_speed_synthesis_v, ...
     ~ ] = F_full_modal_synthesis( ...
         'string_name', handles.string.name, ...
@@ -685,7 +683,7 @@ excitation_position = str2double(get(hObject, 'String'));
 handles.string.params.x_excitation = excitation_position;
 
 excitation_position_ratio = excitation_position ./ ...
-    handles.string.params.length
+    handles.string.params.length;
 set(handles.excitation_position_slide, 'Value', excitation_position_ratio);
 
 guidata(hObject, handles);
