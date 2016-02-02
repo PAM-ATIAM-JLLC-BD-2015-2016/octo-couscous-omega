@@ -68,7 +68,7 @@ handles.filesave_count = 0;
 % Update handles structure
 guidata(hObject, handles);
 
-initialize_gui(hObject, handles, false);
+initialize_gui(hObject, handles);
 
 % UIWAIT makes modal_synth wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
@@ -145,20 +145,20 @@ function reset_button_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-initialize_gui(gcbf, handles, true);
+initialize_gui(gcbf, handles);
 end
 
 % --------------------------------------------------------------------
-function initialize_gui(fig_handle, handles, isreset)
+function initialize_gui(fig_handle, handles)
 % If the metricdata field is present and the reset_button flag is false, it means
 % we are we are just re-initializing a GUI by calling it from the cmd line
 % while it is up. So, bail out as we dont want to reset_button the data.
-if isfield(handles, 'metricdata') && ~isreset
-    return;
-end
 
-clear handles.temporal_fig;
-clear handles.spectrum_fig;
+% Remove leftover plots
+axes(handles.temporal_fig);
+cla
+axes(handles.spectrum_fig);
+cla
 
 string_name = 'E2';
 string_modes_number = 80;
@@ -206,6 +206,8 @@ set(handles.string_modes_number_edit, 'String', ...
 set(handles.body_modes_number_edit, 'String', ...
     int2str(handles.body.modes_number));
 
+set(handles.measure_select_list, 'Value', body_measure_selection);
+
 [ ~, name_index ] = ismember(handles.string.name, ...
     cellstr(get(handles.string_name_popup, 'String')));
 set(handles.string_name_popup, 'Value', name_index);
@@ -218,6 +220,9 @@ set(handles.excitation_position_slide, 'Value', ...
     handles.synthesis.excitation_type, ...
     cellstr(get(handles.excitation_type_popup, 'String')));
 set(handles.excitation_type_popup, 'Value', excitation_type_index);
+
+% Needed in case 'dirac' mode had been selected
+set(handles.excitation_width_edit, 'Enable', 'on');
 
 set(handles.Fs_Hz_edit, 'String', int2str(handles.synthesis.Fs_Hz));
 set(handles.duration_s_edit, 'String', ...
