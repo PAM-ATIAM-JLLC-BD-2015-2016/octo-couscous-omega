@@ -214,10 +214,7 @@ end
 initial_excitation_v = F_compute_initial_excitation_v( ...
     input.string_modes_number, string_params, input.body_modes_number, ...
     static_height_body, coupled_modes_m, excitation_type, ...
-    plot_excitation_b )
-
-% initial_excitation_norm = initial_excitation_v' * mass_m * initial_excitation_v;
-% initial_excitation_v = initial_excitation_v / initial_excitation_norm;
+    plot_excitation_b );
 
 if plot_excitation_b
     stem(abs(initial_excitation_v))
