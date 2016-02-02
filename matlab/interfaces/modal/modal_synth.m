@@ -22,7 +22,7 @@ function varargout = modal_synth(varargin)
 
 % Edit the above text to modify the response to help modal_synth
 
-% Last Modified by GUIDE v2.5 02-Feb-2016 18:29:33
+% Last Modified by GUIDE v2.5 02-Feb-2016 19:21:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
