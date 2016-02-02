@@ -53,7 +53,7 @@ function modal_synth_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to modal_synth (see VARARGIN)
 
-project_path = genpath('../');
+project_path = genpath('../../');
 addpath(project_path);
 
 % Name window
