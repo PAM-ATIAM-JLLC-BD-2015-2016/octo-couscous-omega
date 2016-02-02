@@ -52,17 +52,20 @@ function frf_gui_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to frf_gui (see VARARGIN)
 
+project_path = genpath('../../');
+addpath(project_path);
+
 % Choose default command line output for frf_gui
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-%initialize_gui(handles);
+initialize_gui(hObject, handles);
 
 % UIWAIT makes frf_gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
+end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = frf_gui_OutputFcn(hObject, eventdata, handles) 
@@ -125,7 +128,6 @@ function selectmeasure_Callback(hObject, eventdata, handles)
 % hObject    handle to selectmeasure (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-disp(hObject);
 
 % Hints: contents = cellstr(get(hObject,'String')) returns selectmeasure contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from selectmeasure
@@ -280,11 +282,9 @@ if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgr
     set(hObject,'BackgroundColor','white');
 end
 
-function initialize_gui(fig_handle, handles, isreset)
-% If the metricdata field is present and the reset flag is false, it means
-% we are we are just re-initializing a GUI by calling it from the cmd line
-% while it is up. So, bail out as we dont want to reset the data.
-handles.frfdata.path_measure_mat_str      = 'matlab/measures/yamaha-c40_1/body-no_string_E2/mesure_z2.mat';
+function initialize_gui(fig_handle, handles)
+
+handles.frfdata.path_measure_mat_str      = F_select_measure('Guitar 2');
 handles.frfdata.string_modes_number       = 24;
 handles.frfdata.note_str                  = 'E2';
 handles.frfdata.excitation_type           = 'point';
