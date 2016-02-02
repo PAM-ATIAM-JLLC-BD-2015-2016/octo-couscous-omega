@@ -174,8 +174,8 @@ end
 
 %% Mass-normalize the modes
 for mode_n = 1:length(coupled_modes_m)
-    mode_time_v = coupled_modes_m(1:end/2, mode_n);
-    mode_norm = mode_time_v' * mass_m * mode_time_v;
+    mode_displacement_v = coupled_modes_m(1:end/2, mode_n);
+    mode_norm = mode_displacement_v' * mass_m * mode_displacement_v;
     coupled_modes_m(:,mode_n) = coupled_modes_m(:,mode_n) / mode_norm;
 end
 
