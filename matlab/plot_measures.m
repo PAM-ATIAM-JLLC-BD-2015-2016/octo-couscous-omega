@@ -2,7 +2,7 @@
 %
 %
 %
-clear all, close all, clc;
+%clear all, close all, clc;
 
 %%
 f = [0:65536-1]*12800/65536;

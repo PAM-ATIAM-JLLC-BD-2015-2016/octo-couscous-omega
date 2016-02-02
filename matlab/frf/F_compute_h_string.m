@@ -19,16 +19,16 @@ T = string_params.tension;
 %Wn_v = mode_n_v.' * pi * c/L ...
 %        .* ( 1 + B*(mode_n_v.').^2 );
   
- figure, hold on, plot(abs(Wn_v_plot)), plot(abs(Wn_v)), hold off
- title('abs(Wn)'), legend( 'Wn1','Wn2')
- figure, hold on, plot(real(Wn_v_plot)), plot(real(Wn_v)), hold off
- title('abs(Wn)'), legend( 'Wn1','Wn2')
- figure, hold on, plot(imag(Wn_v_plot)), plot(imag(Wn_v)), hold off
- title('abs(Wn)'), legend( 'Wn1','Wn2')
- figure, hold on, plot(angle(Wn_v_plot)), plot(angle(Wn_v)), hold off
- title('abs(Wn)'), legend( 'Wn1','Wn2')
- disp(Wn_v(end))
- disp(Wn_v_plot(end))
+%  figure, hold on, plot(abs(Wn_v_plot)), plot(abs(Wn_v)), hold off
+%  title('abs(Wn)'), legend( 'Wn1','Wn2')
+%  figure, hold on, plot(real(Wn_v_plot)), plot(real(Wn_v)), hold off
+%  title('abs(Wn)'), legend( 'Wn1','Wn2')
+%  figure, hold on, plot(imag(Wn_v_plot)), plot(imag(Wn_v)), hold off
+%  title('abs(Wn)'), legend( 'Wn1','Wn2')
+%  figure, hold on, plot(angle(Wn_v_plot)), plot(angle(Wn_v)), hold off
+%  title('abs(Wn)'), legend( 'Wn1','Wn2')
+%  disp(Wn_v(end))
+%  disp(Wn_v_plot(end))
  
  Wn_v = Wn_v.*(1+1i*etan_v/2);
  Wn_v2 = Wn_v.*(1-1i*etan_v/2);
@@ -43,7 +43,7 @@ power_m = repmat((-1).^mode_n_v.', 1, length(omega_rad_v));
 mode_n_m = repmat(mode_n_v.', 1, length(omega_rad_v));
 
 %temp = sum( power_m ./ ( W_m - Wn_m + eps) );
-temp = sum( power_m .* (1./ ( W_m - Wn_m + eps) + 1./ ( W_m + Wn_m2 + eps)) );
+temp = sum( power_m .* (1./ ( W_m - Wn_m ) + 0./ ( W_m + Wn_m2 )) );
 
 H_string = x/L + (c/L)*sin(omega_rad_v*x/c) .* temp;
 

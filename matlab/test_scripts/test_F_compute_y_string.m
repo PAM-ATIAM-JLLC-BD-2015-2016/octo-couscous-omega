@@ -1,5 +1,7 @@
 function test_F_compute_y_string()
 
+clear all, close all, clc;
+
 str_note_name = 'E2';
 string_modes_number = 60;
 Nfft = 2^19;
@@ -10,14 +12,14 @@ omega_rad_v = 2*pi*f_hz_v+eps;
 [ string_params ] = ...
     F_compute_full_string_parameters( str_note_name, string_modes_number );
 
-res = F_compute_y_string( string_params, omega_rad_v );
+res =  - F_compute_y_string( string_params, omega_rad_v );
 
 %% Plotting
-figure, plot( omega_rad_v, real(res) )
+figure, plot( omega_rad_v/(2*pi), real(res) )
 title('TEST REAL F compute Y string')
 xlabel('\omega')
 xlim([50 5000])
-figure, plot( omega_rad_v, db(res) )
+figure, plot( omega_rad_v/(2*pi), db(res) )
 title('TEST DB F compute Y string')
 xlabel('\omega')
 xlim([50 5000])
@@ -27,7 +29,7 @@ res = F_duplicate_with_hermitian_symmetry( res );
 
 g = ifft( res );
 g = g/max(abs(g));
-soundsc( g, Fs );
-%audiowrite( 'test_F_compute_y_string.wav', g/max(abs(g)), Fs );
+%soundsc( g, Fs );
+%audiowrite( 'test_F_compute_y_string_minusY.wav', g/max(abs(g)), Fs );
 
 end

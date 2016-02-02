@@ -13,8 +13,8 @@ etan_v  = string_params.loss_factors_v;
 Wn_m    = repmat(Wn_v.', 1, length(omega_rad_v));
 etan_m  = repmat(etan_v.', 1, length(omega_rad_v));
 
-temp1    = 1./ ( W_m - Wn_m.*(1+1i*etan_m/2));
-temp2    = 1./ ( W_m + Wn_m.*(1-1i*etan_m/2));
+temp1   = 1./ ( W_m - Wn_m.*(1+1i*etan_m/2));
+temp2   = 1./ ( W_m + Wn_m.*(1-1i*etan_m/2));
 
 Z_string = -1i*T/L * ( 1./omega_rad_v + sum(temp1+temp2) );
 
