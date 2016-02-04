@@ -2,13 +2,17 @@
 function [sound_frf,G,Y11_b,H,Z] = F_FRF_synthesis( structIn, DEBUG_MODE)
 % Synthesizes the guitar sound thanks to a frequency domain synthesis
 % INPUTS
-%   structIn.str_path_measure_mat : path to the mesure of admittance
+%   structIn.path_measure_mat : path to the mesure of admittance
 %   structIn.note_str : 'E2', 'A2', 'D3', 'G3', 'B3', 'E4'
-%   structIn.excitation_str : 'point' or 'wide'
+%   structIn.excitation_type : Impulse or Rectangular (with lowpass filter)
+%   structIn.excitation_length : size of time domain lowpass filter
+%   structIn.excitation_bridge_dist : distance in meters from bridge to
+%   excistation point on the string
+%   structIn.string_modes_number : number of modes 
+%   structIn.listening_mode : 'position', 'speed', 'acceleration'
 %   mode_debug (optional) : displays plots if true. 
 
-
-disp(structIn);
+%disp(structIn);
 
 %% Parameters
 path_measure_mat_str    = structIn.path_measure_mat_str;
@@ -99,7 +103,10 @@ g2 = [g(floor(length(g)*0.9):end),g(1:floor(length(g)*0.9)-1)];
 %% 
 g3 = g(1:floor(length(g)*0.4));
 %g3 = g2;
-disp('*** FRF Synthesis done ***')
+if DEBUG_MODE
+    disp('*** FRF Synthesis done ***')
+end
+
 if (strcmp(excitation_type,'Impulse') == 1)
     sound_frf = g3;
 elseif (strcmp(excitation_type,'Rectangular') == 1)

@@ -8,6 +8,7 @@ f2 = 5000;
 f1_bin = floor(f1/df);
 f2_bin = floor(f2/df);
 f = [0:Nfft-1]*Fs/Nfft;
+f = f(1:Nfft/2+1);
 
 figure_fullscreen
 %% Body
@@ -57,14 +58,5 @@ figure
 plot(f,db(abs(Y11_s)));
 title('Y11 string')
 xlim([f1 f2])
-
-Y_s = Y11_s(1:Nfft/2+1);
-%Y_s(f2_bin:end) = 0;
-Y_s = [Y_s;flip(conj(Y_s(2:end-1)))];
-Y_s(Nfft/2+1) = abs(Y_s(Nfft/2+1) );
-a = ifft(Y_s);
-soundsc(a(1:floor(length(a)*0.4)),Fs);
-figure, plot(a);
-
 
 

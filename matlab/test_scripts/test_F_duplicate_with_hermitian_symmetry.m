@@ -27,10 +27,10 @@ xlabel('f (Hz)');
 
 g = ifft( res );
 %soundsc( g, Fs );
-audiowrite( 'test_F_duplicate_with_hermitian_symmetry.wav', g, Fs );
+%audiowrite( 'test_F_duplicate_with_hermitian_symmetry.wav', g, Fs );
 
 figure, plot(g);
 g = [g(floor(0.8*length(g)):end),g(1:floor(0.8*length(g)))];
-soundsc( g, Fs );
+%soundsc( g, Fs );
 
 end

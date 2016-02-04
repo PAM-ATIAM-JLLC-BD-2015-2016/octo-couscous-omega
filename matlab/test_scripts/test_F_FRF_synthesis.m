@@ -5,16 +5,16 @@ clear all, close all, clc;
 
 Nfft = 2^19;
 Fs = 25600;
-note_str = 'E2';
+note_str = 'E4';
 
 measure_str = ['matlab/measures/yamaha-c40_1/body-no_string_' note_str '/mesure_z2.mat'];      
 
 s = {};
 
-s.string_modes_number       = 30;
-s.note_str                  = 'E2';
+s.string_modes_number       = 300;
+s.note_str                  = note_str;
 s.path_measure_mat_str      = measure_str;
-s.excitation_type            = 'point';
+s.excitation_type           = 'Impulse';
 s.excitation_length         = 33;
 s.excitation_bridge_dist    = 0.15; %m
 s.listening_mode            = 'position'; % 'acceleration', 'speed' or 'position'

@@ -8,6 +8,11 @@ notes_str_arr = ['E2'; 'A2'; 'D3'; 'G3'; 'B3'; 'E4'];
 folder_name = ['sounds/frf/' date() '_' version_name_str];
 mkdir(folder_name);
 
+modes_number = 100; % has to be high
+
+s = {};
+
+
 for folder_index = 1:3
     switch folder_index
         case 1
@@ -32,7 +37,15 @@ for folder_index = 1:3
             audio_str = [folder_name ...
                 sprintf('/sound_frf_%s_%s_z%d.wav', note_str,instr_str, measure_index)];
 
-            sound_frf = F_FRF_synthesis( measure_str, note_str, 'point', 0);
+            s.string_modes_number       = modes_number;
+            s.note_str                  = note_str;
+            s.path_measure_mat_str      = measure_str;
+            s.excitation_type           = 'Impulse';
+            s.excitation_length         = 33;
+            s.excitation_bridge_dist    = 0.15; %m
+            s.listening_mode            = 'position'; % 'acceleration', 'speed' or 'position'
+
+            sound_frf = F_FRF_synthesis( s, 0);
 
             sound_frf = sound_frf/max(abs(sound_frf));
             audiowrite( audio_str, sound_frf, Fs);

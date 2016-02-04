@@ -1,7 +1,7 @@
-function res = test_F_compute_string_loss_factors_v ()
+function res = test_F_compute_string_natural_frequencies_rad_v ()
 
 str_note_name = 'E2';
-string_modes_number = 40;
+string_modes_number = 10;
 
 [string_linear_mass, string_bending_stiffness, string_tension, ...
     eta_F, eta_B, eta_A] = F_select_basic_string_parameters(str_note_name);
@@ -28,15 +28,12 @@ string_params.initial_height    = initial_height;
 string_params.x_listening       = x_listening;
 string_params.x_excitation      = x_excitation;
 
-string_natural_frequencies_rad_v = ...
-    F_compute_string_natural_frequencies_rad_v( string_params, ...
-    string_modes_number ); 
-
-string_params.natural_frequencies_rad_v = string_natural_frequencies_rad_v;
-
 %% TEST
-res = F_compute_string_loss_factors_v( string_params, string_modes_number );
+res = F_compute_string_natural_frequencies_rad_v( string_params, string_modes_number );
 
 %% Display
 figure, plot( res )
-title('TEST F compute string loss factors');
+title('TEST F compute string frequencies');
+
+
+end
